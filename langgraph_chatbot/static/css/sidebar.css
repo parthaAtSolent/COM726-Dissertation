@@ -1,0 +1,85 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   static/css/sidebar.css  —  Sidebar: branding, model selector, thread list
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Sidebar background ─────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    border-right: 1px solid rgba(108, 99, 255, 0.2);
+}
+
+/* ── App title ───────────────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #e0e0f0;
+}
+
+/* ── Section subheaders ──────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9d96ff;
+    margin-bottom: 0.4rem;
+}
+
+/* ── Model selectbox ─────────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] .stSelectbox > div[data-baseweb="select"] {
+    background: rgba(108, 99, 255, 0.1);
+    border: 1px solid rgba(108, 99, 255, 0.35);
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+}
+section[data-testid="stSidebar"] .stSelectbox > div[data-baseweb="select"]:hover {
+    border-color: rgba(108, 99, 255, 0.65);
+}
+
+/* ── New Chat primary button ─────────────────────────────────────────────── */
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #6c63ff, #a78bfa);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.55rem 1rem;
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+    transition: opacity 0.2s ease, transform 0.15s ease;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(108, 99, 255, 0.45);
+}
+
+/* ── Thread list secondary buttons ──────────────────────────────────────── */
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #c8c4e8;
+    font-size: 0.88rem;
+    text-align: left;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
+    background: rgba(108, 99, 255, 0.15);
+    border-color: rgba(108, 99, 255, 0.4);
+    color: #e0e0f0;
+}
+
+/* ── Divider ─────────────────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] hr {
+    border-color: rgba(108, 99, 255, 0.2);
+    margin: 0.75rem 0;
+}
+
+/* ── Caption / small text ────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] .stCaption {
+    color: #7a75a8;
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
