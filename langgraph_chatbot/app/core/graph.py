@@ -29,12 +29,6 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, START, StateGraph
 
-# # llms is at COM726/ root — ensure Python can find it via sys.path
-# import sys
-# from pathlib import Path
-# # langgraph_chatbot/
-# sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
-
 
 # ── SQLite connection (LangGraph checkpointing only) ──────────────────────────
 _conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
