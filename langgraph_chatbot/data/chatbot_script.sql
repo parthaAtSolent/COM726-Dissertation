@@ -46,6 +46,18 @@ CREATE TABLE IF NOT EXISTS checkpoint_writes (
     INDEX idx_task (task_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
+CREATE TABLE IF NOT EXISTS threads (
+    thread_id VARCHAR(36) PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_created_at (created_at)
+);
+
+
 -- Clear contents of both tables
 TRUNCATE TABLE checkpoints;
 TRUNCATE TABLE checkpoint_writes;
