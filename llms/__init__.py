@@ -15,20 +15,14 @@ How to add a new model
 
 from __future__ import annotations
 
-from llms.llama_3_1_8b_instant import MODEL_KEY, DISPLAY_NAME, ICON, build as _build_llama_8b
+
+from llms.llama_3_1_8b_instant.config import MODEL_KEY as _k1, DISPLAY_NAME as _n1, ICON as _i1
+from llms.llama_3_1_8b_instant.factory import build as _build_llama_8b
+
 
 REGISTRY: dict[str, dict] = {
-    MODEL_KEY: {
-        "name": DISPLAY_NAME,
-        "icon": ICON,
-        "build": _build_llama_8b,
-    },
-    # ── Add future models below ────────────────────────────────────────────
-    # gemini_flash.MODEL_KEY: {
-    #     "name": gemini_flash.DISPLAY_NAME,
-    #     "icon": gemini_flash.ICON,
-    #     "build": gemini_flash.build,
-    # },
+    _k1: {"name": _n1, "icon": _i1, "build": _build_llama_8b},
+
 }
 
 
