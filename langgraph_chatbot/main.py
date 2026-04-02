@@ -24,10 +24,15 @@ import traceback
 # ── FIX PATH FIRST ───────────────────────────────────────────────────────────
 import sys
 from pathlib import Path
+from app.utils.thread_service import init_threads_table
 
 _ROOT = Path(__file__).resolve().parent.parent  # points to COM726/
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
+
+
+# ── SQL table queries ─────────────────────────────────────────────
+init_threads_table()
 
 # ── Local imports AFTER path fix ─────────────────────────────────────────────
 

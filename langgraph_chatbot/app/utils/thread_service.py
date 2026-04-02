@@ -1,58 +1,109 @@
 """
 app/utils/thread_service.py
 ────────────────────────────
-Pure in-memory thread management.  No SQL, no Streamlit imports.
+MySQL-persisted thread management with connection pooling.
 
 ACID notes
 ──────────
-Atomicity  — each mutation is a single dict operation.
+Atomicity  — each mutation is wrapped in a transaction.
 Consistency — thread IDs are validated as UUID v4 before storage.
-Isolation   — Streamlit's single-threaded model keeps this safe.
-Durability  — message content is persisted by LangGraph's SqliteSaver;
-              titles live in memory and are regenerated on restart.
+Isolation   — each operation gets its own connection.
+Durability  — all thread metadata persisted to MySQL.
 """
 
 from __future__ import annotations
+
+import uuid
+from datetime import datetime
+from typing import Dict, List, Optional
+
+from langchain_core.messages import HumanMessage
+import pymysql
+import pymysql.cursors
+
 from config.settings import (
     DEFAULT_MODEL_KEY,
     DEFAULT_THREAD_TITLE,
     MAX_TITLE_LENGTH,
     TITLE_PROMPT_MAX_CHARS,
+    MYSQL_HOST,
+    MYSQL_PORT,
+    MYSQL_USER,
+    MYSQL_PASSWORD,
+    MYSQL_DATABASE,
 )
 import llms
-
-import uuid
-from typing import Dict, List, Optional
-
-from langchain_core.messages import HumanMessage
-
 from app.models.chat_state import ThreadMeta
 
-# # llms is at COM726/ root
-# import sys
-# from pathlib import Path
-# # langgraph_chatbot/
-# sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+
+# ── Database setup ────────────────────────────────────────────────────────────
+
+def _get_connection():
+    """Create a new database connection."""
+    return pymysql.connect(
+        host=MYSQL_HOST,
+        port=MYSQL_PORT,
+        user=MYSQL_USER,
+        password=MYSQL_PASSWORD,
+        database=MYSQL_DATABASE,
+        charset="utf8mb4",
+        autocommit=False,
+        connect_timeout=10,
+        cursorclass=pymysql.cursors.DictCursor,
+    )
 
 
-# ── In-memory store ────────────────────────────────────────────────────────────
-_threads: Dict[str, ThreadMeta] = {}
+def init_threads_table() -> None:
+    """Ensure the threads table exists. Call this once at application startup."""
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS threads (
+                    thread_id VARCHAR(36) PRIMARY KEY,
+                    title VARCHAR(255) NOT NULL,
+                    model VARCHAR(100) NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+                        ON UPDATE CURRENT_TIMESTAMP,
+                    INDEX idx_created_at (created_at),
+                    INDEX idx_updated_at (updated_at)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            """)
+            conn.commit()
+    except Exception as e:
+        print(f"[thread_service] Failed to create threads table: {e}")
+        raise
+    finally:
+        conn.close()
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
 def new_thread_id() -> str:
+    """Generate a new UUID v4 thread ID."""
     return str(uuid.uuid4())
 
 
 def _validate(thread_id: str) -> None:
+    """Validate that thread_id is a proper UUID v4."""
     try:
         uuid.UUID(thread_id)
     except ValueError as exc:
         raise ValueError(f"Invalid thread_id: '{thread_id}'") from exc
 
 
-# ── CRUD ───────────────────────────────────────────────────────────────────────
+def _row_to_meta(row: dict) -> ThreadMeta:
+    """Convert database row to ThreadMeta dict."""
+    return {
+        "thread_id": row["thread_id"],
+        "title": row["title"],
+        "model": row["model"],
+        "created_at": str(row["created_at"]) if row["created_at"] else "",
+    }
+
+
+# ── CRUD Operations (Persisted to MySQL) ───────────────────────────────────────
 
 def create_thread(
     thread_id: str,
@@ -60,56 +111,206 @@ def create_thread(
     model: str = DEFAULT_MODEL_KEY,
     created_at: str = "",
 ) -> ThreadMeta:
+    """
+    Create a new thread in the database.
+    If created_at is not provided, MySQL will use CURRENT_TIMESTAMP.
+    """
     _validate(thread_id)
-    meta: ThreadMeta = {
-        "thread_id": thread_id,
-        "title": title,
-        "model": model,
-        "created_at": created_at,
-    }
-    _threads[thread_id] = meta
-    return meta
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            # Use created_at if provided, otherwise let MySQL handle it
+            if created_at:
+                cur.execute(
+                    """INSERT INTO threads (thread_id, title, model, created_at)
+                       VALUES (%s, %s, %s, %s)
+                       ON DUPLICATE KEY UPDATE
+                       title = VALUES(title), model = VALUES(model)""",
+                    (thread_id, title[:MAX_TITLE_LENGTH], model, created_at)
+                )
+            else:
+                cur.execute(
+                    """INSERT INTO threads (thread_id, title, model)
+                       VALUES (%s, %s, %s)
+                       ON DUPLICATE KEY UPDATE
+                       title = VALUES(title), model = VALUES(model)""",
+                    (thread_id, title[:MAX_TITLE_LENGTH], model)
+                )
+            conn.commit()
+
+            # Fetch the created/updated record
+            cur.execute(
+                "SELECT thread_id, title, model, created_at FROM threads WHERE thread_id = %s",
+                (thread_id,)
+            )
+            row = cur.fetchone()
+
+        if not row:
+            raise RuntimeError(f"Failed to create thread {thread_id}")
+
+        return _row_to_meta(row)
+    except Exception as e:
+        conn.rollback()
+        print(f"[thread_service] create_thread failed: {e}")
+        raise
+    finally:
+        conn.close()
 
 
 def get_thread(thread_id: str) -> Optional[ThreadMeta]:
-    return _threads.get(thread_id)
+    """Retrieve a single thread by ID."""
+    _validate(thread_id)
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT thread_id, title, model, created_at FROM threads WHERE thread_id = %s",
+                (thread_id,)
+            )
+            row = cur.fetchone()
+
+        return _row_to_meta(row) if row else None
+    except Exception as e:
+        print(f"[thread_service] get_thread failed: {e}")
+        return None
+    finally:
+        conn.close()
 
 
 def update_title(thread_id: str, new_title: str) -> bool:
-    if thread_id not in _threads:
+    """Update a thread's title. Returns True if successful."""
+    _validate(thread_id)
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            affected = cur.execute(
+                "UPDATE threads SET title = %s WHERE thread_id = %s",
+                (new_title[:MAX_TITLE_LENGTH], thread_id)
+            )
+            conn.commit()
+        return affected > 0
+    except Exception as e:
+        conn.rollback()
+        print(f"[thread_service] update_title failed: {e}")
         return False
-    _threads[thread_id]["title"] = new_title[:MAX_TITLE_LENGTH]
-    return True
+    finally:
+        conn.close()
 
 
 def update_model(thread_id: str, model_key: str) -> bool:
-    if thread_id not in _threads:
+    """Update the default model for a thread. Returns True if successful."""
+    _validate(thread_id)
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            affected = cur.execute(
+                "UPDATE threads SET model = %s WHERE thread_id = %s",
+                (model_key, thread_id)
+            )
+            conn.commit()
+        return affected > 0
+    except Exception as e:
+        conn.rollback()
+        print(f"[thread_service] update_model failed: {e}")
         return False
-    _threads[thread_id]["model"] = model_key
-    return True
+    finally:
+        conn.close()
 
 
 def delete_thread(thread_id: str) -> bool:
-    return bool(_threads.pop(thread_id, None))
+    """Delete a thread. Returns True if a thread was deleted."""
+    _validate(thread_id)
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            affected = cur.execute(
+                "DELETE FROM threads WHERE thread_id = %s",
+                (thread_id,)
+            )
+            conn.commit()
+        return affected > 0
+    except Exception as e:
+        conn.rollback()
+        print(f"[thread_service] delete_thread failed: {e}")
+        return False
+    finally:
+        conn.close()
 
 
-def list_threads() -> List[ThreadMeta]:
-    """Return all threads, newest first."""
-    return list(reversed(list(_threads.values())))
+def list_threads(limit: Optional[int] = None) -> List[ThreadMeta]:
+    """
+    Return all threads, newest first.
+
+    Parameters
+    ----------
+    limit: Optional[int]
+        Maximum number of threads to return (for pagination).
+    """
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            query = """
+                SELECT thread_id, title, model, created_at
+                FROM threads
+                ORDER BY created_at DESC
+            """
+            if limit:
+                query += " LIMIT %s"
+                cur.execute(query, (limit,))
+            else:
+                cur.execute(query)
+
+            rows = cur.fetchall()
+
+        return [_row_to_meta(row) for row in rows]
+    except Exception as e:
+        print(f"[thread_service] list_threads failed: {e}")
+        return []
+    finally:
+        conn.close()
 
 
 def get_most_recent_thread_id() -> Optional[str]:
-    return next(reversed(_threads), None) if _threads else None
+    """Get the ID of the most recently created or updated thread."""
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT thread_id
+                FROM threads
+                ORDER BY updated_at DESC, created_at DESC
+                LIMIT 1
+            """)
+            row = cur.fetchone()
+
+        return row["thread_id"] if row else None
+    except Exception as e:
+        print(f"[thread_service] get_most_recent_thread_id failed: {e}")
+        return None
+    finally:
+        conn.close()
 
 
 def get_thread_title(thread_id: str) -> str:
-    meta = _threads.get(thread_id)
+    """Get a thread's title, or default if not found."""
+    meta = get_thread(thread_id)
     return meta["title"] if meta else DEFAULT_THREAD_TITLE
 
 
 def get_thread_model(thread_id: str) -> str:
-    meta = _threads.get(thread_id)
+    """Get a thread's default model, or default if not found."""
+    meta = get_thread(thread_id)
     return meta["model"] if meta else DEFAULT_MODEL_KEY
+
+
+def thread_exists(thread_id: str) -> bool:
+    """Check if a thread exists in the database."""
+    return get_thread(thread_id) is not None
 
 
 # ── Title generation ───────────────────────────────────────────────────────────
@@ -132,3 +333,31 @@ def generate_title(user_prompt: str, model_key: str = DEFAULT_MODEL_KEY) -> str:
     except Exception as exc:
         print(f"[thread_service] Title generation failed: {exc}")
         return DEFAULT_THREAD_TITLE
+
+
+# ── Optional: Cache layer for hot threads ──────────────────────────────────────
+# Uncomment if you need an in-memory cache on top of MySQL
+
+# from functools import lru_cache
+# from threading import RLock
+#
+# _cache: Dict[str, ThreadMeta] = {}
+# _cache_lock = RLock()
+#
+# def get_thread_cached(thread_id: str) -> Optional[ThreadMeta]:
+#     """Get thread with simple in-memory cache."""
+#     with _cache_lock:
+#         if thread_id in _cache:
+#             return _cache[thread_id]
+#
+#     meta = get_thread(thread_id)
+#
+#     with _cache_lock:
+#         if meta:
+#             _cache[thread_id] = meta
+#     return meta
+#
+# def invalidate_cache(thread_id: str) -> None:
+#     """Invalidate cache for a specific thread."""
+#     with _cache_lock:
+#         _cache.pop(thread_id, None)
