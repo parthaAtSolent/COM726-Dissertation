@@ -80,6 +80,7 @@ def _deserialize(data: bytes | str) -> Any:
 
 # ── MySQL Checkpointer ────────────────────────────────────────────────────────
 
+
 class MySQLSaver(BaseCheckpointSaver):
     """MySQL checkpointer with connection management and retry logic"""
 
@@ -87,6 +88,9 @@ class MySQLSaver(BaseCheckpointSaver):
         super().__init__()
         self._conn = None
         self._connect()
+        # Allow the connection handshake to fully complete
+        # before LangGraph immediately calls get_tuple on startup
+        time.sleep(0.3)
 
     def _connect(self) -> None:
         """Create a new database connection"""
@@ -115,15 +119,25 @@ class MySQLSaver(BaseCheckpointSaver):
 
     def _ensure_connection(self) -> None:
         """Ensure connection is alive, reconnect if needed"""
+        # Guard: if _conn is None, just reconnect directly
         if self._conn is None:
             self._connect()
             return
 
         try:
-            self._conn.ping(reconnect=True)
+            # Use a lightweight query instead of ping() — ping has known
+            # issues with PyMySQL causing 'Packet sequence number wrong'
+            # and 'NoneType has no attribute settimeout' on fresh connections
+            self._conn.cursor().execute("SELECT 1")
         except Exception as e:
             print(f"[MySQLSaver] Connection lost, reconnecting... Error: {e}")
-            self._connect()
+            self._conn = None
+            try:
+                self._connect()
+            except Exception as connect_err:
+                print(f"[MySQLSaver] Reconnect failed: {connect_err}")
+                self._conn = None
+                raise
 
     def _execute_with_retry(self, operation, *args, **kwargs):
         """Execute a database operation with retry logic"""
@@ -132,25 +146,34 @@ class MySQLSaver(BaseCheckpointSaver):
 
         for attempt in range(max_retries):
             try:
+                # ── KEY FIX: ensure connection BEFORE calling the operation,
+                #    then pass self._conn explicitly so the operation always
+                #    uses the live connection object, not a stale closure.
                 self._ensure_connection()
-                result = operation(*args, **kwargs)
+                if self._conn is None:
+                    raise RuntimeError(
+                        "Connection unavailable after reconnect attempt")
+                result = operation(self._conn, *args, **kwargs)
                 return result
             except Exception as e:
                 print(
                     f"[MySQLSaver] Operation failed (attempt {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     time.sleep(retry_delay)
+                    self._conn = None   # force fresh reconnect on next attempt
                     continue
                 else:
                     raise
 
+    # ── All inner functions now accept `conn` as their first argument ─────────
+
     def get_tuple(self, config: dict) -> Optional[CheckpointTuple]:
-        def _get_tuple():
+        def _get_tuple(conn):
             thread_id = config["configurable"]["thread_id"]
             checkpoint_ns = config["configurable"].get("checkpoint_ns", "")
             checkpoint_id = config["configurable"].get("checkpoint_id")
 
-            with self._conn.cursor() as cur:
+            with conn.cursor() as cur:
                 if checkpoint_id:
                     cur.execute(
                         """SELECT checkpoint, metadata, parent_id, checkpoint_id
@@ -206,7 +229,7 @@ class MySQLSaver(BaseCheckpointSaver):
         before: Optional[dict] = None,
         limit: Optional[int] = None,
     ) -> Iterator[CheckpointTuple]:
-        def _list():
+        def _list(conn):
             thread_id = config["configurable"]["thread_id"]
             checkpoint_ns = config["configurable"].get("checkpoint_ns", "")
             params: list = [thread_id, checkpoint_ns]
@@ -219,7 +242,7 @@ class MySQLSaver(BaseCheckpointSaver):
                 query += " LIMIT %s"
                 params.append(limit)
 
-            with self._conn.cursor() as cur:
+            with conn.cursor() as cur:
                 cur.execute(query, params)
                 rows = cur.fetchall()
 
@@ -245,7 +268,9 @@ class MySQLSaver(BaseCheckpointSaver):
 
         try:
             self._ensure_connection()
-            yield from _list()
+            if self._conn is None:
+                return
+            yield from _list(self._conn)
         except Exception as e:
             print(f"[MySQLSaver.list] Error: {e}")
             return
@@ -257,13 +282,13 @@ class MySQLSaver(BaseCheckpointSaver):
         metadata: CheckpointMetadata,
         new_versions: Any,
     ) -> dict:
-        def _put():
+        def _put(conn):
             thread_id = config["configurable"]["thread_id"]
             checkpoint_ns = config["configurable"].get("checkpoint_ns", "")
             checkpoint_id = checkpoint["id"]
             parent_id = config["configurable"].get("checkpoint_id")
 
-            with self._conn.cursor() as cur:
+            with conn.cursor() as cur:
                 cur.execute(
                     """INSERT INTO checkpoints
                            (thread_id, checkpoint_ns, checkpoint_id,
@@ -281,7 +306,7 @@ class MySQLSaver(BaseCheckpointSaver):
                         _serialize(metadata),
                     ),
                 )
-            self._conn.commit()
+            conn.commit()
 
             return {
                 "configurable": {
@@ -299,12 +324,12 @@ class MySQLSaver(BaseCheckpointSaver):
         writes: Sequence[Tuple[str, Any]],
         task_id: str,
     ) -> None:
-        def _put_writes():
+        def _put_writes(conn):
             thread_id = config["configurable"]["thread_id"]
             checkpoint_ns = config["configurable"].get("checkpoint_ns", "")
             checkpoint_id = config["configurable"]["checkpoint_id"]
 
-            with self._conn.cursor() as cur:
+            with conn.cursor() as cur:
                 for idx, (channel, value) in enumerate(writes):
                     cur.execute(
                         """INSERT INTO checkpoint_writes
@@ -326,22 +351,21 @@ class MySQLSaver(BaseCheckpointSaver):
                             _serialize(value),
                         ),
                     )
-            self._conn.commit()
+            conn.commit()
 
         try:
             self._execute_with_retry(_put_writes)
         except Exception as e:
             print(f"[MySQLSaver.put_writes] Error: {e}")
-            # Don't raise - this is not critical for the chat flow
 
     def delete_thread(self, thread_id: str) -> None:
-        def _delete_thread():
-            with self._conn.cursor() as cur:
+        def _delete_thread(conn):
+            with conn.cursor() as cur:
                 cur.execute(
                     "DELETE FROM checkpoints WHERE thread_id=%s", (thread_id,))
                 cur.execute(
                     "DELETE FROM checkpoint_writes WHERE thread_id=%s", (thread_id,))
-            self._conn.commit()
+            conn.commit()
 
         try:
             self._execute_with_retry(_delete_thread)
@@ -349,8 +373,8 @@ class MySQLSaver(BaseCheckpointSaver):
             print(f"[MySQLSaver.delete_thread] Error: {e}")
             raise
 
-
 # ── Connection factory ────────────────────────────────────────────────────────
+
 
 _checkpointer = MySQLSaver()
 

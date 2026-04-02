@@ -18,8 +18,8 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Environment ───────────────────────────────────────────────────────────────
 load_dotenv(BASE_DIR.parent / ".env")
-print(os.getenv("GOOGLE_API_KEY"))
-print(os.getenv("GROQ_API_KEY"))
+# print(os.getenv("GOOGLE_API_KEY"))
+# print(os.getenv("GROQ_API_KEY"))
 
 # ── MySQL ──────────────────────────────────────────────────────────────────────
 MYSQL_HOST: str = os.getenv("MYSQL_HOST", "localhost")
