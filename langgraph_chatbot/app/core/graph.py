@@ -5,6 +5,7 @@ LangGraph StateGraph with MySQL checkpointing and streaming.
 """
 
 from __future__ import annotations
+import threading
 from config.settings import (
     DEFAULT_MODEL_KEY,
     MYSQL_HOST,
@@ -82,25 +83,23 @@ def _deserialize(data: bytes | str) -> Any:
 
 
 class MySQLSaver(BaseCheckpointSaver):
-    """MySQL checkpointer with connection management and retry logic"""
+    """MySQL checkpointer with thread-local connection management"""
 
     def __init__(self) -> None:
         super().__init__()
-        self._conn = None
-        self._connect()
-        # Allow the connection handshake to fully complete
-        # before LangGraph immediately calls get_tuple on startup
-        time.sleep(0.3)
+        self._local = threading.local()  # Each thread gets its own connection
 
-    def _connect(self) -> None:
-        """Create a new database connection"""
+    def _get_conn(self):
+        """Get or create a connection for the current thread"""
+        conn = getattr(self._local, 'conn', None)
+        if conn is None:
+            self._local.conn = self._create_connection()
+        return self._local.conn
+
+    def _create_connection(self):
+        """Create a brand new database connection"""
         try:
-            if self._conn:
-                try:
-                    self._conn.close()
-                except:
-                    pass
-            self._conn = pymysql.connect(
+            conn = pymysql.connect(
                 host=MYSQL_HOST,
                 port=MYSQL_PORT,
                 user=MYSQL_USER,
@@ -112,32 +111,33 @@ class MySQLSaver(BaseCheckpointSaver):
                 cursorclass=pymysql.cursors.Cursor
             )
             print("[MySQLSaver] Database connected successfully")
+            return conn
         except Exception as e:
             print(f"[MySQLSaver] Connection failed: {e}")
-            self._conn = None
             raise
 
-    def _ensure_connection(self) -> None:
-        """Ensure connection is alive, reconnect if needed"""
-        # Guard: if _conn is None, just reconnect directly
-        if self._conn is None:
-            self._connect()
-            return
+    def _ensure_connection(self):
+        """Ensure the current thread's connection is alive"""
+        conn = getattr(self._local, 'conn', None)
+
+        if conn is None:
+            self._local.conn = self._create_connection()
+            return self._local.conn
 
         try:
-            # Use a lightweight query instead of ping() — ping has known
-            # issues with PyMySQL causing 'Packet sequence number wrong'
-            # and 'NoneType has no attribute settimeout' on fresh connections
-            self._conn.cursor().execute("SELECT 1")
+            # Lightweight check instead of ping()
+            conn.cursor().execute("SELECT 1")
+            return conn
         except Exception as e:
             print(f"[MySQLSaver] Connection lost, reconnecting... Error: {e}")
-            self._conn = None
+            # Close the dead connection cleanly
             try:
-                self._connect()
-            except Exception as connect_err:
-                print(f"[MySQLSaver] Reconnect failed: {connect_err}")
-                self._conn = None
-                raise
+                conn.close()
+            except:
+                pass
+            self._local.conn = None
+            self._local.conn = self._create_connection()
+            return self._local.conn
 
     def _execute_with_retry(self, operation, *args, **kwargs):
         """Execute a database operation with retry logic"""
@@ -146,26 +146,26 @@ class MySQLSaver(BaseCheckpointSaver):
 
         for attempt in range(max_retries):
             try:
-                # ── KEY FIX: ensure connection BEFORE calling the operation,
-                #    then pass self._conn explicitly so the operation always
-                #    uses the live connection object, not a stale closure.
-                self._ensure_connection()
-                if self._conn is None:
-                    raise RuntimeError(
-                        "Connection unavailable after reconnect attempt")
-                result = operation(self._conn, *args, **kwargs)
+                conn = self._ensure_connection()
+                result = operation(conn, *args, **kwargs)
                 return result
             except Exception as e:
                 print(
                     f"[MySQLSaver] Operation failed (attempt {attempt + 1}/{max_retries}): {e}")
+                # Force new connection on next attempt
+                try:
+                    old_conn = getattr(self._local, 'conn', None)
+                    if old_conn:
+                        old_conn.close()
+                except:
+                    pass
+                self._local.conn = None
+
                 if attempt < max_retries - 1:
                     time.sleep(retry_delay)
-                    self._conn = None   # force fresh reconnect on next attempt
                     continue
                 else:
                     raise
-
-    # ── All inner functions now accept `conn` as their first argument ─────────
 
     def get_tuple(self, config: dict) -> Optional[CheckpointTuple]:
         def _get_tuple(conn):
@@ -267,10 +267,8 @@ class MySQLSaver(BaseCheckpointSaver):
                 )
 
         try:
-            self._ensure_connection()
-            if self._conn is None:
-                return
-            yield from _list(self._conn)
+            conn = self._ensure_connection()
+            yield from _list(conn)
         except Exception as e:
             print(f"[MySQLSaver.list] Error: {e}")
             return
@@ -373,6 +371,7 @@ class MySQLSaver(BaseCheckpointSaver):
             print(f"[MySQLSaver.delete_thread] Error: {e}")
             raise
 
+
 # ── Connection factory ────────────────────────────────────────────────────────
 
 
@@ -380,6 +379,47 @@ _checkpointer = MySQLSaver()
 
 
 # ── Chat node ─────────────────────────────────────────────────────────────────
+
+def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
+    """
+    Trim message history to stay within token limits.
+    Keeps the system context + most recent messages.
+    Rough estimate: 1 token ≈ 4 characters.
+    """
+    # Always keep at least the last human message
+    if not messages:
+        return messages
+
+    # Estimate tokens per message (rough: chars / 4)
+    def estimate_tokens(msg) -> int:
+        return len(msg.content) // 4 + 10  # +10 for message overhead
+
+    # Work backwards from most recent, accumulate until limit
+    trimmed = []
+    total_tokens = 0
+
+    for msg in reversed(messages):
+        msg_tokens = estimate_tokens(msg)
+        if total_tokens + msg_tokens > max_tokens:
+            break
+        trimmed.insert(0, msg)
+        total_tokens += msg_tokens
+
+    # Ensure the list always starts with a HumanMessage
+    # (LangChain/Groq requires human message first)
+    while trimmed and not isinstance(trimmed[0], HumanMessage):
+        trimmed.pop(0)
+
+    # Fallback: if trimming removed everything, keep just the last message
+    if not trimmed:
+        trimmed = [messages[-1]]
+
+    if len(trimmed) < len(messages):
+        print(
+            f"[chat_node] Trimmed history from {len(messages)} to {len(trimmed)} messages (~{total_tokens} tokens)")
+
+    return trimmed
+
 
 def chat_node(state: ChatState) -> dict:
     try:
@@ -406,9 +446,23 @@ def chat_node(state: ChatState) -> dict:
             "auto_selected": False,
         }
 
-        # Build plain-text prompt from full history
+        # ── Trim history to avoid token limit errors ──────────────────────────
+        # Different models have different limits
+        token_limits = {
+            "llama-8b-instant":  4000,
+            "gemini-2.5-flash":  8000,
+            "llama3.2-3b":       3000,
+            "qwen3.5-0.8b":      3000,
+            "phi3-3.8b":         3000,
+            "granite3-dense-2b": 3000,
+            "gemma3-270m":       2000,
+        }
+        max_tokens = token_limits.get(model_key, 3000)
+        trimmed_messages = _trim_messages(messages, max_tokens=max_tokens)
+
+        # Build plain-text prompt from trimmed history
         lines = []
-        for msg in messages:
+        for msg in trimmed_messages:
             if isinstance(msg, HumanMessage):
                 lines.append(f"User: {msg.content}")
             elif isinstance(msg, AIMessage):
