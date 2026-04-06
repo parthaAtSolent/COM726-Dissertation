@@ -1,85 +1,199 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   static/css/sidebar.css  —  Sidebar: branding, model selector, thread list
+   static/css/sidebar.css - Complete with Dark & Light themes
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Sidebar background ─────────────────────────────────────────────────── */
-section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-    border-right: 1px solid rgba(108, 99, 255, 0.2);
+/* ── Base styles that work for both themes ─────────────────────────────────── */
+.branding-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.2rem 0 0.6rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.5rem;
 }
 
-/* ── App title ───────────────────────────────────────────────────────────── */
+.branding-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.branding-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    transition: color 0.35s ease;
+}
+
+.branding-subtitle {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    transition: color 0.35s ease;
+}
+
+/* ── Sidebar sections ──────────────────────────────────────────────────────── */
 section[data-testid="stSidebar"] h1 {
     font-size: 1.35rem;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #e0e0f0;
+    color: var(--text-primary);
 }
 
-/* ── Section subheaders ──────────────────────────────────────────────────── */
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3 {
     font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #9d96ff;
+    color: var(--accent-light);
     margin-bottom: 0.4rem;
 }
 
-/* ── Model selectbox ─────────────────────────────────────────────────────── */
 section[data-testid="stSidebar"] .stSelectbox > div[data-baseweb="select"] {
     background: rgba(108, 99, 255, 0.1);
-    border: 1px solid rgba(108, 99, 255, 0.35);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    transition: border-color 0.2s ease;
-}
-section[data-testid="stSidebar"] .stSelectbox > div[data-baseweb="select"]:hover {
-    border-color: rgba(108, 99, 255, 0.65);
+    transition: border-color 0.2s ease, background 0.35s ease;
 }
 
-/* ── New Chat primary button ─────────────────────────────────────────────── */
+section[data-testid="stSidebar"] .stSelectbox > div[data-baseweb="select"]:hover {
+    border-color: var(--border-hover);
+}
+
 section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #6c63ff, #a78bfa);
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
     border: none;
     border-radius: 10px;
     font-weight: 600;
     font-size: 0.95rem;
     padding: 0.55rem 1rem;
+    color: #ffffff;
     box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
     transition: opacity 0.2s ease, transform 0.15s ease;
+    width: 100%;
 }
+
 section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
     opacity: 0.9;
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(108, 99, 255, 0.45);
 }
 
-/* ── Thread list secondary buttons ──────────────────────────────────────── */
 section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--thread-bg);
+    border: 1px solid var(--thread-border);
     border-radius: 8px;
-    color: #c8c4e8;
+    color: var(--text-thread);
     font-size: 0.88rem;
     text-align: left;
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
-    background: rgba(108, 99, 255, 0.15);
-    border-color: rgba(108, 99, 255, 0.4);
-    color: #e0e0f0;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    width: 100%;
+    justify-content: flex-start;
 }
 
-/* ── Divider ─────────────────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
+    background: var(--thread-hover-bg);
+    border-color: var(--thread-hover-border);
+    color: var(--text-primary);
+}
+
 section[data-testid="stSidebar"] hr {
-    border-color: rgba(108, 99, 255, 0.2);
+    border-color: var(--border);
     margin: 0.75rem 0;
 }
 
-/* ── Caption / small text ────────────────────────────────────────────────── */
 section[data-testid="stSidebar"] .stCaption {
-    color: #7a75a8;
+    color: var(--text-muted);
     font-size: 0.78rem;
     line-height: 1.5;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Animated Theme Toggle Pill (CopyCase style)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.theme-switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 64px;
+    height: 30px;
+    border-radius: 15px;
+    padding: 0 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+    user-select: none;
+    outline: none;
+    background: linear-gradient(135deg, #1a1a3e, #0d0d24);
+    border: 1px solid rgba(108, 99, 255, 0.45);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.theme-switch:focus-visible {
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.5);
+}
+
+.theme-switch.is-light {
+    background: linear-gradient(135deg, #bfdbfe, #e0f2fe);
+    border-color: rgba(99, 179, 255, 0.5);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.switch-moon {
+    font-size: 13px;
+    line-height: 1;
+    z-index: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.theme-switch.is-light .switch-moon {
+    opacity: 0.35;
+    transform: scale(0.75);
+}
+
+.switch-sun {
+    font-size: 13px;
+    line-height: 1;
+    z-index: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0.35;
+    transform: scale(0.75);
+}
+
+.theme-switch.is-light .switch-sun {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    z-index: 2;
+    background: linear-gradient(145deg, #8b7fff, #6C63FF);
+    box-shadow: 0 2px 6px rgba(108, 99, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
+}
+
+.theme-switch.is-light .switch-thumb {
+    transform: translateX(34px);
+    background: linear-gradient(145deg, #fde68a, #f59e0b);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.65);
+}
+
+.theme-switch:hover {
+    border-color: rgba(108, 99, 255, 0.7);
+}
+
+.theme-switch.is-light:hover {
+    border-color: rgba(99, 179, 255, 0.75);
 }

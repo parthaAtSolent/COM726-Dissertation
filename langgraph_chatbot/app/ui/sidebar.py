@@ -119,18 +119,54 @@ def _on_model_change() -> None:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _render_branding() -> None:
+    """
+    Inject branding HTML via st.markdown at page level.
+    Streamlit strips tags from st.sidebar.markdown, so we use
+    a CSS trick to position the branding inside the sidebar visually.
+    """
     try:
-        html = load_template("sidebar.html")
-        if html:
-            st.sidebar.markdown(html, unsafe_allow_html=True)
-        else:
-            st.sidebar.markdown("""
-            <div style="text-align: center; padding: 1rem 0;">
-                <h2 style="margin: 0; color: #FF4B4B;">🧠 COM726</h2>
-                <p style="margin: 0; font-size: 0.8rem; opacity: 0.8;">LangGraph Chatbot</p>
+        st.markdown("""
+        <style>
+        .branding-bar {
+            display:         flex;
+            align-items:     center;
+            justify-content: space-between;
+            padding:         0.2rem 0 0.6rem;
+            border-bottom:   1px solid var(--border, rgba(108,99,255,0.15));
+            margin-bottom:   0.5rem;
+        }
+        .branding-left {
+            display:     flex;
+            align-items: center;
+            gap:         0.5rem;
+        }
+        .branding-title {
+            font-size:   1.05rem;
+            font-weight: 700;
+            color:       var(--text-primary, #e0e0f0);
+            line-height: 1.2;
+        }
+        .branding-subtitle {
+            font-size:      0.72rem;
+            color:          var(--text-muted, #7a75a8);
+            letter-spacing: 0.06em;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.sidebar.markdown("""
+        <div class="branding-bar">
+            <div class="branding-left">
+                <span style="font-size:1.6rem;">🧠</span>
+                <div>
+                    <div class="branding-title">LangGraph Chat</div>
+                    <div class="branding-subtitle">COM726 · DISSERTATION</div>
+                </div>
             </div>
-            """, unsafe_allow_html=True)
-            st.sidebar.divider()
+            
+        </div>
+        """, unsafe_allow_html=True)
+
     except Exception as e:
         st.sidebar.error(f"Failed to load branding: {str(e)}")
 

@@ -1,10 +1,12 @@
-[theme]
-primaryColor        = "#6C63FF"
-backgroundColor     = "#0F0F1A"
-secondaryBackgroundColor = "#1A1A2E"
-textColor           = "#E0E0F0"
-font                = "sans serif"
-
 [server]
-headless            = true
-enableCORS          = true
+headless   = true
+enableCORS = true
+
+# Remove the [theme] section completely to let our JS handle theming
+# Or comment it out:
+# [theme]
+# primaryColor             = "#6C63FF"
+# backgroundColor          = "#F5F5FF"
+# secondaryBackgroundColor = "#EBEBFF"
+# textColor                = "#1A1A2E"
+# font                     = "sans serif"

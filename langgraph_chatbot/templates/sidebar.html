@@ -1,26 +1,20 @@
 <!--
   templates/sidebar.html
-  ───────────────────────
-  Static HTML fragments for the sidebar.
-  Injected once at startup via st.markdown(unsafe_allow_html=True).
-  Keep this logic-free — all dynamic data is handled in Python.
+  Complete with animated theme toggle
 -->
-
-<!-- ── App branding block ────────────────────────────────────────────────── -->
-<div style="
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.2rem 0 0.6rem;
-    border-bottom: 1px solid rgba(108,99,255,0.15);
-    margin-bottom: 0.5rem;">
-    <span style="font-size:1.6rem;">🧠</span>
-    <div>
-        <div style="font-size:1.05rem; font-weight:700; color:#e0e0f0; line-height:1.2;">
-            LangGraph Chat
+<div class="branding-bar">
+    <div class="branding-left">
+        <span style="font-size:1.6rem;">🧠</span>
+        <div>
+            <div class="branding-title">LangGraph Chat</div>
+            <div class="branding-subtitle">COM726 · DISSERTATION</div>
         </div>
-        <div style="font-size:0.72rem; color:#7a75a8; letter-spacing:0.06em;">
-            COM726 · DISSERTATION
-        </div>
+    </div>
+    
+    <!-- Animated theme toggle pill -->
+    <div class="theme-switch" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle theme">
+        <span class="switch-moon">🌙</span>
+        <span class="switch-thumb"></span>
+        <span class="switch-sun">☀️</span>
     </div>
 </div>

@@ -29,8 +29,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
 inject_css("sidebar.css", "chat.css")
-inject_js("utils.js")
+inject_js("theme.js", "utils.js")
+
 init_threads_table()
 
 
