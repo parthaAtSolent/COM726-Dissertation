@@ -5,7 +5,6 @@ LangGraph StateGraph with MySQL checkpointing and streaming.
 """
 
 from __future__ import annotations
-import threading
 from config.settings import (
     DEFAULT_MODEL_KEY,
     MYSQL_HOST,
@@ -26,8 +25,9 @@ from langgraph.graph import END, START, StateGraph
 from langchain_core.messages import AIMessage, HumanMessage, BaseMessage
 
 import json
-from typing import Any, Iterator, Optional, Sequence, Tuple
+import threading
 import time
+from typing import Any, Iterator, Optional, Sequence, Tuple
 
 import pymysql
 import pymysql.cursors
@@ -81,23 +81,20 @@ def _deserialize(data: bytes | str) -> Any:
 
 # ── MySQL Checkpointer ────────────────────────────────────────────────────────
 
-
 class MySQLSaver(BaseCheckpointSaver):
-    """MySQL checkpointer with thread-local connection management"""
+    """MySQL checkpointer with thread-local connection management."""
 
     def __init__(self) -> None:
         super().__init__()
-        self._local = threading.local()  # Each thread gets its own connection
+        self._local = threading.local()
 
     def _get_conn(self):
-        """Get or create a connection for the current thread"""
         conn = getattr(self._local, 'conn', None)
         if conn is None:
             self._local.conn = self._create_connection()
         return self._local.conn
 
     def _create_connection(self):
-        """Create a brand new database connection"""
         try:
             conn = pymysql.connect(
                 host=MYSQL_HOST,
@@ -117,7 +114,6 @@ class MySQLSaver(BaseCheckpointSaver):
             raise
 
     def _ensure_connection(self):
-        """Ensure the current thread's connection is alive"""
         conn = getattr(self._local, 'conn', None)
 
         if conn is None:
@@ -125,12 +121,10 @@ class MySQLSaver(BaseCheckpointSaver):
             return self._local.conn
 
         try:
-            # Lightweight check instead of ping()
             conn.cursor().execute("SELECT 1")
             return conn
         except Exception as e:
             print(f"[MySQLSaver] Connection lost, reconnecting... Error: {e}")
-            # Close the dead connection cleanly
             try:
                 conn.close()
             except:
@@ -140,7 +134,6 @@ class MySQLSaver(BaseCheckpointSaver):
             return self._local.conn
 
     def _execute_with_retry(self, operation, *args, **kwargs):
-        """Execute a database operation with retry logic"""
         max_retries = 3
         retry_delay = 0.5
 
@@ -152,7 +145,6 @@ class MySQLSaver(BaseCheckpointSaver):
             except Exception as e:
                 print(
                     f"[MySQLSaver] Operation failed (attempt {attempt + 1}/{max_retries}): {e}")
-                # Force new connection on next attempt
                 try:
                     old_conn = getattr(self._local, 'conn', None)
                     if old_conn:
@@ -374,27 +366,19 @@ class MySQLSaver(BaseCheckpointSaver):
 
 # ── Connection factory ────────────────────────────────────────────────────────
 
-
 _checkpointer = MySQLSaver()
 
 
-# ── Chat node ─────────────────────────────────────────────────────────────────
+# ── Token trimmer ─────────────────────────────────────────────────────────────
 
 def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
-    """
-    Trim message history to stay within token limits.
-    Keeps the system context + most recent messages.
-    Rough estimate: 1 token ≈ 4 characters.
-    """
-    # Always keep at least the last human message
+    """Trim message history to stay within token limits."""
     if not messages:
         return messages
 
-    # Estimate tokens per message (rough: chars / 4)
     def estimate_tokens(msg) -> int:
-        return len(msg.content) // 4 + 10  # +10 for message overhead
+        return len(msg.content) // 4 + 10
 
-    # Work backwards from most recent, accumulate until limit
     trimmed = []
     total_tokens = 0
 
@@ -405,21 +389,16 @@ def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
         trimmed.insert(0, msg)
         total_tokens += msg_tokens
 
-    # Ensure the list always starts with a HumanMessage
-    # (LangChain/Groq requires human message first)
     while trimmed and not isinstance(trimmed[0], HumanMessage):
         trimmed.pop(0)
 
-    # Fallback: if trimming removed everything, keep just the last message
     if not trimmed:
         trimmed = [messages[-1]]
 
-    if len(trimmed) < len(messages):
-        print(
-            f"[chat_node] Trimmed history from {len(messages)} to {len(trimmed)} messages (~{total_tokens} tokens)")
-
     return trimmed
 
+
+# ── Chat node ─────────────────────────────────────────────────────────────────
 
 def chat_node(state: ChatState) -> dict:
     try:
@@ -437,6 +416,7 @@ def chat_node(state: ChatState) -> dict:
             return {
                 "messages":     [AIMessage(content="I didn't receive a message.")],
                 "routing_info": None,
+                "rag_context":  None,
             }
 
         routing_info: RoutingInfo = {
@@ -446,8 +426,30 @@ def chat_node(state: ChatState) -> dict:
             "auto_selected": False,
         }
 
-        # ── Trim history to avoid token limit errors ──────────────────────────
-        # Different models have different limits
+        # ── RAG: retrieve relevant context if vectorstore has docs ────────────
+        rag_context = state.get("rag_context") or ""
+
+        if not rag_context:
+            try:
+                from app.rag.retriever import retrieve_context
+                rag_context = retrieve_context(last_user_message)
+            except Exception as rag_err:
+                print(f"[graph.chat_node] RAG retrieval skipped: {rag_err}")
+                rag_context = ""
+
+        # ── Build prompt ──────────────────────────────────────────────────────
+        lines = []
+
+        if rag_context:
+            lines.append(
+                "You are a helpful assistant. Use the following context from "
+                "uploaded documents to answer the user's question. If the context "
+                "doesn't contain the answer, say so and answer from your own knowledge.\n"
+            )
+            lines.append(f"CONTEXT:\n{rag_context}\n")
+            lines.append("CONVERSATION:")
+
+        # Token limits per model
         token_limits = {
             "llama-8b-instant":  4000,
             "gemini-2.5-flash":  8000,
@@ -458,11 +460,9 @@ def chat_node(state: ChatState) -> dict:
             "gemma3-270m":       2000,
         }
         max_tokens = token_limits.get(model_key, 3000)
-        trimmed_messages = _trim_messages(messages, max_tokens=max_tokens)
+        trimmed = _trim_messages(messages, max_tokens=max_tokens)
 
-        # Build plain-text prompt from trimmed history
-        lines = []
-        for msg in trimmed_messages:
+        for msg in trimmed:
             if isinstance(msg, HumanMessage):
                 lines.append(f"User: {msg.content}")
             elif isinstance(msg, AIMessage):
@@ -476,18 +476,21 @@ def chat_node(state: ChatState) -> dict:
             return {
                 "messages":     [AIMessage(content=response.content)],
                 "routing_info": routing_info,
+                "rag_context":  None,
             }
         except Exception as exc:
             print(f"[graph.chat_node] LLM Error: {exc}")
             return {
                 "messages":     [AIMessage(content=f"⚠️ Error: {str(exc)}")],
                 "routing_info": routing_info,
+                "rag_context":  None,
             }
     except Exception as e:
         print(f"[graph.chat_node] Unexpected error: {e}")
         return {
-            "messages": [AIMessage(content=f"⚠️ Unexpected error: {str(e)}")],
+            "messages":     [AIMessage(content=f"⚠️ Unexpected error: {str(e)}")],
             "routing_info": None,
+            "rag_context":  None,
         }
 
 
@@ -499,11 +502,9 @@ def _compile():
         builder.add_node("chat_node", chat_node)
         builder.add_edge(START, "chat_node")
         builder.add_edge("chat_node", END)
-
         return builder.compile(checkpointer=_checkpointer)
     except Exception as e:
         print(f"[graph.py] Failed to compile graph: {e}")
-        # Return a minimal graph without checkpointer
         builder = StateGraph(ChatState)
         builder.add_node("chat_node", chat_node)
         builder.add_edge(START, "chat_node")

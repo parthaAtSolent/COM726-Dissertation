@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS threads (
 -- Clear contents of both tables
 TRUNCATE TABLE checkpoints;
 TRUNCATE TABLE checkpoint_writes;
-
+TRUNCATE TABLE threads;
 
 -- Verify table structures
 SHOW TABLES;

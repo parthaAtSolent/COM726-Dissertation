@@ -1,7 +1,11 @@
 from __future__ import annotations
+import os
+import tempfile
 import traceback
+
 import streamlit as st
 import llms
+
 from app.utils import (
     create_thread,
     delete_thread,
@@ -16,6 +20,7 @@ from app.utils import (
     update_title,
 )
 from app.core.graph import chatbot
+from app.rag import ingest_documents, clear_vectorstore, list_ingested_files
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -32,7 +37,7 @@ def _new_chat() -> None:
         )
         create_thread(tid, title="New Chat", model=model)
         st.session_state.update({
-            "thread_id":      tid,
+            "thread_id":       tid,
             "message_history": [],
             "editing_thread":  None,
             "delete_confirm":  None,
@@ -119,11 +124,6 @@ def _on_model_change() -> None:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _render_branding() -> None:
-    """
-    Inject branding HTML via st.markdown at page level.
-    Streamlit strips tags from st.sidebar.markdown, so we use
-    a CSS trick to position the branding inside the sidebar visually.
-    """
     try:
         st.markdown("""
         <style>
@@ -157,13 +157,12 @@ def _render_branding() -> None:
         st.sidebar.markdown("""
         <div class="branding-bar">
             <div class="branding-left">
-                <span style="font-size:1.6rem;">🧠</span>
+                <span style="font-size:1.6rem;">🌙</span>
                 <div>
                     <div class="branding-title">LangGraph Chat</div>
                     <div class="branding-subtitle">COM726 · DISSERTATION</div>
                 </div>
             </div>
-            
         </div>
         """, unsafe_allow_html=True)
 
@@ -279,6 +278,74 @@ def _render_thread_row(thread: dict) -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# RAG panel
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _render_rag_panel() -> None:
+    """Render the document upload panel for RAG."""
+    try:
+        st.sidebar.divider()
+        st.sidebar.header("📄 Documents (RAG)")
+
+        # Show already ingested files
+        ingested = list_ingested_files()
+        if ingested:
+            st.sidebar.caption(f"✅ {len(ingested)} file(s) loaded:")
+            for fname in ingested:
+                st.sidebar.caption(f"  • {fname}")
+        else:
+            st.sidebar.caption("No documents loaded yet.")
+
+        # File uploader
+        uploaded_files = st.sidebar.file_uploader(
+            "Upload PDF or TXT",
+            type=["pdf", "txt"],
+            accept_multiple_files=True,
+            key="rag_uploader",
+            label_visibility="collapsed",
+        )
+
+        if uploaded_files:
+            if st.sidebar.button(
+                "⚙️ Process Documents",
+                key="rag_process",
+                use_container_width=True,
+            ):
+                with st.sidebar:
+                    with st.spinner("Embedding documents..."):
+                        temp_paths = []
+                        with tempfile.TemporaryDirectory() as tmp_dir:
+                            for uf in uploaded_files:
+                                tmp_path = os.path.join(tmp_dir, uf.name)
+                                with open(tmp_path, "wb") as f:
+                                    f.write(uf.getbuffer())
+                                temp_paths.append(tmp_path)
+
+                            chunks = ingest_documents(temp_paths)
+
+                    if chunks > 0:
+                        st.success(f"✅ {chunks} chunks stored!")
+                        st.rerun()
+                    else:
+                        st.error("Failed to process documents.")
+
+        # Clear button — only shown when docs exist
+        if ingested:
+            if st.sidebar.button(
+                "🗑️ Clear All Documents",
+                key="rag_clear",
+                use_container_width=True,
+            ):
+                clear_vectorstore()
+                st.sidebar.success("Documents cleared.")
+                st.rerun()
+
+    except Exception as e:
+        st.sidebar.error(f"RAG panel error: {str(e)}")
+        print(f"RAG panel error: {traceback.format_exc()}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # Public entry point
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -301,6 +368,8 @@ def render_sidebar() -> None:
                 _render_thread_row(thread)
 
         _render_delete_confirmation()
+        _render_rag_panel()
+
     except Exception as e:
         st.sidebar.error(f"Failed to render sidebar: {str(e)}")
         print(f"Render sidebar error: {traceback.format_exc()}")
