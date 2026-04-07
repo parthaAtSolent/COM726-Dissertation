@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS threads (
     INDEX idx_created_at (created_at)
 );
 
+-- Use the langgraph_chatbot database
+USE langgraph_chatbot;
 
 -- Clear contents of both tables
 TRUNCATE TABLE checkpoints;

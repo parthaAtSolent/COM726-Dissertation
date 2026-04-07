@@ -157,7 +157,6 @@ def _render_branding() -> None:
         st.sidebar.markdown("""
         <div class="branding-bar">
             <div class="branding-left">
-                <span style="font-size:1.6rem;">🌙</span>
                 <div>
                     <div class="branding-title">LangGraph Chat</div>
                     <div class="branding-subtitle">COM726 · DISSERTATION</div>

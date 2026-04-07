@@ -33,6 +33,23 @@ from llms.granite3_dense_2b.factory import build as _build_granite3
 from llms.gemma3_270m.config import MODEL_KEY as _k7, DISPLAY_NAME as _n7, ICON as _i7
 from llms.gemma3_270m.factory import build as _build_gemma3
 
+# New models
+from llms.deepseek_r1.config import MODEL_KEY as _k8, DISPLAY_NAME as _n8, ICON as _i8
+from llms.deepseek_r1.factory import build as _build_deepseek
+
+from llms.mistral_7b.config import MODEL_KEY as _k9, DISPLAY_NAME as _n9, ICON as _i9
+from llms.mistral_7b.factory import build as _build_mistral
+
+from llms.falcon3.config import MODEL_KEY as _k10, DISPLAY_NAME as _n10, ICON as _i10
+from llms.falcon3.factory import build as _build_falcon
+
+# from llms.starcoder2_7b.config import MODEL_KEY as _k11, DISPLAY_NAME as _n11, ICON as _i11
+# from llms.starcoder2_7b.factory import build as _build_starcoder
+
+# Qwen2.5-Coder model
+from llms.qwen2_5_coder_7b.config import MODEL_KEY as _k12, DISPLAY_NAME as _n12, ICON as _i12
+from llms.qwen2_5_coder_7b.factory import build as _build_qwen_coder
+
 
 REGISTRY: dict[str, dict] = {
     _k1: {"name": _n1, "icon": _i1, "build": _build_llama_8b},
@@ -41,6 +58,13 @@ REGISTRY: dict[str, dict] = {
     _k5: {"name": _n5, "icon": _i5, "build": _build_phi3},
     _k6: {"name": _n6, "icon": _i6, "build": _build_granite3},
     _k7: {"name": _n7, "icon": _i7, "build": _build_gemma3},
+    # New models
+    _k8: {"name": _n8, "icon": _i8, "build": _build_deepseek},
+    _k9: {"name": _n9, "icon": _i9, "build": _build_mistral},
+    _k10: {"name": _n10, "icon": _i10, "build": _build_falcon},
+    # _k11: {"name": _n11, "icon": _i11, "build": _build_starcoder},
+    # Qwen2.5-Coder
+    _k12: {"name": _n12, "icon": _i12, "build": _build_qwen_coder},
 }
 
 
