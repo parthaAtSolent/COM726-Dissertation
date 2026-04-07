@@ -1,7 +1,7 @@
 """
 app/utils/thread_service.py
 ────────────────────────────
-MySQL-persisted thread management with connection pooling.
+MySQL-persisted thread management with connection pooling and streaming support.
 
 ACID notes
 ──────────
@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Iterator, Callable, Any
 
 from langchain_core.messages import HumanMessage
 import pymysql
@@ -70,9 +70,23 @@ def init_threads_table() -> None:
                     INDEX idx_updated_at (updated_at)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             """)
+
+            # Create messages table
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS messages (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    thread_id VARCHAR(36) NOT NULL,
+                    role VARCHAR(20) NOT NULL,
+                    content TEXT NOT NULL,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_thread_id (thread_id),
+                    INDEX idx_timestamp (timestamp),
+                    FOREIGN KEY (thread_id) REFERENCES threads(thread_id) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            """)
             conn.commit()
     except Exception as e:
-        print(f"[thread_service] Failed to create threads table: {e}")
+        print(f"[thread_service] Failed to create tables: {e}")
         raise
     finally:
         conn.close()
@@ -179,6 +193,73 @@ def get_thread(thread_id: str) -> Optional[ThreadMeta]:
         conn.close()
 
 
+def save_message(thread_id: str, role: str, content: str) -> None:
+    """
+    Save a message to the database.
+
+    Args:
+        thread_id: The thread ID
+        role: 'user' or 'assistant'
+        content: The message content
+    """
+    _validate(thread_id)
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            # Insert the message
+            cur.execute("""
+                INSERT INTO messages (thread_id, role, content)
+                VALUES (%s, %s, %s)
+            """, (thread_id, role, content))
+
+            # Update the thread's updated_at timestamp
+            cur.execute("""
+                UPDATE threads SET updated_at = CURRENT_TIMESTAMP 
+                WHERE thread_id = %s
+            """, (thread_id,))
+
+            conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[thread_service] save_message failed: {e}")
+        raise
+    finally:
+        conn.close()
+
+
+def load_conversation(thread_id: str) -> List[Dict[str, str]]:
+    """
+    Load conversation history for a thread.
+
+    Args:
+        thread_id: The thread ID
+
+    Returns:
+        List of messages with 'role' and 'content' keys
+    """
+    _validate(thread_id)
+
+    conn = _get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT role, content 
+                FROM messages 
+                WHERE thread_id = %s 
+                ORDER BY timestamp ASC
+            """, (thread_id,))
+
+            rows = cur.fetchall()
+
+        return [{"role": row["role"], "content": row["content"]} for row in rows]
+    except Exception as e:
+        print(f"[thread_service] load_conversation failed: {e}")
+        return []
+    finally:
+        conn.close()
+
+
 def update_title(thread_id: str, new_title: str) -> bool:
     """Update a thread's title. Returns True if successful."""
     _validate(thread_id)
@@ -228,6 +309,7 @@ def delete_thread(thread_id: str) -> bool:
     conn = _get_connection()
     try:
         with conn.cursor() as cur:
+            # Messages will be deleted automatically due to FOREIGN KEY ON DELETE CASCADE
             affected = cur.execute(
                 "DELETE FROM threads WHERE thread_id = %s",
                 (thread_id,)
@@ -335,29 +417,127 @@ def generate_title(user_prompt: str, model_key: str = DEFAULT_MODEL_KEY) -> str:
         return DEFAULT_THREAD_TITLE
 
 
-# ── Optional: Cache layer for hot threads ──────────────────────────────────────
-# Uncomment if you need an in-memory cache on top of MySQL
+# ── Streaming Response Generation ──────────────────────────────────────────────
 
-# from functools import lru_cache
-# from threading import RLock
-#
-# _cache: Dict[str, ThreadMeta] = {}
-# _cache_lock = RLock()
-#
-# def get_thread_cached(thread_id: str) -> Optional[ThreadMeta]:
-#     """Get thread with simple in-memory cache."""
-#     with _cache_lock:
-#         if thread_id in _cache:
-#             return _cache[thread_id]
-#
-#     meta = get_thread(thread_id)
-#
-#     with _cache_lock:
-#         if meta:
-#             _cache[thread_id] = meta
-#     return meta
-#
-# def invalidate_cache(thread_id: str) -> None:
-#     """Invalidate cache for a specific thread."""
-#     with _cache_lock:
-#         _cache.pop(thread_id, None)
+def generate_response_with_streaming(
+    model_key: str,
+    messages: List[Dict[str, str]],
+    placeholder=None
+) -> str:
+    """
+    Generate a streaming response and update the UI in real-time.
+
+    Args:
+        model_key: The model to use
+        messages: Conversation history
+        placeholder: Streamlit placeholder for live updates
+
+    Returns:
+        Full response text
+    """
+    from llms.streaming import get_streaming_handler, supports_streaming
+
+    # Get the last user message
+    user_message = messages[-1]["content"] if messages else ""
+
+    # Build context from history (last 5 messages for context)
+    context_messages = messages[:-1] if len(messages) > 1 else []
+    if context_messages:
+        context = "\n".join(
+            [f"{m['role']}: {m['content']}" for m in context_messages[-5:]])
+        prompt = f"Previous conversation:\n{context}\n\nUser: {user_message}\nAssistant:"
+    else:
+        prompt = user_message
+
+    full_response = ""
+
+    # Check if model supports streaming
+    if supports_streaming(model_key):
+        handler = get_streaming_handler(model_key)
+
+        # Stream the response
+        for chunk in handler.stream(prompt):
+            full_response += chunk
+            if placeholder:
+                # Update placeholder with accumulated response
+                placeholder.markdown(full_response + "▌")
+    else:
+        # Fallback to non-streaming
+        llm = llms.build_llm(model_key)
+        response = llm.invoke(prompt)
+        full_response = response.content if hasattr(
+            response, 'content') else str(response)
+        if placeholder:
+            placeholder.markdown(full_response)
+
+    if placeholder:
+        # Final update without cursor
+        placeholder.markdown(full_response)
+
+    return full_response
+
+
+def generate_response_with_context(
+    model_key: str,
+    conversation_history: List[Dict[str, str]],
+    user_message: str,
+    placeholder=None,
+    show_thinking: bool = True
+) -> str:
+    """
+    Generate a streaming response with conversation context.
+
+    Args:
+        model_key: The model to use
+        conversation_history: List of previous messages
+        user_message: Current user message
+        placeholder: Streamlit placeholder for live updates
+        show_thinking: Show reasoning for DeepSeek
+
+    Returns:
+        Complete response text
+    """
+    from llms.streaming import get_streaming_handler, supports_streaming
+
+    # Build context from history (last 5 messages for context)
+    context_messages = conversation_history if conversation_history else []
+    if context_messages:
+        context = "\n".join([
+            f"{msg['role']}: {msg['content']}"
+            for msg in context_messages[-5:]
+        ])
+        full_prompt = f"Previous conversation:\n{context}\n\nUser: {user_message}\nAssistant:"
+    else:
+        full_prompt = user_message
+
+    full_response = ""
+
+    # Check if model supports streaming
+    if supports_streaming(model_key):
+        handler = get_streaming_handler(model_key)
+
+        # Special handling for DeepSeek with reasoning steps
+        if model_key == "deepseek-r1" and show_thinking:
+            for chunk in handler.stream(full_prompt, show_thinking=show_thinking):
+                full_response += chunk
+                if placeholder:
+                    placeholder.markdown(full_response + "▌")
+        else:
+            for chunk in handler.stream(full_prompt):
+                full_response += chunk
+                if placeholder:
+                    placeholder.markdown(full_response + "▌")
+    else:
+        # Fallback to non-streaming
+        llm = llms.build_llm(model_key)
+        response = llm.invoke(full_prompt)
+        full_response = response.content if hasattr(
+            response, 'content') else str(response)
+        if placeholder:
+            placeholder.markdown(full_response)
+
+    if placeholder:
+        # Final update without cursor
+        placeholder.markdown(full_response)
+
+    return full_response

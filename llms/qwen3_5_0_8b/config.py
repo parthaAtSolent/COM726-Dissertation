@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 MODEL_KEY: str = "qwen3.5-0.8b"
 MODEL_ID: str = "qwen3.5:0.8b"          # Closest available Ollama tag
 DISPLAY_NAME: str = "🐉 Qwen 3.5 0.8B (Local)"
@@ -9,3 +11,11 @@ WEBSITE: str = "ollama.com"
 
 TEMPERATURE: float = 0.7
 MAX_TOKENS: int = 2048
+
+# Streaming settings
+STREAMING_CONFIG = {
+    "enabled": True,
+    "chunk_size": 5,  # Minimum characters before yielding
+    "buffer_timeout_ms": 50,  # Max time to buffer
+    "word_mode": True,  # Stream by word boundaries
+}

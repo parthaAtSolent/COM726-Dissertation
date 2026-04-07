@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 MODEL_KEY: str = "gemma3:270m"
 MODEL_ID: str = "gemma3:270m"
 DISPLAY_NAME: str = "🤖 Gemma 3 270M (Local)"
@@ -9,3 +11,11 @@ WEBSITE: str = "ollama.com"
 
 TEMPERATURE: float = 0.7
 MAX_TOKENS: int = 2048
+
+# Streaming settings
+STREAMING_CONFIG = {
+    "enabled": True,
+    "chunk_size": 5,  # Minimum characters before yielding
+    "buffer_timeout_ms": 50,  # Max time to buffer
+    "word_mode": True,  # Stream by word boundaries
+}

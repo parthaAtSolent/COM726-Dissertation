@@ -8,11 +8,13 @@ and replicate this file with the appropriate values.  No other file in the
 project needs to change.
 """
 
+from __future__ import annotations
+
 # ── Identity ──────────────────────────────────────────────────────────────────
 MODEL_KEY: str = "llama-8b-instant"
 MODEL_ID: str = "llama-3.1-8b-instant"          # Groq model string
-DISPLAY_NAME: str = "⚡ Llama 3.1 8B Instant (Fast)"
-ICON: str = "⚡"
+DISPLAY_NAME: str = "🏃🏻 Llama 3.1 8B Instant (Fast)"
+ICON: str = "🏃🏻"
 
 # ── Provider ──────────────────────────────────────────────────────────────────
 PROVIDER: str = "groq"
@@ -22,3 +24,11 @@ WEBSITE: str = "console.groq.com"
 # ── Generation parameters ─────────────────────────────────────────────────────
 TEMPERATURE: float = 0.7
 MAX_TOKENS: int = 4096
+
+# Streaming settings
+STREAMING_CONFIG = {
+    "enabled": True,
+    "chunk_size": 5,  # Minimum characters before yielding
+    "buffer_timeout_ms": 50,  # Max time to buffer
+    "word_mode": True,  # Stream by word boundaries
+}

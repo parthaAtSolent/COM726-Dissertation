@@ -1,13 +1,17 @@
 from __future__ import annotations
 from app.ui import render_sidebar, render_header, render_history, handle_input
-from app.utils.thread_service import init_threads_table
-from app.utils import (
+from app.utils.thread_service import (
+    init_threads_table,
+    generate_response_with_context,
+    save_message,
     create_thread,
-    inject_css,
-    inject_js,
     list_threads,
     load_conversation,
     new_thread_id,
+)
+from app.utils import (
+    inject_css,
+    inject_js,
 )
 import llms
 import streamlit as st
@@ -73,6 +77,58 @@ def _bootstrap() -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# Streaming response handler
+# ══════════════════════════════════════════════════════════════════════════════
+
+def save_message_to_db(thread_id: str, role: str, content: str):
+    """Save a message to the database."""
+    save_message(thread_id, role, content)
+
+
+def process_message_with_streaming(user_input: str):
+    """Process user message with streaming response."""
+
+    # Add user message to history
+    st.session_state.message_history.append(
+        {"role": "user", "content": user_input})
+    save_message_to_db(st.session_state.thread_id, "user", user_input)
+
+    # Create placeholder for streaming response
+    with st.chat_message("assistant"):
+        placeholder = st.empty()
+
+        try:
+            # Check if selected model supports streaming
+            model_key = st.session_state.selected_model
+
+            # Use streaming response generation
+            full_response = generate_response_with_context(
+                model_key=model_key,
+                conversation_history=st.session_state.message_history,
+                user_message=user_input,
+                placeholder=placeholder,
+                show_thinking=True  # Show DeepSeek reasoning steps
+            )
+
+            # Save assistant response
+            st.session_state.message_history.append(
+                {"role": "assistant", "content": full_response})
+            save_message_to_db(st.session_state.thread_id,
+                               "assistant", full_response)
+
+        except Exception as e:
+            error_msg = f"❌ Error: {str(e)}"
+            placeholder.error(error_msg)
+            st.session_state.message_history.append(
+                {"role": "assistant", "content": error_msg})
+            save_message_to_db(st.session_state.thread_id,
+                               "assistant", error_msg)
+
+    st.session_state.processing_message = False
+    st.rerun()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # Main
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -84,8 +140,9 @@ def main() -> None:
         render_history()
 
         user_input = st.chat_input("Type your message here…")
-        if user_input:
-            handle_input(user_input)
+        if user_input and not st.session_state.get("processing_message", False):
+            st.session_state.processing_message = True
+            process_message_with_streaming(user_input)
 
     except Exception as e:
         st.error(f"Application error: {str(e)}")
