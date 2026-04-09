@@ -64,6 +64,8 @@ USE langgraph_chatbot;
 TRUNCATE TABLE checkpoints;
 TRUNCATE TABLE checkpoint_writes;
 TRUNCATE TABLE threads;
+TRUNCATE TABLE messages;
+
 
 -- Verify table structures
 SHOW TABLES;
