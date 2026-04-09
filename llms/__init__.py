@@ -50,8 +50,14 @@ from llms.falcon3.factory import build as _build_falcon
 from llms.qwen2_5_coder_7b.config import MODEL_KEY as _k12, DISPLAY_NAME as _n12, ICON as _i12
 from llms.qwen2_5_coder_7b.factory import build as _build_qwen_coder
 
+from llms.custom.config import MODEL_KEY as _k12, DISPLAY_NAME as _n12, ICON as _i12
+from llms.custom.factory import build as _build_custom
+
 
 REGISTRY: dict[str, dict] = {
+    # 🎯 Auto — first in list
+    _k12: {"name": _n12, "icon": _i12, "build": _build_custom},
+
     _k1: {"name": _n1, "icon": _i1, "build": _build_llama_8b},
     _k2: {"name": _n2, "icon": _i2, "build": _build_gemini},
     _k4: {"name": _n4, "icon": _i4, "build": _build_qwen},
