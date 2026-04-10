@@ -61,10 +61,14 @@ CREATE TABLE IF NOT EXISTS threads (
 USE langgraph_chatbot;
 
 -- Clear contents of both tables
-TRUNCATE TABLE checkpoints;
+SET FOREIGN_KEY_CHECKS = 0;
+
 TRUNCATE TABLE checkpoint_writes;
-TRUNCATE TABLE threads;
+TRUNCATE TABLE checkpoints;
 TRUNCATE TABLE messages;
+TRUNCATE TABLE threads;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 -- Verify table structures

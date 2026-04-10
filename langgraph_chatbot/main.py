@@ -1,5 +1,5 @@
 from __future__ import annotations
-from app.ui import render_sidebar, render_header, render_history, handle_input
+from app.ui import render_sidebar, render_header, render_history
 from app.utils.thread_service import (
     init_threads_table,
     generate_response_with_context,
@@ -69,6 +69,7 @@ def _bootstrap() -> None:
             "editing_thread":     None,
             "delete_confirm":     None,
             "processing_message": False,
+            "pending_user_input": None,  # Store user input for processing
             "_initialized":       True,
         })
     except Exception as e:
@@ -77,55 +78,75 @@ def _bootstrap() -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Streaming response handler
+# Helper functions
 # ══════════════════════════════════════════════════════════════════════════════
 
 def save_message_to_db(thread_id: str, role: str, content: str):
     """Save a message to the database."""
-    save_message(thread_id, role, content)
+    try:
+        save_message(thread_id, role, content)
+    except Exception as e:
+        print(f"Failed to save message to DB: {e}")
 
 
-def process_message_with_streaming(user_input: str):
-    """Process user message with streaming response."""
+def process_pending_message():
+    """Process any pending user message with streaming."""
+    user_message = st.session_state.get("pending_user_input")
+    if not user_message:
+        return
 
-    # Add user message to history
-    st.session_state.message_history.append(
-        {"role": "user", "content": user_input})
-    save_message_to_db(st.session_state.thread_id, "user", user_input)
+    # Clear the pending input
+    st.session_state.pending_user_input = None
 
-    # Create placeholder for streaming response
+    # Create assistant message placeholder
     with st.chat_message("assistant"):
-        placeholder = st.empty()
+        # Show cooking message immediately
+        cooking_placeholder = st.empty()
+        cooking_placeholder.markdown("Bro's cooking... Let him cook 🔥🔥🔥")
+
+        # Response placeholder for streaming
+        response_placeholder = st.empty()
 
         try:
-            # Check if selected model supports streaming
             model_key = st.session_state.selected_model
 
             # Use streaming response generation
             full_response = generate_response_with_context(
                 model_key=model_key,
-                conversation_history=st.session_state.message_history,
-                user_message=user_input,
-                placeholder=placeholder,
-                show_thinking=True  # Show DeepSeek reasoning steps
+                # Exclude the last user message
+                conversation_history=st.session_state.message_history[:-1],
+                user_message=user_message,
+                placeholder=response_placeholder,
+                show_thinking=True
             )
+
+            # Clear cooking message
+            cooking_placeholder.empty()
+
+            # Show final response
+            response_placeholder.markdown(full_response)
 
             # Save assistant response
             st.session_state.message_history.append(
-                {"role": "assistant", "content": full_response})
+                {"role": "assistant", "content": full_response}
+            )
             save_message_to_db(st.session_state.thread_id,
                                "assistant", full_response)
 
         except Exception as e:
             error_msg = f"❌ Error: {str(e)}"
-            placeholder.error(error_msg)
+            cooking_placeholder.empty()
+            response_placeholder.error(error_msg)
             st.session_state.message_history.append(
-                {"role": "assistant", "content": error_msg})
+                {"role": "assistant", "content": error_msg}
+            )
             save_message_to_db(st.session_state.thread_id,
                                "assistant", error_msg)
+            print(f"Streaming error: {traceback.format_exc()}")
 
-    st.session_state.processing_message = False
-    st.rerun()
+        finally:
+            # Clear processing flag
+            st.session_state.processing_message = False
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -137,12 +158,33 @@ def main() -> None:
         _bootstrap()
         render_sidebar()
         render_header()
+
+        # Render existing history
         render_history()
 
+        # Check for user input
         user_input = st.chat_input("Type your message here…")
+
         if user_input and not st.session_state.get("processing_message", False):
+            # Set processing flag
             st.session_state.processing_message = True
-            process_message_with_streaming(user_input)
+
+            # Add user message to history and DB
+            st.session_state.message_history.append(
+                {"role": "user", "content": user_input}
+            )
+            save_message_to_db(st.session_state.thread_id, "user", user_input)
+
+            # Store for processing after rerun
+            st.session_state.pending_user_input = user_input
+
+            # Rerun to show user message immediately
+            st.rerun()
+
+        # Process any pending message (this runs after the rerun)
+        if st.session_state.get("processing_message", False) and st.session_state.get("pending_user_input"):
+            process_pending_message()
+            st.rerun()  # Final rerun to update UI
 
     except Exception as e:
         st.error(f"Application error: {str(e)}")

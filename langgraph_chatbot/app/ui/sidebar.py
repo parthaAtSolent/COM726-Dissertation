@@ -27,6 +27,7 @@ from app.rag import ingest_documents, clear_vectorstore, list_ingested_files
 # Thread actions
 # ══════════════════════════════════════════════════════════════════════════════
 
+
 def _new_chat() -> None:
     try:
         tid = new_thread_id()
