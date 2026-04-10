@@ -9,6 +9,7 @@ from app.utils import (
     get_thread_model,
     get_thread_title,
     update_title,
+    save_message,  # ADDED: Import save_message
 )
 
 
@@ -108,8 +109,7 @@ def render_chat_page():
     with chat_container:
         render_history()
 
-    # Chat input - THIS IS THE KEY CHANGE
-    # Instead of using on_change, we check the value directly
+    # Chat input
     user_input = st.chat_input("Type your message here...")
 
     # Process the input if it exists and we're not already processing
@@ -129,6 +129,13 @@ def render_chat_page():
             "role": "user",
             "content": user_input,
         })
+
+        # Save user message to MySQL
+        try:
+            save_message(tid, "user", user_input)
+            print(f"[Chat] Saved user message to MySQL for thread {tid}")
+        except Exception as e:
+            print(f"[Chat] Failed to save user message: {e}")
 
         # Rerun to show the user message immediately
         st.rerun()
@@ -156,7 +163,6 @@ def render_chat_page():
                     # Stream the response
                     for chunk in stream_response(user_message, model_key, tid):
                         full_response = chunk
-                        # Replace cooking message with actual response
                         response_placeholder.markdown(full_response + "▌")
 
                     # Final response without cursor
@@ -169,6 +175,15 @@ def render_chat_page():
                                 "role": "assistant",
                                 "content": full_response,
                             })
+
+                            # Save assistant message to MySQL
+                            try:
+                                save_message(tid, "assistant", full_response)
+                                print(
+                                    f"[Chat] Saved assistant message to MySQL for thread {tid}")
+                            except Exception as e:
+                                print(
+                                    f"[Chat] Failed to save assistant message: {e}")
 
                             # Auto-generate title on first exchange
                             if len(st.session_state["message_history"]) == 2:

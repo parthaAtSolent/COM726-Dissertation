@@ -10,16 +10,7 @@ This module provides various utility functions for:
 - Common helper functions
 """
 
-from .conversation import (
-    load_conversation,
-)
-
-from .style_loader import (
-    inject_css,
-    inject_js,
-    load_html_template as load_template,
-)
-
+# Import thread service functions (MySQL-based - PRIMARY SOURCE)
 from .thread_service import (
     create_thread,
     delete_thread,
@@ -29,13 +20,25 @@ from .thread_service import (
     get_thread_title,
     list_threads,
     new_thread_id,
+    save_message,
     update_model,
     update_title,
 )
+# Import MySQL load_conversation and alias the checkpointer version
+from .thread_service import load_conversation as load_conversation
+from .conversation import load_conversation as load_conversation_from_checkpointer
+
+from .style_loader import (
+    inject_css,
+    inject_js,
+    load_html_template as load_template,
+)
 
 __all__ = [
-    # Conversation utilities
+    # Conversation utilities - MySQL version is primary
     "load_conversation",
+    "load_conversation_from_checkpointer",
+    "save_message",
 
     # Style utilities
     "inject_css",
