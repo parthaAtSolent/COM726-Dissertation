@@ -1,4 +1,5 @@
 from __future__ import annotations
+import time
 import traceback
 import streamlit as st
 import llms
@@ -9,8 +10,29 @@ from app.utils import (
     get_thread_model,
     get_thread_title,
     update_title,
-    save_message,  # ADDED: Import save_message
+    save_message,
 )
+from pathlib import Path
+
+
+# Animation frames (kept in Python for fallback)
+_FRAMES = [
+    "👩🏻‍🍳 Bro's cooking. Let him cook 🔥",
+    "👩🏻‍🍳👩🏻‍🍳 Bro's cooking. Let him cook 🔥🔥",
+    "👩🏻‍🍳👩🏻‍🍳👩🏻‍🍳 Bro's cooking. Let him cook 🔥🔥🔥",
+]
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Helper functions
+# ══════════════════════════════════════════════════════════════════════════════
+
+def load_html_template(template_name: str) -> str:
+    """Load an HTML template from the templates folder."""
+    template_path = Path(__file__).parent.parent / "templates" / template_name
+    if template_path.exists():
+        return template_path.read_text(encoding="utf-8")
+    return ""
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -47,11 +69,14 @@ def render_history() -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Streaming response generator
+# Streaming — collects full response then returns it
 # ══════════════════════════════════════════════════════════════════════════════
 
-def stream_response(user_input: str, model_key: str, tid: str):
-    """Generator function to stream the AI response."""
+def get_full_response(user_input: str, model_key: str, tid: str) -> str:
+    """
+    Runs the LangGraph stream and returns the final complete response.
+    This blocks until the model finishes — animation runs before this call.
+    """
     config = {"configurable": {"thread_id": tid}}
     inputs = {
         "messages": [HumanMessage(content=user_input)],
@@ -67,147 +92,129 @@ def stream_response(user_input: str, model_key: str, tid: str):
                 last = msgs[-1]
                 if isinstance(last, AIMessage) and last.content:
                     ai_response = last.content
-                    yield ai_response
 
     except Exception as stream_error:
         error_msg = str(stream_error)
         if "Packet sequence number wrong" in error_msg:
-            ai_response = "⚠️ Database connection issue. Please refresh and try again."
+            return "⚠️ Database connection issue. Please refresh and try again."
         elif "BrokenPipeError" in error_msg or "ConnectionError" in error_msg:
-            ai_response = "⚠️ Connection lost. Please refresh and try again."
+            return "⚠️ Connection lost. Please refresh and try again."
         else:
             print(f"Stream error: {stream_error}\n{traceback.format_exc()}")
-            ai_response = f"⚠️ Error: {str(stream_error)}"
-        yield ai_response
+            return f"⚠️ Error: {str(stream_error)}"
 
-    if not ai_response:
-        ai_response = "⚠️ No response received. Please try again."
-        yield ai_response
+    return ai_response or "⚠️ No response received. Please try again."
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Main Chat Page Render Function
+# Main chat page
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_chat_page():
-    """Main function to render the chat page."""
+def render_chat_page() -> None:
 
-    # Initialize session state
     if "message_history" not in st.session_state:
         st.session_state["message_history"] = []
-
     if "processing_message" not in st.session_state:
         st.session_state["processing_message"] = False
 
-    # Render header
     render_header()
 
-    # Create a container for the chat history
-    chat_container = st.container()
-
-    # Render existing history in the container
-    with chat_container:
+    with st.container():
         render_history()
 
-    # Chat input
     user_input = st.chat_input("Type your message here...")
 
-    # Process the input if it exists and we're not already processing
+    # ── Step 1: user submits → save + rerun to show message immediately ───────
     if user_input and not st.session_state["processing_message"]:
         tid = st.session_state.get("thread_id")
         if not tid:
             st.error("No thread selected")
             return
 
-        model_key = get_thread_model(tid)
-
-        # Set processing flag
         st.session_state["processing_message"] = True
-
-        # Add user message to history
         st.session_state["message_history"].append({
             "role": "user",
             "content": user_input,
         })
 
-        # Save user message to MySQL
         try:
             save_message(tid, "user", user_input)
-            print(f"[Chat] Saved user message to MySQL for thread {tid}")
         except Exception as e:
             print(f"[Chat] Failed to save user message: {e}")
 
-        # Rerun to show the user message immediately
         st.rerun()
 
-    # If we're processing a message, handle the streaming response
+    # ── Step 2: processing=True → show animation then get response ───────────
     if st.session_state.get("processing_message", False):
-        # Get the last user message
-        if st.session_state["message_history"] and st.session_state["message_history"][-1]["role"] == "user":
-            user_message = st.session_state["message_history"][-1]["content"]
-            tid = st.session_state.get("thread_id")
-            model_key = get_thread_model(tid)
+        history = st.session_state.get("message_history", [])
 
-            # Create assistant message placeholder
-            with st.chat_message("assistant"):
-                # Show cooking message
-                cooking_placeholder = st.empty()
-                cooking_placeholder.markdown(
-                    "Bro's cooking... Let him cook 🔥🔥🔥")
+        if not history or history[-1]["role"] != "user":
+            st.session_state["processing_message"] = False
+            return
 
-                # Stream the response
-                response_placeholder = st.empty()
-                full_response = ""
+        user_message = history[-1]["content"]
+        tid = st.session_state.get("thread_id")
+        model_key = get_thread_model(tid)
 
+        with st.chat_message("assistant"):
+            placeholder = st.empty()
+
+            # ── Animate on the main thread while model runs in background ─────
+            import concurrent.futures
+
+            full_response = ""
+            frame = 0
+
+            # Submit model call to thread pool
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(
+                    get_full_response, user_message, model_key, tid
+                )
+
+                # Cycle animation frames until model finishes
+                while not future.done():
+                    placeholder.markdown(
+                        f"<span style='color:#c4c0ff;font-style:italic;"
+                        f"font-size:1rem;font-weight:500'>"
+                        f"{_FRAMES[frame % len(_FRAMES)]}</span>",
+                        unsafe_allow_html=True,
+                    )
+                    frame += 1
+                    time.sleep(0.5)
+
+                # Get result
                 try:
-                    # Stream the response
-                    for chunk in stream_response(user_message, model_key, tid):
-                        full_response = chunk
-                        response_placeholder.markdown(full_response + "▌")
-
-                    # Final response without cursor
-                    if full_response:
-                        response_placeholder.markdown(full_response)
-
-                        # Save successful response to history
-                        if not full_response.startswith("⚠️"):
-                            st.session_state["message_history"].append({
-                                "role": "assistant",
-                                "content": full_response,
-                            })
-
-                            # Save assistant message to MySQL
-                            try:
-                                save_message(tid, "assistant", full_response)
-                                print(
-                                    f"[Chat] Saved assistant message to MySQL for thread {tid}")
-                            except Exception as e:
-                                print(
-                                    f"[Chat] Failed to save assistant message: {e}")
-
-                            # Auto-generate title on first exchange
-                            if len(st.session_state["message_history"]) == 2:
-                                try:
-                                    new_title = generate_title(
-                                        user_message, model_key)
-                                    update_title(tid, new_title)
-                                    st.toast(
-                                        f"Chat titled: {new_title}", icon="✨")
-                                except Exception as title_error:
-                                    print(
-                                        f"Title generation error: {title_error}")
-
+                    full_response = future.result()
                 except Exception as e:
-                    st.error(f"⚠️ Error: {e}")
-                    print(f"Error in streaming: {e}\n{traceback.format_exc()}")
+                    full_response = f"⚠️ Error: {e}"
 
-                finally:
-                    # Clear processing flag
-                    st.session_state["processing_message"] = False
-                    # Rerun to update the UI with the final state
-                    st.rerun()
+            # ── Show final response ───────────────────────────────────────────
+            placeholder.markdown(full_response)
+
+        # ── Save + update state ───────────────────────────────────────────────
+        if full_response and not full_response.startswith("⚠️"):
+            st.session_state["message_history"].append({
+                "role": "assistant",
+                "content": full_response,
+            })
+
+            try:
+                save_message(tid, "assistant", full_response)
+            except Exception as e:
+                print(f"[Chat] Failed to save assistant message: {e}")
+
+            # Auto-title on first exchange
+            if len(st.session_state["message_history"]) == 2:
+                try:
+                    new_title = generate_title(user_message, model_key)
+                    update_title(tid, new_title)
+                    st.toast(f"Chat titled: {new_title}", icon="✨")
+                except Exception as title_error:
+                    print(f"Title generation error: {title_error}")
+
+        st.session_state["processing_message"] = False
+        st.rerun()
 
 
-# This would be called from your main app.py file
 if __name__ == "__main__":
     render_chat_page()

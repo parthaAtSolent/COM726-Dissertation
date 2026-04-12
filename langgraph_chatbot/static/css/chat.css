@@ -53,7 +53,7 @@
 }
 
 /* ── Routing info badge under assistant messages ─────────────────────────── */
-[data-testid="stChatMessage"] .stCaption {
+.routing-badge {
     margin-top: 0.5rem;
     padding: 0.3rem 0.65rem;
     background: rgba(108, 99, 255, 0.08);
@@ -64,16 +64,24 @@
     line-height: 1.55;
 }
 
-/* ── Thinking / streaming indicator ─────────────────────────────────────── */
-.thinking {
-    color: #7a75a8;
+/* ── Cooking loader styling ──────────────────────────────────────────────── */
+.cooking-loader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    color: #c4c0ff;
     font-style: italic;
-    animation: pulse 1.4s ease-in-out infinite;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 0.45; }
-    50%       { opacity: 1;    }
+.cooking-emoji {
+    display: inline-block;
+}
+
+.cooking-text {
+    display: inline-block;
 }
 
 /* ── Chat input bar ──────────────────────────────────────────────────────── */
@@ -84,14 +92,17 @@
     backdrop-filter: blur(12px);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 [data-testid="stChatInput"] > div:focus-within {
     border-color: rgba(108, 99, 255, 0.7);
     box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12);
 }
+
 [data-testid="stChatInput"] textarea {
     color: #e0e0f0 !important;
     font-size: 0.95rem;
 }
+
 [data-testid="stChatInput"] textarea::placeholder {
     color: #5a5580 !important;
 }
@@ -105,6 +116,7 @@
     font-size: 0.87rem;
     overflow-x: auto;
 }
+
 [data-testid="stChatMessage"] code {
     font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
     font-size: 0.87em;
@@ -116,6 +128,35 @@
     padding: 4rem 0 2rem;
     color: #5a5580;
 }
-.empty-state .empty-icon  { font-size: 3rem; margin-bottom: 0.75rem; }
-.empty-state .empty-title { font-size: 1.1rem; font-weight: 600; color: #7a75a8; margin: 0; }
-.empty-state .empty-sub   { font-size: 0.88rem; margin-top: 0.3rem; }
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+.empty-state .empty-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #7a75a8;
+    margin: 0;
+}
+
+.empty-state .empty-sub {
+    font-size: 0.88rem;
+    margin-top: 0.3rem;
+}
+
+/* ── Streaming cursor animation ──────────────────────────────────────────── */
+.streaming-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: #c4c0ff;
+    margin-left: 2px;
+    animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}

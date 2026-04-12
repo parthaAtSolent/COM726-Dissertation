@@ -9,11 +9,10 @@ that powers the entire application.
 
 from .graph import chatbot
 from app.core.bootstrap import bootstrap_application
-from app.core.streaming import process_pending_message, save_message_to_db
+from app.core.streaming import save_message_to_db
 
 __all__ = [
     "chatbot",
     "bootstrap_application",
-    "process_pending_message",
     "save_message_to_db",
 ]

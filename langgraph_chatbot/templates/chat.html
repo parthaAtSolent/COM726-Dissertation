@@ -1,31 +1,23 @@
 <!--
   templates/chat.html
   ────────────────────
-  Reusable HTML fragments for the main chat view.
-  All {placeholders} are filled in Python via .format() before injection.
-  Zero JavaScript here — keep logic in static/js/utils.js.
+  HTML fragments for the main chat view.
 -->
 
-<!-- ── Routing info badge rendered below each assistant message ──────────── -->
-<!--
-  Usage (Python):
-    ROUTING_BADGE.format(model_name="⚡ Llama 3.1 8B Instant", reason="User-selected model.")
--->
-<div class="routing-badge" style="
-    margin-top: 0.45rem;
-    padding: 0.3rem 0.65rem;
-    background: rgba(108,99,255,0.08);
-    border-left: 3px solid rgba(108,99,255,0.45);
-    border-radius: 0 6px 6px 0;
-    color: #9d96ff;
-    font-size: 0.79rem;
-    line-height: 1.55;">
+<!-- ── Routing info badge ──────────────────────────────────────────────── -->
+<div class="routing-badge">
     🤖 <strong>{model_name}</strong> &nbsp;·&nbsp; 📌 {reason}
 </div>
 
-<!-- ── Empty-state shown when there are no messages yet ─────────────────── -->
+<!-- ── Empty-state shown when no messages ──────────────────────────────── -->
 <div class="empty-state">
     <div class="empty-icon">💬</div>
     <p class="empty-title">Start a conversation</p>
     <p class="empty-sub">Type a message below to begin chatting with the AI.</p>
+</div>
+
+<!-- ── Animation frames container (JS will cycle these) ────────────────── -->
+<div id="cooking-loader" class="cooking-loader" style="display: none;">
+    <span class="cooking-emoji">👩🏻‍🍳</span>
+    <span class="cooking-text">Bro's cooking. Let him cook 🔥</span>
 </div>
