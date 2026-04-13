@@ -1,0 +1,170 @@
+/* ══════════════════════════════════════════════════════════════════════
+   app/static/css/file_uploader.css
+   Styles for the custom drag-and-drop file uploader component.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Reset ────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* ── Drop zone ────────────────────────────────────────────────────── */
+#drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  width: 100%;
+  min-height: 130px;
+  padding: 18px 12px;
+
+  border: 2px dashed rgba(108, 99, 255, 0.40);
+  border-radius: 10px;
+  background: rgba(108, 99, 255, 0.06);
+
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.1s;
+  user-select: none;
+}
+
+#drop-zone:hover,
+#drop-zone.hover {
+  border-color: rgba(108, 99, 255, 0.75);
+  background: rgba(108, 99, 255, 0.13);
+  transform: scale(1.01);
+}
+
+#drop-zone.dragging {
+  border-color: #6C63FF;
+  background: rgba(108, 99, 255, 0.20);
+  transform: scale(1.02);
+}
+
+/* ── Icon ─────────────────────────────────────────────────────────── */
+#upload-icon {
+  font-size: 2rem;
+  line-height: 1;
+  transition: transform 0.15s;
+}
+
+#drop-zone:hover #upload-icon,
+#drop-zone.hover #upload-icon {
+  transform: translateY(-3px);
+}
+
+/* ── Labels ───────────────────────────────────────────────────────── */
+#main-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #b0aad4;
+  text-align: center;
+}
+
+#sub-label {
+  font-size: 0.72rem;
+  color: rgba(176, 170, 212, 0.65);
+  text-align: center;
+}
+
+/* ── Browse button ────────────────────────────────────────────────── */
+#browse-btn {
+  margin-top: 6px;
+  padding: 5px 16px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  background: rgba(108, 99, 255, 0.18);
+  color: #c4c0ff;
+  border: 1px solid rgba(108, 99, 255, 0.45);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+#browse-btn:hover {
+  background: rgba(108, 99, 255, 0.32);
+  border-color: rgba(108, 99, 255, 0.70);
+}
+
+/* ── Hidden native file input ─────────────────────────────────────── */
+#file-input {
+  display: none;
+}
+
+/* ── File chips (staged files) ────────────────────────────────────── */
+#file-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.file-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  background: rgba(108, 99, 255, 0.12);
+  border: 1px solid rgba(108, 99, 255, 0.28);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #c4c0ff;
+  gap: 6px;
+}
+
+.file-chip .chip-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-chip .chip-size {
+  flex-shrink: 0;
+  color: rgba(196, 192, 255, 0.55);
+  font-size: 0.68rem;
+}
+
+.file-chip .chip-remove {
+  flex-shrink: 0;
+  cursor: pointer;
+  color: rgba(196, 192, 255, 0.55);
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: color 0.1s;
+}
+
+.file-chip .chip-remove:hover {
+  color: #ff6b6b;
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────── */
+#progress-wrap {
+  display: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(108, 99, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #6C63FF;
+  border-radius: 2px;
+  transition: width 0.2s ease;
+}

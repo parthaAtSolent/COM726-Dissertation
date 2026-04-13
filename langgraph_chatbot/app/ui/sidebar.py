@@ -1,4 +1,6 @@
 from __future__ import annotations
+from app.utils.file_uploader import custom_file_uploader
+import base64
 import os
 import tempfile
 import traceback
@@ -172,48 +174,250 @@ def _clear_thread_cache() -> None:
 # Sidebar render functions
 # ══════════════════════════════════════════════════════════════════════════════
 
-def _render_branding() -> None:
-    """Render the branding header."""
-    try:
-        st.markdown("""
-        <style>
-        .branding-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.2rem 0 0.6rem;
-            border-bottom: 1px solid var(--border, rgba(108,99,255,0.15));
-            margin-bottom: 0.5rem;
-        }
-        .branding-left {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .branding-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--text-primary, #e0e0f0);
-            line-height: 1.2;
-        }
-        .branding-subtitle {
-            font-size: 0.72rem;
-            color: var(--text-muted, #7a75a8);
-            letter-spacing: 0.06em;
-        }
-        </style>
-        """, unsafe_allow_html=True)
 
-        st.sidebar.markdown("""
+def _render_branding() -> None:
+    """Render the branding header with a Python-driven theme toggle."""
+    try:
+        # ── 1. Initialise theme state ─────────────────────────────────────────
+        if "theme" not in st.session_state:
+            st.session_state["theme"] = "dark"
+
+        is_light = st.session_state["theme"] == "light"
+
+        # ── 2. Inject CSS variables inline (guaranteed to apply, Rule 3) ──────
+        if is_light:
+            theme_css = """
+            <style>
+            :root {
+                --accent:              #6C63FF;
+                --accent-light:        #5a52e0;
+                --border:              rgba(108, 99, 255, 0.22);
+                --border-hover:        rgba(108, 99, 255, 0.50);
+                --text-primary:        #1A1A2E;
+                --text-muted:          #6b6897;
+                --thread-bg:           rgba(108, 99, 255, 0.06);
+                --thread-border:       rgba(108, 99, 255, 0.20);
+                --thread-hover-bg:     rgba(108, 99, 255, 0.14);
+                --thread-hover-border: rgba(108, 99, 255, 0.40);
+                --text-thread:         #3a3660;
+            }
+            
+            /* ════════════════════════════════════════════════
+               LIGHT MODE — full surface + component overrides
+               ════════════════════════════════════════════════ */
+
+            /* ── Page surfaces ── */
+            .stApp                                      { background-color: #F5F5FF !important; color: #1A1A2E !important; }
+            section[data-testid="stSidebar"]            { background-color: #eeeeff !important; }
+
+            /* ── Top toolbar (Deploy bar) ── */
+            header[data-testid="stHeader"],
+            [data-testid="stToolbar"],
+            .stAppToolbar                               { background-color: #eeeeff !important; border-bottom: 1px solid rgba(108,99,255,0.15) !important; }
+            header[data-testid="stHeader"] *,
+            [data-testid="stToolbar"] *                 { color: #1A1A2E !important; }
+
+            /* ── All text in the app ── */
+            .stApp p, .stApp span, .stApp div,
+            .stApp h1, .stApp h2, .stApp h3,
+            .stApp h4, .stApp h5, .stApp h6,
+            .stApp label, .stApp li, .stApp a,
+            [data-testid="stMarkdownContainer"],
+            [data-testid="stMarkdownContainer"] *,
+            [data-testid="stChatMessage"] *,
+            [data-testid="stText"]                      { color: #1A1A2E !important; }
+
+            /* ── Sidebar accent headings stay purple ── */
+            section[data-testid="stSidebar"] h2,
+            section[data-testid="stSidebar"] h3,
+            section[data-testid="stSidebar"] .stSubheader { color: #6C63FF !important; }
+
+            /* ── Sidebar captions and text ── */
+            section[data-testid="stSidebar"] .stCaption,
+            section[data-testid="stSidebar"] .stMarkdown,
+            section[data-testid="stSidebar"] p,
+            section[data-testid="stSidebar"] span,
+            section[data-testid="stSidebar"] div:not(.branding-bar) { color: #1A1A2E !important; }
+
+            /* ── Model dropdown (select box) ── */
+            [data-baseweb="select"],
+            [data-baseweb="select"] > div,
+            [data-baseweb="select"] input               { background-color: #ffffff !important; color: #1A1A2E !important; border-color: rgba(108,99,255,0.3) !important; }
+            [data-baseweb="popover"] *,
+            [data-baseweb="menu"] *                     { background-color: #ffffff !important; color: #1A1A2E !important; }
+
+            /* ── File uploader dropzone — IMPROVED LIGHT MODE FIX ── */
+            [data-testid="stFileUploadDropzone"] {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                border: 2px dashed rgba(108, 99, 255, 0.3) !important;
+                border-radius: 8px !important;
+                padding: 20px !important;
+            }
+            
+            [data-testid="stFileUploadDropzone"] > div {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+            }
+            
+            [data-testid="stFileUploadDropzone"] * {
+                background-color: transparent !important;
+                color: #1A1A2E !important;
+                opacity: 1 !important;
+            }
+            
+            /* Dropzone text and icons */
+            [data-testid="stFileUploadDropzone"] svg {
+                fill: #6C63FF !important;
+                stroke: #6C63FF !important;
+            }
+            
+            [data-testid="stFileUploadDropzone"] p,
+            [data-testid="stFileUploadDropzone"] span {
+                color: #6b6897 !important;
+            }
+            
+            /* Browse files button */
+            [data-testid="stFileUploadDropzone"] button {
+                background-color: #e8e7ff !important;
+                color: #6C63FF !important;
+                border: 1px solid rgba(108, 99, 255, 0.3) !important;
+                border-radius: 6px !important;
+            }
+            
+            [data-testid="stFileUploadDropzone"] button:hover {
+                background-color: #d8d6ff !important;
+            }
+
+            /* ── Chat input bar — white card on light page ── */
+            [data-testid="stBottom"],
+            [data-testid="stBottom"] > div              { background-color: #F5F5FF !important; }
+            [data-testid="stChatInput"],
+            [data-testid="stChatInput"] > div           { background-color: #ffffff !important;
+                                                          border: 1px solid rgba(108,99,255,0.3) !important;
+                                                          border-radius: 12px !important; }
+            [data-testid="stChatInput"] textarea        { background-color: #ffffff !important;
+                                                          color: #1A1A2E !important; }
+            [data-testid="stChatInput"] textarea::placeholder { color: #6b6897 !important; }
+            [data-testid="stChatInput"] button          { color: #6C63FF !important; }
+
+            /* ── Info and warning boxes in sidebar ── */
+            section[data-testid="stSidebar"] .stAlert,
+            section[data-testid="stSidebar"] .stInfo,
+            section[data-testid="stSidebar"] .stSuccess,
+            section[data-testid="stSidebar"] .stWarning {
+                background-color: #e8e7ff !important;
+                color: #1A1A2E !important;
+                border-left-color: #6C63FF !important;
+            }
+            
+            section[data-testid="stSidebar"] .stAlert p,
+            section[data-testid="stSidebar"] .stInfo p,
+            section[data-testid="stSidebar"] .stSuccess p {
+                color: #1A1A2E !important;
+            }
+
+            /* ── Buttons in sidebar ── */
+            section[data-testid="stSidebar"] .stButton > button {
+                background-color: #e8e7ff !important;
+                color: #1A1A2E !important;
+                border: 1px solid rgba(108, 99, 255, 0.25) !important;
+            }
+            
+            section[data-testid="stSidebar"] .stButton > button:hover {
+                background-color: #d8d6ff !important;
+            }
+            
+            section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+                background-color: #6C63FF !important;
+                color: white !important;
+            }
+
+            /* ── Icon buttons (edit ✏️ / delete 🗑️) ── */
+            section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+                background-color: #e8e7ff !important;
+                border-color: rgba(108,99,255,0.25) !important;
+                color: #1A1A2E !important;
+            }
+            section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
+                background-color: #d8d6ff !important;
+            }
+
+            /* ── Thread list buttons (inactive) ── */
+            section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:not([data-active]) {
+                background-color: rgba(108,99,255,0.07) !important;
+                color: #3a3660 !important;
+            }
+            
+            /* ── Divider styling ── */
+            section[data-testid="stSidebar"] hr {
+                border-color: rgba(108, 99, 255, 0.2) !important;
+            }
+            </style>
+            """
+        else:
+            theme_css = """
+            <style>
+            :root {
+                --accent:              #6C63FF;
+                --accent-light:        #9f9aff;
+                --border:              rgba(108, 99, 255, 0.15);
+                --border-hover:        rgba(108, 99, 255, 0.40);
+                --text-primary:        #e0e0f0;
+                --text-muted:          #7a75a8;
+                --thread-bg:           rgba(255, 255, 255, 0.04);
+                --thread-border:       rgba(108, 99, 255, 0.20);
+                --thread-hover-bg:     rgba(108, 99, 255, 0.12);
+                --thread-hover-border: rgba(108, 99, 255, 0.45);
+                --text-thread:         #b8b4e8;
+            }
+            
+            /* Dark mode file uploader styling */
+            [data-testid="stFileUploadDropzone"] {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+                border: 2px dashed rgba(108, 99, 255, 0.3) !important;
+                border-radius: 8px !important;
+            }
+            
+            [data-testid="stFileUploadDropzone"] * {
+                color: #e0e0f0 !important;
+            }
+            
+            [data-testid="stFileUploadDropzone"] button {
+                background-color: rgba(108, 99, 255, 0.2) !important;
+                color: #c4c0ff !important;
+            }
+            </style>
+            """
+
+        # Inject theme vars globally
+        st.markdown(theme_css, unsafe_allow_html=True)
+
+        # ── 3. Branding HTML — purely visual, zero interactive JS ─────────────
+        pill_class = "theme-switch is-light" if is_light else "theme-switch"
+        st.sidebar.markdown(f"""
         <div class="branding-bar">
             <div class="branding-left">
+                <span style="font-size:1.6rem;">🧠</span>
                 <div>
                     <div class="branding-title">LangGraph Chat</div>
                     <div class="branding-subtitle">COM726 · DISSERTATION</div>
                 </div>
             </div>
+            <div class="{pill_class}" aria-hidden="true">
+                <span class="switch-moon">🌙</span>
+                <span class="switch-thumb"></span>
+                <span class="switch-sun">☀️</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+
+        # ── 4. Actual toggle — native Streamlit button ────────────────────────
+        toggle_label = "Switch to 🌙 Dark" if is_light else "Switch to ☀️ Light"
+        if st.sidebar.button(toggle_label, key="theme_toggle_btn",
+                             use_container_width=True):
+            st.session_state["theme"] = "dark" if is_light else "light"
+            st.rerun()
 
     except Exception as e:
         st.sidebar.error(f"Failed to load branding: {str(e)}")
@@ -341,13 +545,13 @@ def _render_thread_row(thread: dict) -> None:
 # ══════════════════════════════════════════════════════════════════════════════
 # RAG panel
 # ══════════════════════════════════════════════════════════════════════════════
-
 def _render_rag_panel() -> None:
-    """Render the document upload panel for RAG."""
+    """Render the document upload panel for RAG using the custom file uploader."""
     try:
         st.sidebar.divider()
         st.sidebar.header("📄 Documents (RAG)")
 
+        # ── 1. Already-ingested file list ─────────────────────────────────────
         ingested = list_ingested_files()
         if ingested:
             st.sidebar.caption(f"✅ {len(ingested)} file(s) loaded:")
@@ -356,30 +560,40 @@ def _render_rag_panel() -> None:
         else:
             st.sidebar.caption("No documents loaded yet.")
 
-        uploaded_files = st.sidebar.file_uploader(
-            "Upload PDF or TXT",
-            type=["pdf", "txt"],
-            accept_multiple_files=True,
-            key="rag_uploader",
-            label_visibility="collapsed",
-        )
+        # ── 2. Custom file uploader ───────────────────────────────────────────
+        #
+        # Returns None until the user stages files, then:
+        #   [{ "name": str, "mime": str, "size": int, "b64": str }, ...]
+        #
+        # You have full control here — swap the icon, label, accepted types,
+        # or max_files without touching any HTML/CSS/JS directly.
+        #
+        with st.sidebar:
+            files = custom_file_uploader(
+                accepted_types=["pdf", "txt"],
+                icon="📄",
+                label="Drop PDFs or TXT files here",
+                max_files=10,
+                height=160,
+                key="rag_uploader",
+            )
 
-        if uploaded_files:
-            if st.sidebar.button(
-                "⚙️ Process Documents",
-                key="rag_process",
-                use_container_width=True,
-            ):
+        # ── 3. Process button (only shown when files are staged) ──────────────
+        if files:
+            n = len(files)
+            label = f"⚙️ Process {n} file{'s' if n > 1 else ''}"
+
+            if st.sidebar.button(label, key="rag_process", use_container_width=True):
                 with st.sidebar:
-                    with st.spinner("Embedding documents..."):
-                        temp_paths = []
+                    with st.spinner("Embedding documents…"):
                         with tempfile.TemporaryDirectory() as tmp_dir:
-                            for uf in uploaded_files:
-                                tmp_path = os.path.join(tmp_dir, uf.name)
-                                with open(tmp_path, "wb") as f:
-                                    f.write(uf.getbuffer())
+                            temp_paths = []
+                            for f in files:
+                                raw = base64.b64decode(f["b64"])
+                                tmp_path = os.path.join(tmp_dir, f["name"])
+                                with open(tmp_path, "wb") as fh:
+                                    fh.write(raw)
                                 temp_paths.append(tmp_path)
-
                             chunks = ingest_documents(temp_paths)
 
                     if chunks > 0:
@@ -388,6 +602,7 @@ def _render_rag_panel() -> None:
                     else:
                         st.error("Failed to process documents.")
 
+        # ── 4. Clear all documents ────────────────────────────────────────────
         if ingested:
             if st.sidebar.button(
                 "🗑️ Clear All Documents",
@@ -401,11 +616,10 @@ def _render_rag_panel() -> None:
     except Exception as e:
         st.sidebar.error(f"RAG panel error: {str(e)}")
         print(f"RAG panel error: {traceback.format_exc()}")
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # Public entry point
 # ══════════════════════════════════════════════════════════════════════════════
+
 
 def render_sidebar() -> None:
     """Render the complete sidebar."""

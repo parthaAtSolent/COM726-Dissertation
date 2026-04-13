@@ -156,6 +156,10 @@ def render_chat_page() -> None:
         tid = st.session_state.get("thread_id")
         model_key = get_thread_model(tid)
 
+        # Pick animation colour based on current theme (dark=light-purple, light=deep-purple)
+        anim_color = "#5a52e0" if st.session_state.get(
+            "theme") == "light" else "#c4c0ff"
+
         with st.chat_message("assistant"):
             placeholder = st.empty()
 
@@ -174,7 +178,7 @@ def render_chat_page() -> None:
                 # Cycle animation frames until model finishes
                 while not future.done():
                     placeholder.markdown(
-                        f"<span style='color:#c4c0ff;font-style:italic;"
+                        f"<span style='color:{anim_color};font-style:italic;"
                         f"font-size:1rem;font-weight:500'>"
                         f"{_FRAMES[frame % len(_FRAMES)]}</span>",
                         unsafe_allow_html=True,

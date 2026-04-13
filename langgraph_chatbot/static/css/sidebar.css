@@ -1,8 +1,27 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   static/css/sidebar.css - Complete with Dark & Light themes
+   static/css/sidebar.css
+   CSS variables are defined here as dark-mode defaults.
+   Light-mode overrides are injected inline by _render_branding() in
+   sidebar.py on every rerun — Python / st.session_state is the source of
+   truth for theming. No [data-theme] attribute selectors needed here.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Base styles that work for both themes ─────────────────────────────────── */
+/* ── Dark-mode defaults (fallback until Python injects per-rerun vars) ───── */
+:root {
+    --accent:              #6C63FF;
+    --accent-light:        #9f9aff;
+    --border:              rgba(108, 99, 255, 0.15);
+    --border-hover:        rgba(108, 99, 255, 0.40);
+    --text-primary:        #e0e0f0;
+    --text-muted:          #7a75a8;
+    --thread-bg:           rgba(255, 255, 255, 0.04);
+    --thread-border:       rgba(108, 99, 255, 0.20);
+    --thread-hover-bg:     rgba(108, 99, 255, 0.12);
+    --thread-hover-border: rgba(108, 99, 255, 0.45);
+    --text-thread:         #b8b4e8;
+}
+
+/* ── Base styles ────────────────────────────────────────────────────────── */
 .branding-bar {
     display: flex;
     align-items: center;
@@ -33,7 +52,7 @@
     transition: color 0.35s ease;
 }
 
-/* ── Sidebar sections ──────────────────────────────────────────────────────── */
+/* ── Sidebar sections ───────────────────────────────────────────────────── */
 section[data-testid="stSidebar"] h1 {
     font-size: 1.35rem;
     font-weight: 700;
@@ -111,7 +130,10 @@ section[data-testid="stSidebar"] .stCaption {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Animated Theme Toggle Pill (CopyCase style)
+   Animated Theme Toggle Pill  (visual only — pointer-events: none)
+   The pill class ('theme-switch' vs 'theme-switch is-light') is set by
+   Python in _render_branding() based on st.session_state["theme"].
+   CSS transitions fire naturally on rerender — no JS needed.
    ══════════════════════════════════════════════════════════════════════════ */
 
 .theme-switch {
@@ -120,21 +142,16 @@ section[data-testid="stSidebar"] .stCaption {
     align-items: center;
     justify-content: space-between;
     width: 64px;
-    height: 30px;
+    height: 30px;           /* explicit height — avoids absolute-positioning collapse */
     border-radius: 15px;
     padding: 0 6px;
-    cursor: pointer;
     flex-shrink: 0;
     user-select: none;
-    outline: none;
+    pointer-events: none;   /* clicks handled by the Streamlit button below */
     background: linear-gradient(135deg, #1a1a3e, #0d0d24);
     border: 1px solid rgba(108, 99, 255, 0.45);
     box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
     transition: background 0.4s ease, border-color 0.4s ease;
-}
-
-.theme-switch:focus-visible {
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.5);
 }
 
 .theme-switch.is-light {
@@ -188,12 +205,4 @@ section[data-testid="stSidebar"] .stCaption {
     transform: translateX(34px);
     background: linear-gradient(145deg, #fde68a, #f59e0b);
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.65);
-}
-
-.theme-switch:hover {
-    border-color: rgba(108, 99, 255, 0.7);
-}
-
-.theme-switch.is-light:hover {
-    border-color: rgba(99, 179, 255, 0.75);
 }
