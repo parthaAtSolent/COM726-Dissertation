@@ -7,9 +7,9 @@ Main application entry point.
 from __future__ import annotations
 from app.utils.thread_service import init_threads_table
 from app.utils import inject_css, inject_js
-from app.ui import render_sidebar
+from app.ui.sidebar import render_sidebar  # Correct: app/ui/sidebar
 from app.core import bootstrap_application
-from app.ui.chat import render_chat_page
+from app.ui.chat import render_chat_page  # Correct: app/ui/chat
 import streamlit as st
 
 import sys

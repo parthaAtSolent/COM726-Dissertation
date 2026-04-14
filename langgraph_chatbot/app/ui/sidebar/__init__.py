@@ -1,21 +1,44 @@
-"""Sidebar UI component."""
+"""
+Sidebar module - Navigation and controls.
+"""
 
-import streamlit as st
-import traceback
-from app.ui.sidebar import (
-    render_branding,
-    render_model_selector,
+from app.ui.sidebar.branding import render_branding
+from app.ui.sidebar.model_selector import render_model_selector
+from app.ui.sidebar.thread_actions import (
     new_chat,
+    switch_thread,
+    delete_thread,
+    save_title,
+    on_model_change,
     clear_thread_cache,
     get_cached_threads,
-    render_thread_row,
-    render_delete_confirmation,
-    render_rag_panel,
 )
+from app.ui.sidebar.thread_list import render_thread_row
+from app.ui.sidebar.rag_panel import render_rag_panel
+from app.ui.sidebar.delete_confirmation import render_delete_confirmation
+
+__all__ = [
+    "render_branding",
+    "render_model_selector",
+    "new_chat",
+    "switch_thread",
+    "delete_thread",
+    "save_title",
+    "on_model_change",
+    "clear_thread_cache",
+    "get_cached_threads",
+    "render_thread_row",
+    "render_rag_panel",
+    "render_delete_confirmation",
+    "render_sidebar",
+]
 
 
 def render_sidebar() -> None:
     """Render the complete sidebar."""
+    import streamlit as st
+    import traceback
+
     try:
         render_branding()
         render_model_selector()
