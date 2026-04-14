@@ -2,6 +2,8 @@
 app/core/graph.py
 ──────────────────
 LangGraph StateGraph with MySQL checkpointing and streaming.
+RAG is handled inside the chat_node – it retrieves context and builds a
+proper prompt with instructions to cite sources.
 """
 
 from __future__ import annotations
@@ -364,12 +366,8 @@ class MySQLSaver(BaseCheckpointSaver):
             raise
 
 
-# ── Connection factory ────────────────────────────────────────────────────────
-
 _checkpointer = MySQLSaver()
 
-
-# ── Token trimmer ─────────────────────────────────────────────────────────────
 
 def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
     """Trim message history to stay within token limits."""
@@ -389,6 +387,7 @@ def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
         trimmed.insert(0, msg)
         total_tokens += msg_tokens
 
+    # Ensure the first message is a HumanMessage
     while trimmed and not isinstance(trimmed[0], HumanMessage):
         trimmed.pop(0)
 
@@ -398,21 +397,19 @@ def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
     return trimmed
 
 
-# ── Chat node ─────────────────────────────────────────────────────────────────
-
 def chat_node(state: ChatState) -> dict:
     try:
         messages = state["messages"]
         model_key = state.get("model") or DEFAULT_MODEL_KEY
 
-        # Extract latest user message
-        last_user_message: str | None = None
+        # Extract the original user message (the latest HumanMessage)
+        original_user_message: str | None = None
         for msg in reversed(messages):
             if isinstance(msg, HumanMessage):
-                last_user_message = msg.content
+                original_user_message = msg.content
                 break
 
-        if not last_user_message:
+        if not original_user_message:
             return {
                 "messages":     [AIMessage(content="I didn't receive a message.")],
                 "routing_info": None,
@@ -426,30 +423,57 @@ def chat_node(state: ChatState) -> dict:
             "auto_selected": False,
         }
 
-        # ── RAG: retrieve relevant context if vectorstore has docs ────────────
-        rag_context = state.get("rag_context") or ""
+        # ── RAG: retrieve relevant context using the original user message ──
+        rag_context = ""
+        try:
+            from app.rag.retriever import retrieve_context
+            rag_context = retrieve_context(original_user_message)
+        except RuntimeError as rag_err:
+            error_msg = str(rag_err)
+            print(f"[graph.chat_node] RAG retrieval failed: {error_msg}")
+            return {
+                "messages": [AIMessage(
+                    content=(
+                        f"⚠️ **Document retrieval failed** — I cannot access "
+                        f"the uploaded documents right now.\n\n"
+                        f"**Reason:** {error_msg}\n\n"
+                        f"Please make sure Ollama is running:\n"
+                        f"```\nollama serve\nollama pull nomic-embed-text\n```"
+                    )
+                )],
+                "routing_info": routing_info,
+                "rag_context":  None,
+            }
+        except Exception as rag_err:
+            print(
+                f"[graph.chat_node] RAG retrieval unexpected error: {rag_err}")
+            rag_context = ""
 
-        if not rag_context:
-            try:
-                from app.rag.retriever import retrieve_context
-                rag_context = retrieve_context(last_user_message)
-            except Exception as rag_err:
-                print(f"[graph.chat_node] RAG retrieval skipped: {rag_err}")
-                rag_context = ""
-
-        # ── Build prompt ──────────────────────────────────────────────────────
-        lines = []
+        # ── Build the final prompt with clear instructions ────────────────
+        prompt_lines = []
 
         if rag_context:
-            lines.append(
+            prompt_lines.append(
                 "You are a helpful assistant. Use the following context from "
-                "uploaded documents to answer the user's question. If the context "
-                "doesn't contain the answer, say so and answer from your own knowledge.\n"
+                "uploaded documents to answer the user's question.\n"
+                "**IMPORTANT INSTRUCTIONS:**\n"
+                "1. If the answer is found in the context, cite the source document "
+                "   (e.g., 'According to [filename]...').\n"
+                "2. If the context does not contain the answer, say:\n"
+                "   'Based on the uploaded documents, I couldn't find information about this. "
+                "Here's my general knowledge:'\n"
+                "3. Be concise and helpful.\n"
             )
-            lines.append(f"CONTEXT:\n{rag_context}\n")
-            lines.append("CONVERSATION:")
+            prompt_lines.append(f"CONTEXT:\n{rag_context}\n")
+        else:
+            prompt_lines.append(
+                "You are a helpful assistant. No documents have been uploaded or no relevant "
+                "context was found. Answer using your own knowledge."
+            )
 
-        # Token limits per model
+        prompt_lines.append("\nCONVERSATION HISTORY:")
+
+        # Trim conversation history to fit model token limits
         token_limits = {
             "llama-8b-instant":  4000,
             "gemini-2.5-flash":  8000,
@@ -464,19 +488,21 @@ def chat_node(state: ChatState) -> dict:
 
         for msg in trimmed:
             if isinstance(msg, HumanMessage):
-                lines.append(f"User: {msg.content}")
+                prompt_lines.append(f"User: {msg.content}")
             elif isinstance(msg, AIMessage):
-                lines.append(f"Assistant: {msg.content}")
-        lines.append("Assistant:")
-        prompt_text = "\n".join(lines)
+                prompt_lines.append(f"Assistant: {msg.content}")
 
+        prompt_lines.append("Assistant:")
+        prompt_text = "\n".join(prompt_lines)
+
+        # Invoke the LLM
         try:
             llm = llms.build_llm(model_key)
             response = llm.invoke(prompt_text)
             return {
                 "messages":     [AIMessage(content=response.content)],
                 "routing_info": routing_info,
-                "rag_context":  None,
+                "rag_context":  None,   # cleared after use
             }
         except Exception as exc:
             print(f"[graph.chat_node] LLM Error: {exc}")
@@ -485,6 +511,7 @@ def chat_node(state: ChatState) -> dict:
                 "routing_info": routing_info,
                 "rag_context":  None,
             }
+
     except Exception as e:
         print(f"[graph.chat_node] Unexpected error: {e}")
         return {
@@ -493,8 +520,6 @@ def chat_node(state: ChatState) -> dict:
             "rag_context":  None,
         }
 
-
-# ── Compiled chatbot singleton ────────────────────────────────────────────────
 
 def _compile():
     try:
@@ -505,6 +530,7 @@ def _compile():
         return builder.compile(checkpointer=_checkpointer)
     except Exception as e:
         print(f"[graph.py] Failed to compile graph: {e}")
+        # Fallback – compile without checkpointer
         builder = StateGraph(ChatState)
         builder.add_node("chat_node", chat_node)
         builder.add_edge(START, "chat_node")

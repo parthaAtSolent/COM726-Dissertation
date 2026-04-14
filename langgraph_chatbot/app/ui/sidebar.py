@@ -1,5 +1,4 @@
 from __future__ import annotations
-from app.utils.file_uploader import custom_file_uploader
 import base64
 import os
 import tempfile
@@ -543,64 +542,169 @@ def _render_thread_row(thread: dict) -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# RAG panel
+# RAG panel - FIXED VERSION
 # ══════════════════════════════════════════════════════════════════════════════
+
 def _render_rag_panel() -> None:
     """Render the document upload panel for RAG using the custom file uploader."""
     try:
+        from app.rag.ingestion import get_vectorstore_count
+
         st.sidebar.divider()
         st.sidebar.header("📄 Documents (RAG)")
 
-        # ── 1. Already-ingested file list ─────────────────────────────────────
+        # ── 1. Vectorstore status ─────────────────────────────────────────────
         ingested = list_ingested_files()
+        chunk_count = get_vectorstore_count()
+
         if ingested:
-            st.sidebar.caption(f"✅ {len(ingested)} file(s) loaded:")
+            st.sidebar.caption(
+                f"✅ {len(ingested)} file(s) · {chunk_count} chunks indexed:"
+            )
             for fname in ingested:
                 st.sidebar.caption(f"  • {fname}")
         else:
             st.sidebar.caption("No documents loaded yet.")
+            st.sidebar.caption(f"📁 Vectorstore path: data/vectorstore")
+            st.sidebar.caption(f"📊 Chunks: {chunk_count}")
 
-        # ── 2. Custom file uploader ───────────────────────────────────────────
-        #
-        # Returns None until the user stages files, then:
-        #   [{ "name": str, "mime": str, "size": int, "b64": str }, ...]
-        #
-        # You have full control here — swap the icon, label, accepted types,
-        # or max_files without touching any HTML/CSS/JS directly.
-        #
-        with st.sidebar:
-            files = custom_file_uploader(
-                accepted_types=["pdf", "txt"],
-                icon="📄",
-                label="Drop PDFs or TXT files here",
-                max_files=10,
-                height=160,
-                key="rag_uploader",
-            )
+        # ── 2. File uploader (Custom Styling Applied)───────────────────────────────────────────
 
-        # ── 3. Process button (only shown when files are staged) ──────────────
+        st.markdown("""
+        <style>
+        /* Scope only to the sidebar uploader */
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] {
+            background: linear-gradient(135deg, #6C63FF, #5a52e0) !important;
+            border: 3px solid #4a43c0 !important;
+            border-radius: 16px !important;
+            padding: 1rem !important;
+            box-shadow: none !important;
+        }
+
+        /* Inner layers */
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] > div,
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] > div > div {
+            background: transparent !important;
+        }
+
+        /* Text */
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] * {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            font-weight: 600 !important;
+        }
+
+        /* Icon */
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] svg {
+            fill: #ffffff !important;
+        }
+
+        /* Button */
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] button {
+            background: #ffffff !important;
+            color: #5a52e0 !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 0.45rem 0.9rem !important;
+            font-weight: 600 !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        /* Button hover effect */
+        section[data-testid="stSidebar"] div.st-key-rag_uploader_native [data-testid="stFileUploaderDropzone"] button:hover {
+            background: #f0efff !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        files = st.sidebar.file_uploader(
+            "Upload PDF or TXT files",
+            type=["pdf", "txt"],
+            accept_multiple_files=True,
+            key="rag_uploader_native",
+        )
+
+        # ── 3. Process button with detailed debugging ────────────────────
         if files:
             n = len(files)
             label = f"⚙️ Process {n} file{'s' if n > 1 else ''}"
 
+            # Debug: Show what files were selected
+            st.sidebar.write(
+                f"📁 Selected files: {[f.name for f in files]}")
+
             if st.sidebar.button(label, key="rag_process", use_container_width=True):
-                with st.sidebar:
-                    with st.spinner("Embedding documents…"):
-                        with tempfile.TemporaryDirectory() as tmp_dir:
-                            temp_paths = []
-                            for f in files:
-                                raw = base64.b64decode(f["b64"])
-                                tmp_path = os.path.join(tmp_dir, f["name"])
-                                with open(tmp_path, "wb") as fh:
-                                    fh.write(raw)
-                                temp_paths.append(tmp_path)
-                            chunks = ingest_documents(temp_paths)
+                progress = st.sidebar.empty()
+                status_text = st.sidebar.empty()
+
+                try:
+                    with st.sidebar:
+                        with st.spinner("Processing documents..."):
+                            with tempfile.TemporaryDirectory() as tmp_dir:
+                                temp_paths = []
+
+                                for idx, f in enumerate(files):
+                                    status_text.info(
+                                        f"📥 Processing file {idx+1}/{n}: {f.name}")
+
+                                    # Handle UploadedFile objects (native Streamlit)
+                                    tmp_path = os.path.join(tmp_dir, f.name)
+                                    with open(tmp_path, "wb") as fh:
+                                        fh.write(f.getvalue())
+                                    temp_paths.append(tmp_path)
+                                    status_text.success(
+                                        f"  ✅ Loaded: {f.name} ({f.size} bytes)")
+
+                                if not temp_paths:
+                                    status_text.error(
+                                        "No valid files to process")
+                                    return
+
+                                status_text.info(
+                                    f"📥 Ingesting {len(temp_paths)} file(s)...")
+                                progress.caption("🧠 Embedding chunks…")
+
+                                # This is the critical call - where ingestion happens
+                                status_text.info(
+                                    "Calling ingest_documents()...")
+                                chunks = ingest_documents(temp_paths)
+                                status_text.success(
+                                    f"✅ ingest_documents returned {chunks} chunks")
+
+                                # Verify immediately
+                                new_count = get_vectorstore_count()
+                                status_text.info(
+                                    f"📊 Vectorstore now has {new_count} chunks")
 
                     if chunks > 0:
-                        st.success(f"✅ {chunks} chunks stored!")
+                        st.sidebar.success(
+                            f"✅ {chunks} chunks stored from {n} file(s)"
+                        )
                         st.rerun()
                     else:
-                        st.error("Failed to process documents.")
+                        st.sidebar.warning(
+                            "⚠️ Files were loaded but produced no content. "
+                            "Check console for errors."
+                        )
+
+                except RuntimeError as e:
+                    st.sidebar.error(f"❌ {e}")
+                    st.sidebar.info(
+                        "💡 Make sure Ollama is running:\n"
+                        "```bash\n"
+                        "ollama serve\n"
+                        "ollama pull nomic-embed-text\n"
+                        "```"
+                    )
+                except Exception as e:
+                    st.sidebar.error(f"❌ Unexpected error: {e}")
+                    st.sidebar.code(str(e))
+                    print(f"RAG panel error: {traceback.format_exc()}")
+                finally:
+                    progress.empty()
+                    status_text.empty()
 
         # ── 4. Clear all documents ────────────────────────────────────────────
         if ingested:
@@ -616,6 +720,8 @@ def _render_rag_panel() -> None:
     except Exception as e:
         st.sidebar.error(f"RAG panel error: {str(e)}")
         print(f"RAG panel error: {traceback.format_exc()}")
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Public entry point
 # ══════════════════════════════════════════════════════════════════════════════

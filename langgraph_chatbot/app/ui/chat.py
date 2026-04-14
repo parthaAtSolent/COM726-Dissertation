@@ -15,17 +15,20 @@ from app.utils import (
 from pathlib import Path
 
 
-# Animation frames (kept in Python for fallback)
+# Animation frames for standard response
 _FRAMES = [
     "👩🏻‍🍳 Bro's cooking. Let him cook 🔥",
     "👩🏻‍🍳👩🏻‍🍳 Bro's cooking. Let him cook 🔥🔥",
     "👩🏻‍🍳👩🏻‍🍳👩🏻‍🍳 Bro's cooking. Let him cook 🔥🔥🔥",
 ]
 
+# RAG‑specific animation frames
+_RAG_FRAMES = [
+    "📚 Searching documents... 🔍",
+    "📄 Reading uploaded files... 📖",
+    "🤔 Finding relevant context... ✨",
+]
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Helper functions
-# ══════════════════════════════════════════════════════════════════════════════
 
 def load_html_template(template_name: str) -> str:
     """Load an HTML template from the templates folder."""
@@ -35,10 +38,6 @@ def load_html_template(template_name: str) -> str:
     return ""
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Header
-# ══════════════════════════════════════════════════════════════════════════════
-
 def render_header() -> None:
     try:
         tid = st.session_state.get("thread_id")
@@ -46,18 +45,26 @@ def render_header() -> None:
             return
         title = get_thread_title(tid)
         model_key = get_thread_model(tid)
-        st.title(f"💬 {title}")
-        st.caption(
-            f"Using: {llms.get_icon(model_key)} "
-            f"{llms.get_display_name(model_key)}"
-        )
+
+        # Show RAG indicator if documents are loaded
+        from app.rag import list_ingested_files
+        ingested_files = list_ingested_files()
+        rag_indicator = " 📚" if ingested_files else ""
+
+        st.title(f"💬 {title}{rag_indicator}")
+
+        if ingested_files:
+            st.caption(
+                f"Using: {llms.get_icon(model_key)} {llms.get_display_name(model_key)} "
+                f"• 📄 {len(ingested_files)} document(s) loaded"
+            )
+        else:
+            st.caption(
+                f"Using: {llms.get_icon(model_key)} {llms.get_display_name(model_key)}"
+            )
     except Exception as e:
         st.error(f"Failed to render header: {str(e)}")
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# History
-# ══════════════════════════════════════════════════════════════════════════════
 
 def render_history() -> None:
     try:
@@ -68,17 +75,14 @@ def render_history() -> None:
         st.error(f"Failed to render history: {str(e)}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Streaming — collects full response then returns it
-# ══════════════════════════════════════════════════════════════════════════════
-
 def get_full_response(user_input: str, model_key: str, tid: str) -> str:
     """
     Runs the LangGraph stream and returns the final complete response.
-    This blocks until the model finishes — animation runs before this call.
+    RAG retrieval is handled entirely inside the graph.
     """
     config = {"configurable": {"thread_id": tid}}
     inputs = {
+        # original, unmodified input
         "messages": [HumanMessage(content=user_input)],
         "model": model_key,
     }
@@ -106,12 +110,7 @@ def get_full_response(user_input: str, model_key: str, tid: str) -> str:
     return ai_response or "⚠️ No response received. Please try again."
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Main chat page
-# ══════════════════════════════════════════════════════════════════════════════
-
 def render_chat_page() -> None:
-
     if "message_history" not in st.session_state:
         st.session_state["message_history"] = []
     if "processing_message" not in st.session_state:
@@ -124,7 +123,7 @@ def render_chat_page() -> None:
 
     user_input = st.chat_input("Type your message here...")
 
-    # ── Step 1: user submits → save + rerun to show message immediately ───────
+    # Step 1: user submits → save message + rerun to show it immediately
     if user_input and not st.session_state["processing_message"]:
         tid = st.session_state.get("thread_id")
         if not tid:
@@ -144,7 +143,7 @@ def render_chat_page() -> None:
 
         st.rerun()
 
-    # ── Step 2: processing=True → show animation then get response ───────────
+    # Step 2: processing=True → show animation, then get response
     if st.session_state.get("processing_message", False):
         history = st.session_state.get("message_history", [])
 
@@ -156,46 +155,44 @@ def render_chat_page() -> None:
         tid = st.session_state.get("thread_id")
         model_key = get_thread_model(tid)
 
-        # Pick animation colour based on current theme (dark=light-purple, light=deep-purple)
+        # Choose animation frames based on whether RAG documents exist
+        from app.rag import list_ingested_files
+        has_rag = len(list_ingested_files()) > 0
+        display_frames = _RAG_FRAMES if has_rag else _FRAMES
+
         anim_color = "#5a52e0" if st.session_state.get(
             "theme") == "light" else "#c4c0ff"
 
         with st.chat_message("assistant"):
             placeholder = st.empty()
 
-            # ── Animate on the main thread while model runs in background ─────
             import concurrent.futures
 
             full_response = ""
             frame = 0
 
-            # Submit model call to thread pool
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
                 future = executor.submit(
-                    get_full_response, user_message, model_key, tid
-                )
+                    get_full_response, user_message, model_key, tid)
 
-                # Cycle animation frames until model finishes
                 while not future.done():
                     placeholder.markdown(
                         f"<span style='color:{anim_color};font-style:italic;"
                         f"font-size:1rem;font-weight:500'>"
-                        f"{_FRAMES[frame % len(_FRAMES)]}</span>",
+                        f"{display_frames[frame % len(display_frames)]}</span>",
                         unsafe_allow_html=True,
                     )
                     frame += 1
                     time.sleep(0.5)
 
-                # Get result
                 try:
                     full_response = future.result()
                 except Exception as e:
                     full_response = f"⚠️ Error: {e}"
 
-            # ── Show final response ───────────────────────────────────────────
             placeholder.markdown(full_response)
 
-        # ── Save + update state ───────────────────────────────────────────────
+        # Save assistant response and optionally generate title
         if full_response and not full_response.startswith("⚠️"):
             st.session_state["message_history"].append({
                 "role": "assistant",
