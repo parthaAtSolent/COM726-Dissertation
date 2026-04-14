@@ -26,6 +26,7 @@ class ChatState(TypedDict):
     model:        str
     routing_info: Optional[dict]
     rag_context:  Optional[str]
+    route: Optional[str]
 
 
 class RoutingInfo(TypedDict):

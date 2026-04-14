@@ -1,0 +1,49 @@
+{
+  "dataset": "custom",
+  "total_queries": 9,
+  "successful_queries": 9,
+  "failed_queries": 0,
+  "avg_latency_ms": 4763.086504406399,
+  "median_latency_ms": 4027.221202850342,
+  "p95_latency_ms": 13667.86003112793,
+  "accuracy": 1.0,
+  "route_distribution": {
+    "agent": 7,
+    "direct": 2
+  },
+  "route_accuracy": {
+    "agent": 1.0,
+    "direct": 1.0
+  },
+  "route_avg_latency": {
+    "agent": 3506.6520827157156,
+    "direct": 9160.606980323792
+  },
+  "model_distribution": {
+    "llama-8b-instant": 2,
+    "falcon3": 6,
+    "gemini-2.5-flash": 1
+  },
+  "model_accuracy": {
+    "llama-8b-instant": 1.0,
+    "falcon3": 1.0,
+    "gemini-2.5-flash": 1.0
+  },
+  "category_distribution": {
+    "conversational": 6,
+    "summarization": 1
+  },
+  "category_accuracy": {
+    "conversational": 1.0,
+    "summarization": 1.0
+  },
+  "complexity_distribution": {
+    "unknown": 2,
+    "low": 7
+  },
+  "complexity_accuracy": {
+    "unknown": 1.0,
+    "low": 1.0
+  },
+  "timestamp": "2026-04-14T19:40:36.719185"
+}

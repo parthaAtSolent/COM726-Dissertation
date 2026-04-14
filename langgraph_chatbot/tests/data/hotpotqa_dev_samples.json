@@ -1,0 +1,26 @@
+[
+  {
+    "question": "Which American-born actress played the lead role in the 2014 film 'The Fault in Our Stars' and also starred in the TV series 'The Vampire Diaries'?",
+    "answer": "Shailene Woodley",
+    "context": [
+      "The Fault in Our Stars (film)",
+      "The Vampire Diaries"
+    ]
+  },
+  {
+    "question": "The first man to walk on the moon came from which US state?",
+    "answer": "Ohio",
+    "context": [
+      "Neil Armstrong",
+      "Apollo 11"
+    ]
+  },
+  {
+    "question": "What is the name of the university that was founded by John D. Rockefeller and is located in Chicago?",
+    "answer": "University of Chicago",
+    "context": [
+      "John D. Rockefeller",
+      "Chicago"
+    ]
+  }
+]

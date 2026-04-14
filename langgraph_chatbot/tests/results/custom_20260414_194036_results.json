@@ -1,0 +1,178 @@
+[
+  {
+    "query_id": 0,
+    "dataset": "custom",
+    "question": "What is the capital of France?",
+    "expected_answer": "Paris",
+    "actual_answer": "The capital of France is Paris.",
+    "route_taken": "agent",
+    "model_used": "llama-8b-instant",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 952.5978565216064,
+    "estimated_tokens": 14,
+    "error": null,
+    "routing_reason": "Fallback due to error: \"Model 'qwen2_5_coder_7b' not registered. Available: ['custom', 'llama-8b-instant', 'gemini-2.5-flas",
+    "categories": [],
+    "complexity": "unknown",
+    "timestamp": "2026-04-14T19:39:50.252840"
+  },
+  {
+    "query_id": 1,
+    "dataset": "custom",
+    "question": "Who wrote Romeo and Juliet?",
+    "expected_answer": "William Shakespeare",
+    "actual_answer": "Hello there! Romeo and Juliet is a famous play written by none other than William Shakespeare. He's one of the most celebrated playwrights in history, known for his incredible storytelling and rich character development. This particular play, set in Verona, Italy, tells the tragic tale of two young lovers whose deaths ultimately reconcile their families. It's a classic example of Shakespeare's ability to explore themes of love, fate, and conflict in a captivating way. Enjoy diving into this timeless piece!\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: conversational\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `falcon3`\n   \u2022 Routing Decision: Task classified as 'conversational' \u2192 routed to falcon3 (specialized in general conversation)\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "direct",
+    "model_used": "falcon3",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 4653.353929519653,
+    "estimated_tokens": 289,
+    "error": null,
+    "routing_reason": "Orchestrator selected falcon3 for conversational task",
+    "categories": [
+      "conversational"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:39:55.410354"
+  },
+  {
+    "query_id": 2,
+    "dataset": "custom",
+    "question": "What is the chemical symbol for gold?",
+    "expected_answer": "Au",
+    "actual_answer": "Sure! The chemical symbol for gold is Au. It comes from the Latin word \"aurum,\" which means gold. It's often associated with wealth and has been used in jewelry and art for centuries due to its beautiful color and durability. Is there anything else about gold or chemistry you're curious about?\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: conversational\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `falcon3`\n   \u2022 Routing Decision: Task classified as 'conversational' \u2192 routed to falcon3 (specialized in general conversation)\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "agent",
+    "model_used": "falcon3",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 4027.221202850342,
+    "estimated_tokens": 238,
+    "error": null,
+    "routing_reason": "Orchestrator selected falcon3 for conversational task",
+    "categories": [
+      "conversational"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:39:59.941246"
+  },
+  {
+    "query_id": 3,
+    "dataset": "custom",
+    "question": "What is the largest ocean on Earth?",
+    "expected_answer": "Pacific Ocean",
+    "actual_answer": "Hey there! The largest ocean on Earth is the Pacific Ocean. It's so vast that it's often referred to as \"the ocean.\" It covers a significant portion of our planet, connecting many countries and cultures. Isn't it fascinating how such a massive part of our world can be home to countless species and have its own unique climate? If you have more questions about oceans or anything else, feel free to ask!\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: conversational\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `falcon3`\n   \u2022 Routing Decision: Task classified as 'conversational' \u2192 routed to falcon3 (specialized in general conversation)\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "agent",
+    "model_used": "falcon3",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 4543.076276779175,
+    "estimated_tokens": 264,
+    "error": null,
+    "routing_reason": "Orchestrator selected falcon3 for conversational task",
+    "categories": [
+      "conversational"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:40:04.990660"
+  },
+  {
+    "query_id": 4,
+    "dataset": "custom",
+    "question": "What is 15% of 200?",
+    "expected_answer": "30",
+    "actual_answer": "Hey there! To find 15% of 200, you can think of it this way: 15% means 15 out of every 100. So, you're looking for 15 parts out of 100 parts of 200. Let's break it down:\n\nFirst, find 1% of 200 by dividing 200 by 100: \n200 / 100 = 2\n\nNow, since you want 15%, multiply 2 (which is 1% of 200) by 15:\n2 * 15 = 30\n\nSo, 15% of 200 is 30! Easy peasy!\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: conversational\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `falcon3`\n   \u2022 Routing Decision: Task classified as 'conversational' \u2192 routed to falcon3 (specialized in general conversation)\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "agent",
+    "model_used": "falcon3",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 6198.988199234009,
+    "estimated_tokens": 245,
+    "error": null,
+    "routing_reason": "Orchestrator selected falcon3 for conversational task",
+    "categories": [
+      "conversational"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:40:11.698537"
+  },
+  {
+    "query_id": 5,
+    "dataset": "custom",
+    "question": "Calculate (45 + 27) * 3",
+    "expected_answer": "216",
+    "actual_answer": "To calculate (45 + 27) * 3, we need to follow the order of operations (PEMDAS):\n\n1. Parentheses: \n   Inside the parentheses, we have 45 + 27\n   So, (45 + 27) = 72\n\n2. Multiplication:\n   Now we multiply 72 by 3\n   72 * 3 = 216\n\nTherefore, (45 + 27) * 3 = 216.",
+    "route_taken": "agent",
+    "model_used": "llama-8b-instant",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 1231.1456203460693,
+    "estimated_tokens": 69,
+    "error": null,
+    "routing_reason": "Fallback due to error: \"Model 'deepseek_r1' not registered. Available: ['custom', 'llama-8b-instant', 'gemini-2.5-flash', '",
+    "categories": [],
+    "complexity": "unknown",
+    "timestamp": "2026-04-14T19:40:13.431045"
+  },
+  {
+    "query_id": 6,
+    "dataset": "custom",
+    "question": "What is 100 divided by 4?",
+    "expected_answer": "25",
+    "actual_answer": "100 divided by 4 equals 25. That's right! If you have 100 cookies and you want to share them equally among 4 friends, each friend would get 25 cookies. Easy as pie!\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: conversational\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `falcon3`\n   \u2022 Routing Decision: Task classified as 'conversational' \u2192 routed to falcon3 (specialized in general conversation)\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "agent",
+    "model_used": "falcon3",
+    "is_correct": true,
+    "confidence": 0.9,
+    "latency_ms": 3942.17848777771,
+    "estimated_tokens": 203,
+    "error": null,
+    "routing_reason": "Orchestrator selected falcon3 for conversational task",
+    "categories": [
+      "conversational"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:40:17.880521"
+  },
+  {
+    "query_id": 7,
+    "dataset": "custom",
+    "question": "According to the uploaded document, what is the main topic?",
+    "expected_answer": "",
+    "actual_answer": "Hello! It looks like you've shared a document, but I don't see it here. Could you please upload or share the content so I can assist you with identifying the main topic?\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: conversational\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `falcon3`\n   \u2022 Routing Decision: Task classified as 'conversational' \u2192 routed to falcon3 (specialized in general conversation)\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "agent",
+    "model_used": "falcon3",
+    "is_correct": true,
+    "confidence": 0.5,
+    "latency_ms": 3651.3569355010986,
+    "estimated_tokens": 212,
+    "error": null,
+    "routing_reason": "Orchestrator selected falcon3 for conversational task",
+    "categories": [
+      "conversational"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:40:22.040729"
+  },
+  {
+    "query_id": 8,
+    "dataset": "custom",
+    "question": "Summarize the key points from the document",
+    "expected_answer": "",
+    "actual_answer": "Please provide the document you would like me to summarize. I need its content to extract the key points.\n\n============================================================\n\ud83e\udd16 ***ORCHESTRATION TRANSPARENCY REPORT***\n============================================================\n\n\ud83d\udccb **Task Analysis:**\n   \u2022 Categories: summarization\n   \u2022 Complexity: LOW\n\n\ud83c\udfaf **Model Selection:**\n   \u2022 Primary Specialist: `gemini-2.5-flash`\n   \u2022 Routing Decision: Task classified as 'summarization' \u2192 routed to gemini-2.5-flash (specialized in fast summarization and content refinement)\n   \u2022 Refinement/Synthesis: `gemini-2.5-flash`\n   \u2022 Purpose: Polishing and improving response quality\n\n\u2705 **Quality Assurance:**\n   \u2022 Response synthesized from specialist output\n   \u2022 Factual consistency verified\n   \u2022 Structure and clarity optimized\n\n============================================================",
+    "route_taken": "direct",
+    "model_used": "gemini-2.5-flash",
+    "is_correct": true,
+    "confidence": 0.5,
+    "latency_ms": 13667.86003112793,
+    "estimated_tokens": 226,
+    "error": null,
+    "routing_reason": "Orchestrator selected gemini-2.5-flash for summarization task",
+    "categories": [
+      "summarization"
+    ],
+    "complexity": "low",
+    "timestamp": "2026-04-14T19:40:36.218500"
+  }
+]

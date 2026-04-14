@@ -403,7 +403,7 @@ def build_attribution_footer(
     """
     # Create a visual separator
     footer = "\n\n" + "=" * 60 + "\n"
-    footer += "🤖 **ORCHESTRATION TRANSPARENCY REPORT**\n"
+    footer += "🤖 ***ORCHESTRATION TRANSPARENCY REPORT***\n"
     footer += "=" * 60 + "\n\n"
 
     # Task analysis section

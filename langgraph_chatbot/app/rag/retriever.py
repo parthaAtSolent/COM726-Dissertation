@@ -83,3 +83,14 @@ def retrieve_context(query: str) -> str:
         chunks.append(f"[Source: {source}]\n{doc.page_content}")
 
     return "\n\n---\n\n".join(chunks)
+
+
+def get_vectorstore_count() -> int:
+    try:
+        from app.rag.embedder import get_embeddings
+        import chromadb
+        client = chromadb.PersistentClient(path=str(vECTORSTORE_DIR))
+        col = client.get_collection("rag_documents")
+        return col.count()
+    except Exception:
+        return 0

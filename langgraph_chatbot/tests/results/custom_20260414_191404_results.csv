@@ -1,0 +1,9 @@
+query_id,dataset,question,expected_answer,actual_answer,route_taken,model_used,is_correct,confidence,latency_ms,estimated_tokens,error,routing_reason,categories,complexity,timestamp
+0,custom,What is the capital of France?,Paris,[ERROR],unknown,unknown,False,0.0,0.0,7,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:00.939723
+1,custom,Who wrote Romeo and Juliet?,William Shakespeare,[ERROR],unknown,unknown,False,0.0,0.0,6,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:01.453760
+2,custom,What is the chemical symbol for gold?,Au,[ERROR],unknown,unknown,False,0.0,0.0,9,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:01.956618
+3,custom,What is 15% of 200?,30,[ERROR],unknown,unknown,False,0.0,0.0,4,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:02.459024
+4,custom,Calculate (45 + 27) * 3,216,[ERROR],unknown,unknown,False,0.0,0.0,5,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:02.961541
+5,custom,What is the current weather in London?,,[ERROR],unknown,unknown,False,0.0,0.0,9,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:03.462989
+6,custom,"According to the uploaded document, what is the main topic?",,[ERROR],unknown,unknown,False,0.0,0.0,14,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:03.965233
+7,custom,Summarize the key points from the document,,[ERROR],unknown,unknown,False,0.0,0.0,10,module 'signal' has no attribute 'SIGALRM',,,unknown,2026-04-14T19:14:04.466533

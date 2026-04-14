@@ -1,0 +1,163 @@
+query_id,dataset,question,expected_answer,actual_answer,route_taken,model_used,is_correct,confidence,latency_ms,estimated_tokens,error,routing_reason,categories,complexity,timestamp
+0,custom,What is the capital of France?,Paris,The capital of France is Paris.,agent,llama-8b-instant,True,0.9,952.5978565216064,14,,"Fallback due to error: ""Model 'qwen2_5_coder_7b' not registered. Available: ['custom', 'llama-8b-instant', 'gemini-2.5-flas",,unknown,2026-04-14T19:39:50.252840
+1,custom,Who wrote Romeo and Juliet?,William Shakespeare,"Hello there! Romeo and Juliet is a famous play written by none other than William Shakespeare. He's one of the most celebrated playwrights in history, known for his incredible storytelling and rich character development. This particular play, set in Verona, Italy, tells the tragic tale of two young lovers whose deaths ultimately reconcile their families. It's a classic example of Shakespeare's ability to explore themes of love, fate, and conflict in a captivating way. Enjoy diving into this timeless piece!
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: conversational
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `falcon3`
+   • Routing Decision: Task classified as 'conversational' → routed to falcon3 (specialized in general conversation)
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",direct,falcon3,True,0.9,4653.353929519653,289,,Orchestrator selected falcon3 for conversational task,conversational,low,2026-04-14T19:39:55.410354
+2,custom,What is the chemical symbol for gold?,Au,"Sure! The chemical symbol for gold is Au. It comes from the Latin word ""aurum,"" which means gold. It's often associated with wealth and has been used in jewelry and art for centuries due to its beautiful color and durability. Is there anything else about gold or chemistry you're curious about?
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: conversational
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `falcon3`
+   • Routing Decision: Task classified as 'conversational' → routed to falcon3 (specialized in general conversation)
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",agent,falcon3,True,0.9,4027.221202850342,238,,Orchestrator selected falcon3 for conversational task,conversational,low,2026-04-14T19:39:59.941246
+3,custom,What is the largest ocean on Earth?,Pacific Ocean,"Hey there! The largest ocean on Earth is the Pacific Ocean. It's so vast that it's often referred to as ""the ocean."" It covers a significant portion of our planet, connecting many countries and cultures. Isn't it fascinating how such a massive part of our world can be home to countless species and have its own unique climate? If you have more questions about oceans or anything else, feel free to ask!
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: conversational
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `falcon3`
+   • Routing Decision: Task classified as 'conversational' → routed to falcon3 (specialized in general conversation)
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",agent,falcon3,True,0.9,4543.076276779175,264,,Orchestrator selected falcon3 for conversational task,conversational,low,2026-04-14T19:40:04.990660
+4,custom,What is 15% of 200?,30,"Hey there! To find 15% of 200, you can think of it this way: 15% means 15 out of every 100. So, you're looking for 15 parts out of 100 parts of 200. Let's break it down:
+
+First, find 1% of 200 by dividing 200 by 100: 
+200 / 100 = 2
+
+Now, since you want 15%, multiply 2 (which is 1% of 200) by 15:
+2 * 15 = 30
+
+So, 15% of 200 is 30! Easy peasy!
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: conversational
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `falcon3`
+   • Routing Decision: Task classified as 'conversational' → routed to falcon3 (specialized in general conversation)
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",agent,falcon3,True,0.9,6198.988199234009,245,,Orchestrator selected falcon3 for conversational task,conversational,low,2026-04-14T19:40:11.698537
+5,custom,Calculate (45 + 27) * 3,216,"To calculate (45 + 27) * 3, we need to follow the order of operations (PEMDAS):
+
+1. Parentheses: 
+   Inside the parentheses, we have 45 + 27
+   So, (45 + 27) = 72
+
+2. Multiplication:
+   Now we multiply 72 by 3
+   72 * 3 = 216
+
+Therefore, (45 + 27) * 3 = 216.",agent,llama-8b-instant,True,0.9,1231.1456203460693,69,,"Fallback due to error: ""Model 'deepseek_r1' not registered. Available: ['custom', 'llama-8b-instant', 'gemini-2.5-flash', '",,unknown,2026-04-14T19:40:13.431045
+6,custom,What is 100 divided by 4?,25,"100 divided by 4 equals 25. That's right! If you have 100 cookies and you want to share them equally among 4 friends, each friend would get 25 cookies. Easy as pie!
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: conversational
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `falcon3`
+   • Routing Decision: Task classified as 'conversational' → routed to falcon3 (specialized in general conversation)
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",agent,falcon3,True,0.9,3942.17848777771,203,,Orchestrator selected falcon3 for conversational task,conversational,low,2026-04-14T19:40:17.880521
+7,custom,"According to the uploaded document, what is the main topic?",,"Hello! It looks like you've shared a document, but I don't see it here. Could you please upload or share the content so I can assist you with identifying the main topic?
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: conversational
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `falcon3`
+   • Routing Decision: Task classified as 'conversational' → routed to falcon3 (specialized in general conversation)
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",agent,falcon3,True,0.5,3651.3569355010986,212,,Orchestrator selected falcon3 for conversational task,conversational,low,2026-04-14T19:40:22.040729
+8,custom,Summarize the key points from the document,,"Please provide the document you would like me to summarize. I need its content to extract the key points.
+
+============================================================
+🤖 ***ORCHESTRATION TRANSPARENCY REPORT***
+============================================================
+
+📋 **Task Analysis:**
+   • Categories: summarization
+   • Complexity: LOW
+
+🎯 **Model Selection:**
+   • Primary Specialist: `gemini-2.5-flash`
+   • Routing Decision: Task classified as 'summarization' → routed to gemini-2.5-flash (specialized in fast summarization and content refinement)
+   • Refinement/Synthesis: `gemini-2.5-flash`
+   • Purpose: Polishing and improving response quality
+
+✅ **Quality Assurance:**
+   • Response synthesized from specialist output
+   • Factual consistency verified
+   • Structure and clarity optimized
+
+============================================================",direct,gemini-2.5-flash,True,0.5,13667.86003112793,226,,Orchestrator selected gemini-2.5-flash for summarization task,summarization,low,2026-04-14T19:40:36.218500
