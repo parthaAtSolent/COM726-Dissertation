@@ -1,17 +1,15 @@
 <resources>
     <string name="app_name">LangGraph Chat</string>
-    <string name="select_thread_first">Select a conversation first</string>
-    <string name="send_error">Send failed: %s</string>
-    <string name="upload_document">Upload document (PDF or TXT)</string>
-    <string name="rag_empty">No documents ingested yet.</string>
-    <string name="rag_uploading">Uploading…</string>
     <string name="nav_chat">Chat</string>
     <string name="nav_documents">Documents</string>
-    <string name="empty_threads">No conversations yet.\nTap + to start one.</string>
-    <string name="assistant_typing">Assistant is typing…</string>
     <string name="message_hint">Type a message…</string>
     <string name="send_message">Send</string>
     <string name="empty_chat">Start the conversation below.</string>
+    <string name="empty_threads">No conversations yet.\nTap + to start one.</string>
+    <string name="assistant_typing">Assistant is typing…</string>
+    <string name="select_thread_first">Select a conversation first</string>
+    <string name="send_error">Send failed: %s</string>
+    <string name="retry">Retry</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
@@ -20,5 +18,21 @@
     <string name="delete_thread_message">Delete "%s"? This cannot be undone.</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="retry">Retry</string>
+    <string name="upload_document">Upload document (PDF or TXT)</string>
+    <string name="rag_empty">No documents ingested yet.</string>
+    <string name="rag_uploading">Uploading…</string>
+
+    <!-- Model Selector -->
+    <string name="select_model">Select Model</string>
+    <string name="model_custom">🤖 Custom (Auto-router)</string>
+    <string name="model_deepseek_r1">🧠 DeepSeek R1</string>
+    <string name="model_falcon3">🦅 Falcon3</string>
+    <string name="model_gemini_2_5_flash">✨ Gemini 2.5 Flash</string>
+    <string name="model_gemma3_270m">🔬 Gemma3 270M</string>
+    <string name="model_granite3_dense_2b">🗿 Granite3 Dense 2B</string>
+    <string name="model_llama_3_1_8b_instant">🦙 Llama 3.1 8B Instant</string>
+    <string name="model_mistral_7b">🌬️ Mistral 7B</string>
+    <string name="model_phi3_3_8b">📘 Phi3 3.8B</string>
+    <string name="model_qwen2_5_coder_7b">🐉 Qwen2.5 Coder 7B</string>
+    <string name="model_qwen3_5_0_8b">🐉 Qwen3.5 0.8B</string>
 </resources>
