@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">Multi LLM - Langraph Chatbot</string>
+    <string name="app_name">LangGraph Chat</string>
+    <string name="select_thread_first">Select a conversation first</string>
+    <string name="send_error">Send failed: %s</string>
+    <string name="upload_document">Upload document (PDF or TXT)</string>
+    <string name="rag_empty">No documents ingested yet.</string>
+    <string name="rag_uploading">Uploading…</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_documents">Documents</string>
+    <string name="empty_threads">No conversations yet.\nTap + to start one.</string>
+    <string name="assistant_typing">Assistant is typing…</string>
+    <string name="message_hint">Type a message…</string>
+    <string name="send_message">Send</string>
+    <string name="empty_chat">Start the conversation below.</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="rename_thread">Rename conversation</string>
+    <string name="delete_thread_title">Delete conversation?</string>
+    <string name="delete_thread_message">Delete "%s"? This cannot be undone.</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="retry">Retry</string>
 </resources>

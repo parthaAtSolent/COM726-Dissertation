@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Material 3 Colour Scheme (purple accent matching desktop #6C63FF) -->
+    <color name="primary">#6C63FF</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#E4DFFF</color>
+    <color name="on_primary_container">#1E0083</color>
+    <color name="surface">#FFFBFE</color>
+    <color name="surface_variant">#E7E0EC</color>
+    <color name="on_surface">#1C1B1F</color>
+    <color name="on_surface_variant">#49454F</color>
 </resources>

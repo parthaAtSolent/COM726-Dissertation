@@ -1,116 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
+    <!-- ── Main content column ── -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Top Action Bar -->
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="@string/app_name" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="LangGraph Chatbot"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btnTestConnection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Test"
-                android:backgroundTint="@android:color/holo_orange_dark" />
-
-            <Button
-                android:id="@+id/btnNewChat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Chat"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@android:color/holo_blue_dark" />
-
-        </LinearLayout>
-
-        <!-- Chat Display Area -->
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
+        <!-- NavHost fills remaining space above the bottom nav -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#F5F5F5"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp">
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph" />
 
-            <TextView
-                android:id="@+id/tvChatHistory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="📱 Welcome to LangGraph Chatbot\n\nClick 'Test Connection' to start..."
-                android:textSize="14sp"
-                android:lineSpacingExtra="4dp" />
-
-        </androidx.core.widget.NestedScrollView>
-
-        <!-- Input Area -->
-        <LinearLayout
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <EditText
-                android:id="@+id/etMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Type your message..."
-                android:padding="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:enabled="false" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/btnSend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send"
-                android:layout_marginStart="8dp"
-                android:enabled="false" />
-
-        </LinearLayout>
-
-        <!-- Status Information -->
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="⚡ Not connected"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:gravity="center"
-            android:layout_marginTop="8dp" />
+            app:menu="@menu/bottom_nav_menu" />
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- ── Left drawer: thread list ── -->
+    <FrameLayout
+        android:id="@+id/drawerContent"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="?attr/colorSurface">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/threadListFragment"
+            android:name="com.example.multillm_langraphchatbot.ui.threads.ThreadListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

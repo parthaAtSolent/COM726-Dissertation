@@ -102,3 +102,12 @@ streamlit run main.py
 | Consistency | Thread IDs validated as UUID v4 before storage |
 | Isolation   | `processing_message` flag prevents concurrent sends; Streamlit is single-threaded |
 | Durability  | LangGraph's `SqliteSaver` writes all messages to `data/chatbot.db` |
+
+
+## Run the FastAPI backend
+
+### Navigate to your project folder
+cd "C:\Users\parth\OneDrive - Southampton Solent University\COM726 - Dissertation\langgraph_chatbot"
+
+### Run the FastAPI server
+PYTHONPATH=. uvicorn api:app --host 0.0.0.0 --port 8000 --reload

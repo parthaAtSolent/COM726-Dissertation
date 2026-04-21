@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/tvMessageContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="72dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_message_user"
+        android:padding="12dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+</FrameLayout>

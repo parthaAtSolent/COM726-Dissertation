@@ -1,0 +1,225 @@
+You are a senior Android engineer who is mastered in Java language for mobile application with 10+ years of experience in production-grade mobile app development, Android architecture, UI/UX design, API integration, performance tuning, and codebase migration from desktop/web-style applications to native Android.
+
+I will provide you with two ZIP files:
+
+Desktop application codebase — this contains the full existing desktop implementation, including business logic, UI flows, data handling, utility functions, and any reusable application behavior.
+Mobile Android application codebase — this is the current Android project, but it is only a basic/testing implementation right now. It can hit FastAPI endpoints and display results, but it does not yet fully reflect the sophistication, structure, and feature richness of the desktop app.
+
+Your job is to thoroughly analyze both codebases and produce a complete, practical, and production-oriented migration plan and code implementation guidance for the Android app so it inherits the relevant capabilities of the desktop application while being adapted properly for mobile.
+
+Main Objective
+
+Transform the Android app from a simple endpoint-testing client into a polished, mobile-first application that preserves the important functionality, workflows, and logic from the desktop version, while improving the UX for touch devices, smaller screens, lifecycle handling, responsiveness, offline resilience, navigation, and native Android conventions.
+
+What I Need You To Do
+1. Deeply compare both codebases
+Inspect the desktop app to identify:
+all major user flows
+business logic
+reusable algorithms
+API contracts
+data transformations
+state handling
+validation rules
+file handling
+storage patterns
+UI sections and their purpose
+any features that are currently missing from Android
+Inspect the mobile app to identify:
+current structure
+architecture
+screens/components
+API usage
+incomplete or placeholder functionality
+technical debt
+missing imports, missing dependencies, broken references, or poor patterns
+desktop features that should be migrated or reimagined for Android
+2. Map desktop features into mobile-native equivalents
+
+Do not simply copy desktop UI patterns into Android. Instead:
+
+convert desktop workflows into mobile-friendly flows
+redesign navigation where needed
+simplify dense desktop screens into touch-optimized layouts
+use native Android patterns such as:
+bottom navigation
+material components
+dialogs/bottom sheets
+RecyclerView / LazyColumn equivalents depending on the stack
+tabs where appropriate
+responsive layouts
+stateful forms
+loading / empty / error states
+preserve core functionality, but make the interaction model mobile-appropriate
+3. Produce a complete implementation strategy
+
+I want a detailed, prioritized plan that includes:
+
+what to keep
+what to rewrite
+what to refactor
+what to remove
+what to move into shared utilities
+what should become repository/service/view-model logic
+what should remain UI-only
+what dependencies or libraries should be added or replaced
+4. Generate file-by-file changes
+
+For the Android project, give me a precise implementation breakdown:
+
+which files need to be created
+which files need to be modified
+which files should be deleted or deprecated
+what each file should contain or change
+what import statements are required
+what package structure should be introduced or cleaned up
+what classes, functions, ViewModels, repositories, DTOs, adapters, composables, fragments, or utilities should be added
+5. Handle architecture properly
+
+Use best practices for the stack used in the Android project. Depending on the current codebase, recommend and apply the correct structure, such as:
+
+MVVM
+Clean Architecture
+Repository pattern
+Dependency Injection
+single source of truth for state
+separation of UI, domain, and data layers
+proper coroutine / async handling
+lifecycle-aware components
+error propagation and retry handling
+state persistence across configuration changes
+security and networking best practices
+6. Improve the Android app beyond testing mode
+
+The current Android app only validates API connectivity. Upgrade it with mobile-ready capabilities such as:
+
+proper authentication/session handling if relevant
+improved navigation and screen hierarchy
+form validation and UX feedback
+cached data or local persistence if useful
+loading indicators, skeletons, empty states, and error screens
+retry mechanisms and graceful failure handling
+offline-aware behavior where applicable
+accessibility-friendly controls and labels
+theme consistency, spacing, and responsive layouts
+support for device rotation and lifecycle changes
+logging and debugging improvements
+code organization for maintainability and scaling
+7. Preserve feature parity intelligently
+
+If the desktop app has functionality that is not present in the mobile app, determine whether it should:
+
+be fully ported
+be adapted into a mobile-native version
+be omitted due to poor mobile suitability
+be split into progressive features for later phases
+
+For each desktop feature, state:
+
+whether it exists in mobile already
+whether it should be ported
+how it should be adapted
+any API/backend changes needed
+any UI/data-model changes needed
+8. Provide exact code guidance
+
+I need your output to be concrete and implementation-ready. Do not stay at a high level.
+
+For each relevant Android file, provide:
+
+the exact issue or gap
+the exact change required
+the updated code structure or code snippet
+the imports needed
+how it connects to the rest of the app
+any build.gradle / Gradle dependency updates if required
+9. Call out risks and compatibility issues
+
+Identify:
+
+broken imports
+dependency mismatches
+deprecated APIs
+threading issues
+main-thread network risks
+null-safety risks
+memory leaks
+lifecycle bugs
+UI freezing risks
+poor error handling
+any architectural smells introduced by the current testing-only implementation
+10. Be practical and opinionated
+
+Act like a lead Android engineer reviewing a real codebase. Make direct, decisive recommendations. Do not be vague. Prefer:
+
+specific refactors
+exact file paths
+concrete naming
+clear architecture decisions
+realistic mobile UX changes
+production-quality patterns
+Output Format I Want From You
+
+Please respond in this structure:
+
+A. Codebase assessment
+
+Summarize:
+
+what the desktop app does
+what the mobile app currently does
+the major gaps between them
+the most important migration opportunities
+B. Feature parity matrix
+
+Create a table or structured list with:
+
+desktop feature
+current Android status
+recommended mobile approach
+priority
+implementation notes
+C. Android implementation plan
+
+Break it into:
+
+immediate fixes
+core architecture refactor
+feature migration phase
+UX/mobile polish phase
+hardening/testing phase
+D. File-level change plan
+
+For every file that should be changed or added:
+
+file path
+purpose
+required changes
+imports/dependencies needed
+any new classes/functions/components
+E. Code snippets or full replacements
+
+Where appropriate, provide:
+
+updated Java code
+XML or Compose code
+Gradle dependency changes
+navigation changes
+API client/repository/view model changes
+model/DTO updates
+F. Final migration checklist
+
+Give me a concise checklist of everything that must be done before the Android app can be considered a robust mobile version of the desktop app.
+
+Important Constraints
+Do not assume the mobile app should mirror the desktop UI exactly.
+Do not skip mobile-specific redesign decisions.
+Do not give generic advice only; analyze the actual files.
+Do not ignore any missing imports, broken references, or incomplete code paths.
+Do not invent functionality that does not exist in the desktop app.
+If some desktop functionality is not suitable for mobile, say so clearly and suggest an alternative.
+If there are multiple possible architectures, choose the best one for the current codebase and justify it.
+If something depends on file contents, inspect the uploaded ZIP files carefully before answering.
+Desired Outcome
+
+I want a detailed, expert-level transformation plan that turns the Android project from a basic FastAPI test client into a robust, polished, feature-rich mobile application that meaningfully reflects the functionality and logic of the desktop application, with clear file-by-file instructions and implementation-ready guidance
