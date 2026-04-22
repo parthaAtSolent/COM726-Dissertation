@@ -1,6 +1,5 @@
 package com.example.multillm_langraphchatbot.ui.threads;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +22,21 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-/**
- * Thread list shown inside the NavigationDrawer.
- * Scoped to the Activity so it shares ThreadListViewModel with ChatFragment.
- */
 public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThreadClickListener {
+
+    // ── Keep this list in sync with your backend's supported models ───────────
+    private static final String[] MODELS = {
+            "deepseek-r1",
+            "falcon3",
+            "gemini-2.5-flash",
+            "gemma3-270m",
+            "granite3-dense-2b",
+            "llama-3.1-8b-instant",
+            "mistral-7b",
+            "phi3-3-8b",
+            "qwen2.5-coder-7b",
+            "qwen3.5-0-8b"
+    };
 
     private FragmentThreadListBinding binding;
     private ThreadListViewModel       viewModel;
@@ -50,25 +59,36 @@ public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThre
         prefs     = new AppPreferences(requireContext());
         viewModel = new ViewModelProvider(requireActivity()).get(ThreadListViewModel.class);
 
-        // RecyclerView
+        // ── RecyclerView ──────────────────────────────────────────────────────
         adapter = new ThreadAdapter(this);
         binding.rvThreads.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvThreads.setAdapter(adapter);
 
-        // FAB — New Chat
+        // ── FAB — New Chat ────────────────────────────────────────────────────
         binding.fabNewChat.setOnClickListener(v -> showNewChatDialog());
 
-        // Observe thread list
+        // ── Model selector ────────────────────────────────────────────────────
+        // Show persisted model name on the button immediately
+        binding.btnModelSelector.setText(prefs.getSelectedModel());
+
+        binding.btnModelSelector.setOnClickListener(v -> showModelPicker());
+
+        // ── Observe thread list ───────────────────────────────────────────────
         viewModel.threads.observe(getViewLifecycleOwner(), resource -> {
-            binding.progressBar.setVisibility(resource.isLoading() ? View.VISIBLE : View.GONE);
+            binding.progressBar.setVisibility(
+                    resource.isLoading() ? View.VISIBLE : View.GONE);
+
             if (resource.isSuccess() && resource.data != null) {
                 List<Thread> threads = resource.data;
                 adapter.submitList(threads);
-                binding.tvEmpty.setVisibility(threads.isEmpty() ? View.VISIBLE : View.GONE);
-                // If no thread selected, select the most recent one
+                binding.tvEmpty.setVisibility(
+                        threads.isEmpty() ? View.VISIBLE : View.GONE);
+
+                // Auto-select most recent thread on first load
                 if (viewModel.activeThreadId.getValue() == null && !threads.isEmpty()) {
                     viewModel.selectThread(threads.get(0).threadId);
                 }
+
             } else if (resource.isError()) {
                 Snackbar.make(binding.getRoot(), resource.message, Snackbar.LENGTH_LONG)
                         .setAction(R.string.retry, v -> viewModel.loadThreads())
@@ -76,32 +96,31 @@ public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThre
             }
         });
 
-        // Observe new thread creation
+        // ── Observe new thread creation ───────────────────────────────────────
         viewModel.newThread.observe(getViewLifecycleOwner(), resource -> {
             if (resource.isSuccess() && resource.data != null) {
                 viewModel.selectThread(resource.data.threadId);
                 viewModel.loadThreads();
-                // Close drawer after selecting new thread
                 closeDrawer();
             } else if (resource.isError()) {
                 Snackbar.make(binding.getRoot(), resource.message, Snackbar.LENGTH_LONG).show();
             }
         });
 
-        // Observe active thread ID to highlight correct row
-        viewModel.activeThreadId.observe(getViewLifecycleOwner(), threadId -> {
-            adapter.setActiveThreadId(threadId);
-        });
+        // ── Highlight active thread row ───────────────────────────────────────
+        viewModel.activeThreadId.observe(getViewLifecycleOwner(),
+                threadId -> adapter.setActiveThreadId(threadId));
 
-        // Observe delete result
+        // ── Observe delete result ─────────────────────────────────────────────
         viewModel.deleteResult.observe(getViewLifecycleOwner(), resource -> {
             if (resource != null && resource.isSuccess()) {
                 viewModel.loadThreads();
-                // If deleted thread was active, clear or select next
                 viewModel.activeThreadId.setValue(null);
             }
         });
     }
+
+    // ── ThreadAdapter callbacks ───────────────────────────────────────────────
 
     @Override
     public void onThreadClick(Thread thread) {
@@ -111,7 +130,6 @@ public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThre
 
     @Override
     public void onThreadLongClick(Thread thread) {
-        // Show context menu: Rename / Delete
         String[] options = {
                 getString(R.string.rename),
                 getString(R.string.delete)
@@ -125,9 +143,38 @@ public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThre
                 .show();
     }
 
+    // ── Private helpers ───────────────────────────────────────────────────────
+
     private void showNewChatDialog() {
-        String model = prefs.getSelectedModel();
-        viewModel.createThread("New Chat", model);
+        viewModel.createThread("New Chat", prefs.getSelectedModel());
+    }
+
+    private void showModelPicker() {
+        String current = prefs.getSelectedModel();
+
+        // Find the index of the currently selected model
+        int checkedIndex = 0;
+        for (int i = 0; i < MODELS.length; i++) {
+            if (MODELS[i].equals(current)) {
+                checkedIndex = i;
+                break;
+            }
+        }
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Choose AI Model")
+                .setSingleChoiceItems(MODELS, checkedIndex, (dialog, which) -> {
+                    String chosen = MODELS[which];
+
+                    // Persist the choice
+                    prefs.setSelectedModel(chosen);
+
+                    // Update button label immediately
+                    binding.btnModelSelector.setText(chosen);
+
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     private void showRenameDialog(Thread thread) {
@@ -153,7 +200,8 @@ public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThre
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.delete_thread_title)
                 .setMessage(getString(R.string.delete_thread_message, thread.title))
-                .setPositiveButton(R.string.delete, (d, w) -> viewModel.deleteThread(thread.threadId))
+                .setPositiveButton(R.string.delete,
+                        (d, w) -> viewModel.deleteThread(thread.threadId))
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }

@@ -55,70 +55,40 @@
         android:id="@+id/inputBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
         android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Model selector button row -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:gravity="center_vertical">
+            android:layout_weight="1"
+            android:hint="@string/message_hint">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSelectModel"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMessage"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🤖 Custom"
-                android:gravity="center"
-                android:padding="8dp"
-                app:icon="@drawable/ic_model"
-                app:iconGravity="textStart" />
+                android:maxLines="4"
+                android:inputType="textMultiLine|textCapSentences"
+                android:imeOptions="actionSend" />
 
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Message input row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:gravity="center_vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/message_hint">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="4"
-                    android:inputType="textMultiLine|textCapSentences"
-                    android:imeOptions="actionSend" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSend"
-                style="@style/Widget.Material3.Button.Icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                app:icon="@drawable/ic_send"
-                app:iconGravity="textStart"
-                android:contentDescription="@string/send_message" />
-
-        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSend"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="textStart"
+            android:contentDescription="@string/send_message" />
 
     </LinearLayout>
 

@@ -1,15 +1,10 @@
 package com.example.multillm_langraphchatbot.ui.chat;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,15 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.multillm_langraphchatbot.R;
-import com.example.multillm_langraphchatbot.data.model.ModelOption;
 import com.example.multillm_langraphchatbot.databinding.FragmentChatBinding;
 import com.example.multillm_langraphchatbot.ui.threads.ThreadListViewModel;
 import com.example.multillm_langraphchatbot.util.AppPreferences;
 import com.example.multillm_langraphchatbot.util.ModelHelper;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.List;
 
 public class ChatFragment extends Fragment {
 
@@ -62,9 +53,6 @@ public class ChatFragment extends Fragment {
         layoutManager.setStackFromEnd(true);
         binding.rvMessages.setLayoutManager(layoutManager);
         binding.rvMessages.setAdapter(adapter);
-
-        // Setup model selector button
-        setupModelSelector();
 
         // Send button
         binding.btnSend.setOnClickListener(v -> onSendClicked());
@@ -110,7 +98,6 @@ public class ChatFragment extends Fragment {
             binding.typingIndicator.setVisibility(sending ? View.VISIBLE : View.GONE);
             binding.btnSend.setEnabled(!sending);
             binding.etMessage.setEnabled(!sending);
-            binding.btnSelectModel.setEnabled(!sending);
 
             if (sending && adapter.getItemCount() > 0) {
                 binding.rvMessages.smoothScrollToPosition(adapter.getItemCount() - 1);
@@ -141,78 +128,6 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    private void setupModelSelector() {
-        String currentModel = prefs.getSelectedModel();
-        updateModelButtonText(currentModel);
-
-        binding.btnSelectModel.setOnClickListener(v -> showModelSelectorDialog());
-    }
-
-    private void showModelSelectorDialog() {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_model_selector);
-
-        ListView listView = dialog.findViewById(R.id.listViewModels);
-        List<ModelOption> models = ModelHelper.getAvailableModels();
-        String currentModel = prefs.getSelectedModel();
-
-        // Create custom adapter
-        ArrayAdapter<ModelOption> adapter = new ArrayAdapter<ModelOption>(
-                requireContext(),
-                R.layout.item_model,
-                R.id.tvModelName,
-                models
-        ) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                ModelOption model = getItem(position);
-
-                TextView tvModelName = view.findViewById(R.id.tvModelName);
-                TextView tvModelDesc = view.findViewById(R.id.tvModelDescription);
-
-                tvModelName.setText(model.getDisplayName());
-                tvModelDesc.setText(model.getDescription());
-
-                // Highlight current selection
-                if (model.getKey().equals(currentModel)) {
-                    view.setBackgroundColor(requireContext().getColor(R.color.primary_container));
-                } else {
-                    view.setBackgroundColor(0);
-                }
-
-                return view;
-            }
-        };
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            ModelOption selected = models.get(position);
-            prefs.setSelectedModel(selected.getKey());
-            updateModelButtonText(selected.getKey());
-            dialog.dismiss();
-
-            Snackbar.make(binding.getRoot(),
-                    "Switched to " + selected.getDisplayName(),
-                    Snackbar.LENGTH_SHORT).show();
-        });
-
-        dialog.show();
-    }
-
-    private void updateModelButtonText(String modelKey) {
-        List<ModelOption> models = ModelHelper.getAvailableModels();
-        for (ModelOption model : models) {
-            if (model.getKey().equals(modelKey)) {
-                binding.btnSelectModel.setText(model.getDisplayName());
-                return;
-            }
-        }
-        binding.btnSelectModel.setText("🤖 Custom");
-    }
-
     private void onSendClicked() {
         if (currentThreadId == null) {
             Snackbar.make(binding.getRoot(), "Select a conversation first", Snackbar.LENGTH_SHORT).show();
@@ -224,7 +139,7 @@ public class ChatFragment extends Fragment {
 
         binding.etMessage.setText("");
 
-        // Get selected model (custom or specific)
+        // Get selected model from preferences (set in drawer)
         String modelKey = prefs.getSelectedModel();
         String apiModel = ModelHelper.getModelKeyForApi(modelKey);
 
