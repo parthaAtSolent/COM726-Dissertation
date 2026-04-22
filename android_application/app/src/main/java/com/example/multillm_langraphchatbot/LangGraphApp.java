@@ -1,20 +1,22 @@
 package com.example.multillm_langraphchatbot;
 
 import android.app.Application;
-import com.example.multillm_langraphchatbot.data.repository.ChatRepository;
-import com.example.multillm_langraphchatbot.data.repository.ThreadRepository;
+import android.util.Log;
 
-/**
- * Application class — initialises singletons at startup.
- */
 public class LangGraphApp extends Application {
-
+    private static final String TAG = "LangGraphApp";
     private static LangGraphApp instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        // Catch uncaught exceptions
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            Log.e(TAG, "Uncaught exception: ", throwable);
+            // You can also show a dialog here
+        });
     }
 
     public static LangGraphApp getInstance() {

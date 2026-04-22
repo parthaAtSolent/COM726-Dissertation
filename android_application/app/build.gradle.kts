@@ -21,13 +21,12 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
-            // Allow cleartext only for debug builds against local server
             manifestPlaceholders["usesCleartextTraffic"] = "true"
         }
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            manifestPlaceholders["usesCleartextTraffic"] = "false"
+            isMinifyEnabled = false  // Temporarily disable minification
+            isShrinkResources = false  // Temporarily disable shrinking
+            manifestPlaceholders["usesCleartextTraffic"] = "true"  // Allow HTTP for testing
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
