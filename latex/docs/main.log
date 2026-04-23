@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  13 FEB 2026 09:38
+This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  23 APR 2026 13:01
  restricted system commands enabled.
 **main.tex
 (./main.tex
@@ -377,12 +377,22 @@ Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
 \multirow@dima=\skip77
 \bigstrutjot=\dimen187
 )
+(C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/tools/array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen188
+\ar@mcellbox=\box59
+\extrarowheight=\dimen189
+\NC@list=\toks26
+\extratabsurround=\skip78
+\backup@length=\skip79
+\ar@cellbox=\box60
+)
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2025/02/06 v3.11 Customized lists
-\labelindent=\skip78
-\enit@outerparindent=\dimen188
-\enit@toks=\toks26
-\enit@inbox=\box59
+\labelindent=\skip80
+\enit@outerparindent=\dimen190
+\enit@toks=\toks27
+\enit@inbox=\box61
 \enit@count@id=\count323
 \enitdp@description=\count324
 )
@@ -398,52 +408,52 @@ Package: iftex 2024/12/12 v1.0g TeX engine tests
 \Gm@cnth=\count325
 \Gm@cntv=\count326
 \c@Gm@tempcnt=\count327
-\Gm@bindingoffset=\dimen189
-\Gm@wd@mp=\dimen190
-\Gm@odd@mp=\dimen191
-\Gm@even@mp=\dimen192
-\Gm@layoutwidth=\dimen193
-\Gm@layoutheight=\dimen194
-\Gm@layouthoffset=\dimen195
-\Gm@layoutvoffset=\dimen196
-\Gm@dimlist=\toks27
+\Gm@bindingoffset=\dimen191
+\Gm@wd@mp=\dimen192
+\Gm@odd@mp=\dimen193
+\Gm@even@mp=\dimen194
+\Gm@layoutwidth=\dimen195
+\Gm@layoutheight=\dimen196
+\Gm@layouthoffset=\dimen197
+\Gm@layoutvoffset=\dimen198
+\Gm@dimlist=\toks28
 
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/geometry/geometry.cfg)) (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/tocloft/tocloft.sty
 Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
 Package tocloft Info: The document has section divisions on input line 51.
-\cftparskip=\skip79
-\cftbeforetoctitleskip=\skip80
-\cftaftertoctitleskip=\skip81
-\cftbeforepartskip=\skip82
-\cftpartnumwidth=\skip83
-\cftpartindent=\skip84
-\cftbeforesecskip=\skip85
-\cftsecindent=\skip86
-\cftsecnumwidth=\skip87
-\cftbeforesubsecskip=\skip88
-\cftsubsecindent=\skip89
-\cftsubsecnumwidth=\skip90
-\cftbeforesubsubsecskip=\skip91
-\cftsubsubsecindent=\skip92
-\cftsubsubsecnumwidth=\skip93
-\cftbeforeparaskip=\skip94
-\cftparaindent=\skip95
-\cftparanumwidth=\skip96
-\cftbeforesubparaskip=\skip97
-\cftsubparaindent=\skip98
-\cftsubparanumwidth=\skip99
-\cftbeforeloftitleskip=\skip100
-\cftafterloftitleskip=\skip101
-\cftbeforefigskip=\skip102
-\cftfigindent=\skip103
-\cftfignumwidth=\skip104
+\cftparskip=\skip81
+\cftbeforetoctitleskip=\skip82
+\cftaftertoctitleskip=\skip83
+\cftbeforepartskip=\skip84
+\cftpartnumwidth=\skip85
+\cftpartindent=\skip86
+\cftbeforesecskip=\skip87
+\cftsecindent=\skip88
+\cftsecnumwidth=\skip89
+\cftbeforesubsecskip=\skip90
+\cftsubsecindent=\skip91
+\cftsubsecnumwidth=\skip92
+\cftbeforesubsubsecskip=\skip93
+\cftsubsubsecindent=\skip94
+\cftsubsubsecnumwidth=\skip95
+\cftbeforeparaskip=\skip96
+\cftparaindent=\skip97
+\cftparanumwidth=\skip98
+\cftbeforesubparaskip=\skip99
+\cftsubparaindent=\skip100
+\cftsubparanumwidth=\skip101
+\cftbeforeloftitleskip=\skip102
+\cftafterloftitleskip=\skip103
+\cftbeforefigskip=\skip104
+\cftfigindent=\skip105
+\cftfignumwidth=\skip106
 \c@lofdepth=\count328
 \c@lotdepth=\count329
-\cftbeforelottitleskip=\skip105
-\cftafterlottitleskip=\skip106
-\cftbeforetabskip=\skip107
-\cfttabindent=\skip108
-\cfttabnumwidth=\skip109
+\cftbeforelottitleskip=\skip107
+\cftafterlottitleskip=\skip108
+\cftbeforetabskip=\skip109
+\cfttabindent=\skip110
+\cfttabnumwidth=\skip111
 )
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/cite/cite.sty
 LaTeX Info: Redefining \cite on input line 302.
@@ -479,7 +489,7 @@ Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-\pdftexcmds@toks=\toks28
+\pdftexcmds@toks=\toks29
 ))
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
@@ -508,7 +518,7 @@ ty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen197
+\@linkdim=\dimen199
 \Hy@linkcounter=\count332
 \Hy@pagecounter=\count333
  (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/hyperref/pd1enc.def
@@ -534,7 +544,7 @@ Package hyperref Info: Bookmarks ON on input line 4462.
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4801.
-\XeTeXLinkMargin=\dimen198
+\XeTeXLinkMargin=\dimen256
 
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -545,8 +555,8 @@ Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
 \Fld@menulength=\count336
-\Field@Width=\dimen199
-\Fld@charsize=\dimen256
+\Field@Width=\dimen257
+\Fld@charsize=\dimen258
 Package hyperref Info: Hyper figures OFF on input line 6078.
 Package hyperref Info: Link nesting OFF on input line 6083.
 Package hyperref Info: Hyper index ON on input line 6086.
@@ -576,30 +586,30 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 84.
 )
-\Hy@SectionHShift=\skip110
+\Hy@SectionHShift=\skip112
 ) (./main.aux)
 \openout1 = main.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
 
 Package fontspec Info: 
 (fontspec)             Adjusting the maths setup (use [no-math] to avoid
@@ -607,79 +617,79 @@ Package fontspec Info:
 
 \symlegacymaths=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 82.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 82.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 82.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 82.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 82.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 82.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 82.
-LaTeX Font Info:    Redeclaring math accent \check on input line 82.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 82.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 82.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 82.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 82.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 82.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 83.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 83.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 83.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 83.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 83.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 83.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 83.
+LaTeX Font Info:    Redeclaring math accent \check on input line 83.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 83.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 83.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 83.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 83.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 82.
+(Font)              `operators' in the math version `normal' on input line 83.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/TrebuchetMS(0)/m/n on input line 82.
+(Font)                  OT1/cmr/m/n --> TU/TrebuchetMS(0)/m/n on input line 83.
 
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 82.
+(Font)              `operators' in the math version `bold' on input line 83.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/TrebuchetMS(0)/m/n on input line 82
+(Font)                  OT1/cmr/bx/n --> TU/TrebuchetMS(0)/m/n on input line 83
 .
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  TU/TrebuchetMS(0)/m/n --> TU/TrebuchetMS(0)/m/n on inpu
-t line 82.
+t line 83.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
 (Font)                  OT1/cmr/m/it --> TU/TrebuchetMS(0)/m/it on input line 8
-2.
+3.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/TrebuchetMS(0)/b/n on input line 82
+(Font)                  OT1/cmr/bx/n --> TU/TrebuchetMS(0)/b/n on input line 83
 .
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 82.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 83.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 82.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 83.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
 (Font)                  TU/TrebuchetMS(0)/m/n --> TU/TrebuchetMS(0)/b/n on inpu
-t line 82.
+t line 83.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> TU/TrebuchetMS(0)/b/it on input line 
-82.
+83.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 82.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 83.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 82.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 83.
 \c@lstlisting=\count342
 
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count343
-\scratchdimen=\dimen257
-\scratchbox=\box60
+\scratchdimen=\dimen259
+\scratchbox=\box62
 \nofMPsegments=\count344
 \nofMParguments=\count345
-\everyMPshowfont=\toks29
+\everyMPshowfont=\toks30
 \MPscratchCnt=\count346
-\MPscratchDim=\dimen258
+\MPscratchDim=\dimen260
 \MPnumerator=\count347
 \makeMPintoPDFobject=\count348
-\everyMPtoPDFconversion=\toks30
+\everyMPtoPDFconversion=\toks31
 )
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/epstopdf-pkg/epstopdf-b
 ase.sty
@@ -730,20 +740,26 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 82.
+Package hyperref Info: Link coloring OFF on input line 83.
 (./main.out) (./main.out)
 \@outlinefile=\write3
 
 \openout3 = main.out
-<../assets/solent_logo.png, id=107, 2055.68pt x 2054.67625pt>
+<../assets/solent_logo.png, id=299, 2055.68pt x 2054.67625pt>
 File: ../assets/solent_logo.png Graphic file (type png)
 <use ../assets/solent_logo.png>
-Package luatex.def Info: ../assets/solent_logo.png  used on input line 89.
+Package luatex.def Info: ../assets/solent_logo.png  used on input line 90.
 (luatex.def)             Requested size: 135.89174pt x 135.81596pt.
  [1
 
 {C:/Users/parth/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}<../assets/sole
-nt_logo.png>] (./main.toc
+nt_logo.png>]
+Overfull \hbox (11.23598pt too wide) in paragraph at lines 138--139
+[]\TU/TrebuchetMS(0)/m/n/12 The sys-tem is eval-u-ated on the Hot-potQA and MuSi
+Que multi-hop question-answering
+ []
+
+[1] (./main.toc
 LaTeX Font Info:    Trying to load font information for U+msa on input line 1.
 
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/amsfonts/umsa.fd
@@ -753,68 +769,567 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
 
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+)
+[2])
 \tf@toc=\write4
 
 \openout4 = main.toc
+ [3] (./main.lof)
+\tf@lof=\write5
 
-[1]
-Overfull \hbox (2.14813pt too wide) in paragraph at lines 157--163
-\TU/TrebuchetMS(0)/m/n/12 ground-ing re-sponses in ex-ter-nal knowl-edge sources
-, re-duc-ing hal-lu-ci-na-tion and knowl-
+\openout5 = main.lof
+ [4] (./main.lot)
+\tf@lot=\write6
+
+\openout6 = main.lot
+ [5] (./main.lol
+Overfull \hbox (4.85522pt too wide) in paragraph at lines 1--1
+ [][] [][]\TU/TrebuchetMS(0)/m/n/12 Chat-State Type-d-Dict def-i-ni-tion man-ag-
+ing con-ver-sa-tion con-text and rout- 
+ []
+
+)
+\tf@lol=\write7
+
+\openout7 = main.lol
+ [6]
+Overfull \hbox (17.7505pt too wide) in paragraph at lines 171--172
+\TU/TrebuchetMS(0)/m/n/12 struc-tion fol-low-ing (Brown et al., 2020; Wei et al.
+, 2022). The emer-gence of transformer-
  []
 
 
 warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
-[1] [2]
-Overfull \hbox (3.0044pt too wide) in paragraph at lines 201--202
-\TU/TrebuchetMS(0)/m/n/12 The sys-tem in-te-grates in-tent clas-si-fiers, spe-ci
-al-ist lan-guage mod-els, vec-tor databases,
+[1] [2] [3]
+Overfull \hbox (2.42218pt too wide) in paragraph at lines 230--231
+\TU/TrebuchetMS(0)/m/n/12 Retrieval-Augmented Gen-er-a-tion (RAG) was for-mally in-tro-duced by Lewis et al. (2020)
  []
 
-[3]
-<../assets/flowchart.png, id=166, 635.37375pt x 1092.08pt>
-File: ../assets/flowchart.png Graphic file (type png)
-<use ../assets/flowchart.png>
-Package luatex.def Info: ../assets/flowchart.png  used on input line 263.
-(luatex.def)             Requested size: 244.53723pt x 420.31046pt.
-<../assets/ui.png, id=168, 1279.44667pt x 736.08333pt>
+[4]
+Overfull \hbox (0.75305pt too wide) in paragraph at lines 234--235
+\TU/TrebuchetMS(0)/m/n/12 plex-ity. PAR-RAG (Zhang et al., 2025) ad-dresses mult
+i-hop ques-tion an-swer-ing through
+ []
+
+[5] [6] [7] [8]
+Overfull \hbox (1.10437pt too wide) in paragraph at lines 291--292
+[]\TU/TrebuchetMS(0)/m/n/12 The ex-per-i-men-tal eval-u-a-tion is con-ducted us-
+ing a con-trolled bench-mark ap-proach,
+ []
+
+
+Overfull \hbox (10.93054pt too wide) in paragraph at lines 291--292
+\TU/TrebuchetMS(0)/m/n/12 com-par-ing the pro-posed sys-tem against single-model
+ base-lines on stan-dard-ised datasets
+ []
+
+[9]
+Overfull \hbox (8.32323pt too wide) in paragraph at lines 316--317
+\TU/TrebuchetMS(0)/m/n/12 by Lang-Graph’s \TU/lmtt/m/n/12 StateGraph\TU/Trebu
+chetMS(0)/m/n/12 . The state schema, de-fined in \TU/lmtt/m/n/12 app/models/chat
+_state.py\TU/TrebuchetMS(0)/m/n/12 ,
+ []
+
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 318.
+
+Overfull \hbox (4.98126pt too wide) in paragraph at lines 332--333
+\TU/TrebuchetMS(0)/m/n/12 and four nodes are reg-is-tered: \TU/lmtt/m/n/12 route
+r_node\TU/TrebuchetMS(0)/m/n/12 , \TU/lmtt/m/n/12 direct_node\TU/TrebuchetMS(0)
+/m/n/12 , \TU/lmtt/m/n/12 rag_node\TU/TrebuchetMS(0)/m/n/12 , and \TU/lmtt/m/n/
+12 agent_node\TU/TrebuchetMS(0)/m/n/12 .
+ []
+
+
+Underfull \hbox (badness 1365) in paragraph at lines 345--346
+[]|\TU/TrebuchetMS(0)/b/n/12 Pri-mary Spe-cial-i-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 347--348
+[]|\TU/TrebuchetMS(0)/m/n/12 Ad-vanced multi-
+ []
+
+
+Underfull \hbox (badness 3375) in paragraph at lines 349--350
+[]|\TU/TrebuchetMS(0)/m/n/12 Gen-eral lan-guage
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 351--352
+[]|\TU/TrebuchetMS(0)/m/n/12 Syn-the-sis, broad
+ []
+
+
+Underfull \hbox (badness 4660) in paragraph at lines 353--354
+[]|\TU/TrebuchetMS(0)/m/n/12 Lightweight, fast
+ []
+
+
+Underfull \hbox (badness 1253) in paragraph at lines 355--356
+[]|\TU/TrebuchetMS(0)/m/n/12 En-ter-prise, struc-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 357--358
+[]|\TU/TrebuchetMS(0)/m/n/12 General-purpose,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 361--362
+[]|\TU/TrebuchetMS(0)/m/n/12 Rea-son-ing, com-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 363--364
+[]|\TU/TrebuchetMS(0)/m/n/12 Code gen-er-a-tion
+ []
+
+
+Overfull \hbox (22.6441pt too wide) in paragraph at lines 343--368
+ [][] 
+ []
+
+
+Overfull \hbox (3.47621pt too wide) in paragraph at lines 370--371
+\TU/TrebuchetMS(0)/m/n/12 Mistral-7B and LLaMA-3.1-8B-Instant han-dle general-pu
+rpose instruction-following and
+ []
+
+[10] [11] [12]
+Overfull \hbox (1.25421pt too wide) in paragraph at lines 463--464
+\TU/TrebuchetMS(0)/m/n/12 The \TU/lmtt/m/n/12 direct_node \TU/TrebuchetMS(0)/m/
+n/12 han-dles queries that can be an-swered from para-met-ric model knowl-
+ []
+
+
+Overfull \hbox (101.94725pt too wide) in paragraph at lines 463--464
+\TU/TrebuchetMS(0)/m/n/12 edge with-out re-trieval or agen-tic ex-e-cu-tion. It in-vokes the or-ches-tra-tor
+’s \TU/lmtt/m/n/12 _call_llm_with_orchestrator
+ []
+
+[13] [14] [15]
+<../assets/ui.png, id=645, 1279.44667pt x 736.08333pt>
 File: ../assets/ui.png Graphic file (type png)
 <use ../assets/ui.png>
-Package luatex.def Info: ../assets/ui.png  used on input line 279.
+Package luatex.def Info: ../assets/ui.png  used on input line 541.
 (luatex.def)             Requested size: 407.65472pt x 234.52939pt.
- [4] [5<../assets/flowchart.png>]
-<../assets/gnatt_chart.png, id=182, 1872.9975pt x 852.18375pt>
+<../assets/flowchart.png, id=646, 635.37375pt x 1092.08pt>
+File: ../assets/flowchart.png Graphic file (type png)
+<use ../assets/flowchart.png>
+Package luatex.def Info: ../assets/flowchart.png  used on input line 552.
+(luatex.def)             Requested size: 244.53723pt x 420.31046pt.
+ [16<../assets/ui.png>] [17<../assets/flowchart.png>] [18]
+(C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+(C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+[19
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+] [20]
+Overfull \hbox (8.62921pt too wide) in paragraph at lines 693--694
+\TU/TrebuchetMS(0)/m/n/12 mod-ule wraps the graph’s \TU/lmtt/m/n/12 astream_ev
+ents \TU/TrebuchetMS(0)/m/n/12 method, fil-ter-ing for \TU/lmtt/m/n/12 on_chat_m
+odel_stream
+ []
+
+[21]
+Overfull \hbox (1.32323pt too wide) in paragraph at lines 723--724
+[]\TU/TrebuchetMS(0)/m/n/12 The API is de-signed for state-less hor-i-zon-tal sc
+al-a-bil-ity; all state is man-aged through
+ []
+
+[22] [23]
+Overfull \hbox (23.90697pt too wide) in paragraph at lines 777--778
+\TU/TrebuchetMS(0)/m/n/12 poses a mes-sage in the Com-pose \TU/lmtt/m/n/12 ChatS
+creen \TU/TrebuchetMS(0)/m/n/12 and taps the send but-ton. The \TU/lmtt/m/n/12 
+ChatViewModel
+ []
+
+[24] [25] [26]
+Overfull \hbox (15.7516pt too wide) in paragraph at lines 895--896
+\TU/TrebuchetMS(0)/m/n/12 adap-tive multi-LLM con-fig-u-ra-tion ben-e-fits from di-rect-ing rea-son-ing queries to DeepSeek-
+ []
+
+[27] [28] [29] [30]
+<../assets/gnatt_chart.png, id=828, 1872.9975pt x 852.18375pt>
 File: ../assets/gnatt_chart.png Graphic file (type png)
 <use ../assets/gnatt_chart.png>
-Package luatex.def Info: ../assets/gnatt_chart.png  used on input line 309.
+Package luatex.def Info: ../assets/gnatt_chart.png  used on input line 967.
 (luatex.def)             Requested size: 452.9679pt x 206.08867pt.
- [6<../assets/ui.png>] [7<../assets/gnatt_chart.png>] [8] (./main.aux)
+ [31<../assets/gnatt_chart.png>] [32] [33]
+Missing character: There is no ́ (U+0301) in font "name:Trebuchet MS:mode=node;
+script=latn;language=dflt;+tlig;"!
+Missing character: There is no ́ (U+0301) in font "name:Trebuchet MS:mode=node;
+script=latn;language=dflt;+tlig;"!
+Missing character: There is no ́ (U+0301) in font "name:Trebuchet MS:mode=node;
+script=latn;language=dflt;+tlig;"!
+[34]
+Underfull \hbox (badness 1448) in paragraph at lines 1054--1055
+[]\TU/TrebuchetMS(0)/m/n/12 TRIVEDI, H., BAL-A-SUB-RA-MA-NIAN, N., KHOT, T. and SAB-HAR-WAL, A., 2022.
+ []
+
+[35
+Missing character: There is no ́ (U+0301) in font "name:Trebuchet MS:mode=node;
+script=latn;language=dflt;+tlig;"!
+] [36]
+Underfull \hbox (badness 10000) in paragraph at lines 1095--1096
+[]\TU/TrebuchetMS(0)/b/n/12 GitHub Repos-i-tory: \TU/lmtt/m/n/12 [Repository URL
+ -- to be provided upon project
+ []
+
+[37]
+Underfull \hbox (badness 1496) in paragraph at lines 1137--1138
+\TU/TrebuchetMS(0)/m/n/12 load the Hot-potQA and MuSiQue eval-u-a-tion sets from
+ their of-fi-cial repos-i-to-
+ []
+
+[38] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: CEE7E5C2FF308919E155ADC89E5A5F6A;4373.
+(rerunfilecheck)             Checksum: 3FD2909F30EC2FB80EA843417B9B7EE5;12890.
 )
 
 Here is how much of LuaTeX's memory you used:
- 17104 strings out of 476081
- 100000,794899 words of node,token memory allocated
- 799 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 8 attribute, 111 glue_spec
-, 8 attribute_list, 1 write, 2 pdf_action nodes
-   avail lists: 2:740,3:288,4:48,5:169,6:78,7:6864,8:32,9:459,10:11,11:672
- 39196 multiletter control sequences out of 65536+600000
+ 17998 strings out of 476081
+ 381555,1144653 words of node,token memory allocated
+ 1039 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 32 attribute, 111 glue_spe
+c, 32 attribute_list, 1 write, 26 pdf_action nodes
+   avail lists: 2:3716,3:434,4:936,5:10305,6:99,7:13142,8:41,9:17280,10:24,11:85
+5
+ 39747 multiletter control sequences out of 65536+600000
  62 fonts using 7138583 bytes
- 73i,6n,92p,1005b,388s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/users/parth/appdata/local/programs/miktex/fonts/opentype/public/lm/lmmono12-
-regular.otf><C:/Windows/Fonts/trebucit.ttf><c:/users/parth/appdata/local/program
+ 73i,10n,92p,1098b,895s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Windows/Fonts/trebucit.ttf><c:/users/parth/appdata/local/programs/miktex/fon
+ts/opentype/public/lm/lmmono12-regular.otf><c:/users/parth/appdata/local/program
 s/miktex/fonts/opentype/public/lm/lmmono10-regular.otf><C:/Windows/Fonts/trebuc.
-ttf><C:/Windows/Fonts/trebucbd.ttf>
-Output written on main.pdf (10 pages, 1048118 bytes).
+ttf><C:/Windows/Fonts/trebucbd.ttf><C:/Users/parth/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/parth/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/parth/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on main.pdf (45 pages, 1282874 bytes).
 
-PDF statistics: 247 PDF objects out of 1000 (max. 8388607)
- 45 named destinations out of 1000 (max. 131072)
- 209 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 989 PDF objects out of 1000 (max. 8388607)
+ 352 named destinations out of 1000 (max. 131072)
+ 593 words of extra memory for PDF output out of 10000 (max. 100000000)
 

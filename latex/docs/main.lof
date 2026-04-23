@@ -1,0 +1,9 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces High-level architecture of the Adaptive Multi-LLM Agentic RAG system.}}{9}{figure.caption.6}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Query routing decision flowchart for the adaptive multi-path execution architecture.}}{14}{figure.caption.8}%
+\contentsline {figure}{\numberline {3}{\ignorespaces RAG pipeline showing document ingestion, embedding, retrieval, and context injection.}}{14}{figure.caption.9}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Streamlit user interface showing the chat panel, model selector, and conversation thread management sidebar.}}{16}{figure.caption.10}%
+\contentsline {figure}{\numberline {5}{\ignorespaces High-level system flowchart illustrating adaptive routing, retrieval, and agent execution.}}{17}{figure.caption.11}%
+\contentsline {figure}{\numberline {6}{\ignorespaces LangGraph StateGraph topology showing nodes, conditional edges, and execution paths.}}{17}{figure.caption.12}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Android application three-layer architecture with Jetpack Compose and Retrofit.}}{23}{figure.caption.13}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Android application interaction sequence from user input to response display.}}{24}{figure.caption.14}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Project Gantt Chart illustrating the full project timeline from January 17, 2026 to May 2, 2026.}}{31}{figure.caption.18}%
