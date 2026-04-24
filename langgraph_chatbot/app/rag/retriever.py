@@ -9,7 +9,7 @@ from __future__ import annotations
 # instead of from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
 
-from app.rag.ingestion import vECTORSTORE_DIR, COLLECTION_NAME
+from app.rag.ingestion import VECTORSTORE_DIR, COLLECTION_NAME
 from app.rag.embedder import get_embedder
 
 TOP_K = 4
@@ -30,17 +30,17 @@ def retrieve_context(query: str) -> str:
         to the user rather than silently dropping context.
     """
     print(f"[RAG] Retrieving context for query: '{query[:100]}...'")
-    print(f"[RAG] vectorstore path: {vECTORSTORE_DIR}")
+    print(f"[RAG] vectorstore path: {VECTORSTORE_DIR}")
 
     vectorstore = Chroma(
         collection_name=COLLECTION_NAME,
         embedding_function=get_embedder(),
-        persist_directory=vECTORSTORE_DIR,
+        persist_directory=VECTORSTORE_DIR,
     )
 
-    # Check collection is populated
+    # Check collection is populated — using public API (chromadb 1.x compatible)
     try:
-        count = vectorstore._collection.count()
+        count = len(vectorstore.get(include=[])["ids"])
         print(f"[RAG] vectorstore has {count} chunks")
     except Exception as e:
         print(f"[RAG] Error checking count: {e}")
@@ -86,11 +86,16 @@ def retrieve_context(query: str) -> str:
 
 
 def get_vectorstore_count() -> int:
+    """Return total number of chunks currently stored."""
     try:
-        from app.rag.embedder import get_embeddings
-        import chromadb
-        client = chromadb.PersistentClient(path=str(vECTORSTORE_DIR))
-        col = client.get_collection("rag_documents")
-        return col.count()
-    except Exception:
+        vectorstore = Chroma(
+            collection_name=COLLECTION_NAME,
+            embedding_function=get_embedder(),
+            persist_directory=VECTORSTORE_DIR,
+        )
+        count = len(vectorstore.get(include=[])["ids"])
+        print(f"[RAG] vectorstore count: {count}")
+        return count
+    except Exception as e:
+        print(f"[RAG] get_vectorstore_count failed: {e}")
         return 0

@@ -19,17 +19,15 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from app.rag.embedder import get_embedder
 
 # ── Config ────────────────────────────────────────────────────────────────────
-# FIXED: Use the actual path with capital 'V' in vectorstore
-vECTORSTORE_DIR = str(
-    # Changed from 'vectorstore' to 'vectorstore'
+VECTORSTORE_DIR = str(
     Path(__file__).resolve().parents[2] / "data" / "vectorstore")
 COLLECTION_NAME = "rag_documents"
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
 
 # Debug: Print the vectorstore path
-print(f"[RAG] vectorstore directory: {vECTORSTORE_DIR}")
-print(f"[RAG] Full path: {Path(vECTORSTORE_DIR).absolute()}")
+print(f"[RAG] vectorstore directory: {VECTORSTORE_DIR}")
+print(f"[RAG] Full path: {Path(VECTORSTORE_DIR).absolute()}")
 
 
 def _get_vectorstore() -> Chroma:
@@ -37,7 +35,7 @@ def _get_vectorstore() -> Chroma:
     return Chroma(
         collection_name=COLLECTION_NAME,
         embedding_function=get_embedder(),
-        persist_directory=vECTORSTORE_DIR,
+        persist_directory=VECTORSTORE_DIR,
     )
 
 
@@ -100,15 +98,15 @@ def ingest_documents(file_paths: List[str]) -> int:
 
     # ── 3. Embed and store ────────────────────────────────────────────────────
     try:
-        print(f"[RAG] Getting vectorstore at: {vECTORSTORE_DIR}")
+        print(f"[RAG] Getting vectorstore at: {VECTORSTORE_DIR}")
         vectorstore = _get_vectorstore()
 
         print(f"[RAG] Adding {len(chunks)} documents to vectorstore...")
         vectorstore.add_documents(chunks)
         print(f"[RAG] Successfully added documents")
 
-        # Verify by checking count
-        count = vectorstore._collection.count()
+        # Verify by checking count — using public API (chromadb 1.x compatible)
+        count = len(vectorstore.get(include=[])["ids"])
         print(f"[RAG] vectorstore now contains {count} total chunks")
 
     except Exception as e:
@@ -141,7 +139,7 @@ def list_ingested_files() -> List[str]:
 def get_vectorstore_count() -> int:
     """Return total number of chunks currently stored."""
     try:
-        count = _get_vectorstore()._collection.count()
+        count = len(_get_vectorstore().get(include=[])["ids"])
         print(f"[RAG] vectorstore count: {count}")
         return count
     except Exception as e:
