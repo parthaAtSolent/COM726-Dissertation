@@ -1,4 +1,0 @@
-\contentsline {table}{\numberline {1}{\ignorespaces Deployed language models with their primary specialisations and context window sizes.}}{11}{table.caption.7}%
-\contentsline {table}{\numberline {2}{\ignorespaces Model performance on the HotpotQA benchmark (500 questions). EM = Exact Match; F1 = Token F1; Lat = Average Latency (ms).}}{25}{table.caption.15}%
-\contentsline {table}{\numberline {3}{\ignorespaces Model performance on the MuSiQue benchmark (500 questions). EM = Exact Match; F1 = Token F1; Lat = Average Latency (ms).}}{26}{table.caption.16}%
-\contentsline {table}{\numberline {4}{\ignorespaces Routing accuracy by execution path on the 200-query annotation set.}}{26}{table.caption.17}%

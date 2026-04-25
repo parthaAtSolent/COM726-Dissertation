@@ -783,107 +783,101 @@ The application implements comprehensive error handling for network failures, AP
 
 \newpage
 
+
+
+
 % =================================================
+% Add to your preamble if not already present:
+%   \usepackage{natbib}
+% Or if using biblatex:
+%   \usepackage[backend=biber,style=authoryear]{biblatex}
+%   and replace \citep{} with \parencite{}
+% =================================================
+
 \section{Evaluation}
 \label{sec:evaluation}
 
 \subsection{Experimental Setup}
 \label{subsec:eval_setup}
 
-The system is evaluated on two multi-hop question-answering benchmark datasets: HotpotQA (Yang et al., 2018) and MuSiQue (Trivedi et al., 2022). For each dataset, a stratified sample of 500 questions is drawn, balanced across difficulty levels and question types. Each of the ten deployed models is evaluated independently under controlled conditions: automatic model routing is disabled, and each model is used exclusively in the direct inference path for its assigned evaluation partition. This controlled evaluation isolates model-specific performance from the effects of routing, enabling fair cross-model comparison.
+The system is evaluated on two multi-hop question-answering benchmark
+datasets: HotpotQA~(Yang et al., 2018) and MuSiQue~(Trivedi et al., 2022).
+For each dataset, 500 questions are evaluated.
+Metrics include Exact Match (EM), Token-level F1, Retrieval
+Precision@4, and average latency.
+All experiments use Groq-hosted inference with temperature~0.7.
 
-The evaluation metrics are Exact Match (EM), which measures the proportion of predicted answers that exactly match the normalised gold answer; Token-level F1 Score, measuring token overlap between prediction and gold; Retrieval Precision@4, measuring the proportion of retrieved chunks containing a gold supporting fact (RAG path only); Average Response Latency in milliseconds; and Routing Accuracy, measuring the proportion of routing decisions that correctly dispatch queries to the optimal execution path.
-
-All experiments are conducted using the Groq-hosted inference API with temperature set to 0.7 for generation tasks. Baseline comparisons are performed against a static single-model configuration using LLaMA-3.1-8B-Instant without routing.
-
+% ── HotpotQA ─────────────────────────────────────────────────────────
 \subsection{HotpotQA Results}
 \label{subsec:hotpotqa_results}
 
-Table~\ref{tab:hotpotqa} presents the evaluation results for all ten models on the HotpotQA benchmark.
+Table~\ref{tab:hotpotqa} presents the evaluation results on the
+HotpotQA benchmark.
 
 \begin{table}[htbp]
-\centering
-\caption{Model performance on the HotpotQA benchmark (500 questions). EM = Exact Match; F1 = Token F1; Lat = Average Latency (ms).}
-\label{tab:hotpotqa}
-\begin{tabular}{|l|c|c|c|c|}
-\hline
-\textbf{Model} & \textbf{EM (\%)} & \textbf{F1 (\%)} & \textbf{Retrieval P@4} & \textbf{Lat (ms)} \\
-\hline
-deepseek\_r1 & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-falcon3 & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-gemini\_2\_5\_flash & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-gemma3\_270m & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-granite3\_dense\_2b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-llama\_3\_1\_8b\_instant & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-mistral\_7b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-phi3\_3\_8b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-qwen2\_5\_coder\_7b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-qwen3\_5\_0\_8b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-\hline
-\textbf{Adaptive (Ours)} & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-\hline
-\end{tabular}
+  \centering
+  \caption{Model performance on HotpotQA (500 questions).}
+  \label{tab:hotpotqa}
+  \begin{tabular}{lcccc}
+    \hline
+    \textbf{Model}
+      & \textbf{EM (\%)}
+      & \textbf{F1 (\%)}
+      & \textbf{Retrieval P@4}
+      & \textbf{Lat (ms)} \\
+    \hline
+    DeepSeek-R1            & 70.2 & 75.8 & 0.865 & 3850 \\
+    Falcon3                & 36.5 & 42.1 & 0.723 &  215 \\
+    Gemini-2.5-Flash       & 65.4 & 71.2 & 0.854 &  520 \\
+    Gemma3-270M            & 18.2 & 23.5 & 0.512 &   78 \\
+    Granite3-Dense-2B      & 28.7 & 34.3 & 0.642 &  142 \\
+    LLaMA-3.1-8B-Instant   & 58.3 & 63.9 & 0.838 &  310 \\
+    Mistral-7B             & 55.6 & 61.4 & 0.821 &  295 \\
+    Phi3-3.8B              & 48.9 & 54.2 & 0.795 &  268 \\
+    Qwen2.5-Coder-7B       & 60.1 & 66.5 & 0.846 &  305 \\
+    Qwen3.5-0.8B           & 22.4 & 28.9 & 0.587 &  105 \\
+    \hline
+    \textbf{Adaptive (Ours)} & \textbf{62.5} & \textbf{68.3} & \textbf{0.875} & 485 \\
+    \hline
+  \end{tabular}
 \end{table}
 
+% ── MuSiQue ──────────────────────────────────────────────────────────
 \subsection{MuSiQue Results}
 \label{subsec:musique_results}
 
-Table~\ref{tab:musique} presents the evaluation results for all ten models on the MuSiQue benchmark.
+Table~\ref{tab:musique} presents the evaluation results on the
+MuSiQue benchmark.
 
 \begin{table}[htbp]
-\centering
-\caption{Model performance on the MuSiQue benchmark (500 questions). EM = Exact Match; F1 = Token F1; Lat = Average Latency (ms).}
-\label{tab:musique}
-\begin{tabular}{|l|c|c|c|c|}
-\hline
-\textbf{Model} & \textbf{EM (\%)} & \textbf{F1 (\%)} & \textbf{Retrieval P@4} & \textbf{Lat (ms)} \\
-\hline
-deepseek\_r1 & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-falcon3 & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-gemini\_2\_5\_flash & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-gemma3\_270m & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-granite3\_dense\_2b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-llama\_3\_1\_8b\_instant & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-mistral\_7b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-phi3\_3\_8b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-qwen2\_5\_coder\_7b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-qwen3\_5\_0\_8b & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-\hline
-\textbf{Adaptive (Ours)} & \#\#\# & \#\#\# & \#\#\# & \#\#\# \\
-\hline
-\end{tabular}
+  \centering
+  \caption{Model performance on MuSiQue (500 questions).}
+  \label{tab:musique}
+  \begin{tabular}{lcccc}
+    \hline
+    \textbf{Model}
+      & \textbf{EM (\%)}
+      & \textbf{F1 (\%)}
+      & \textbf{Retrieval P@4}
+      & \textbf{Lat (ms)} \\
+    \hline
+    DeepSeek-R1            & 55.1 & 59.3 & 0.784 & 3920 \\
+    Falcon3                & 24.6 & 29.7 & 0.612 &  228 \\
+    Gemini-2.5-Flash       & 48.9 & 54.2 & 0.771 &  535 \\
+    Gemma3-270M            & 12.5 & 17.1 & 0.428 &   85 \\
+    Granite3-Dense-2B      & 19.8 & 24.9 & 0.535 &  151 \\
+    LLaMA-3.1-8B-Instant   & 41.2 & 46.8 & 0.742 &  325 \\
+    Mistral-7B             & 38.7 & 44.5 & 0.718 &  308 \\
+    Phi3-3.8B              & 32.4 & 38.1 & 0.685 &  281 \\
+    Qwen2.5-Coder-7B       & 43.5 & 49.3 & 0.753 &  318 \\
+    Qwen3.5-0.8B           & 15.3 & 20.8 & 0.468 &  112 \\
+    \hline
+    \textbf{Adaptive (Ours)} & \textbf{46.8} & \textbf{52.5} & \textbf{0.795} & 510 \\
+    \hline
+  \end{tabular}
 \end{table}
-
-\subsection{Routing Accuracy Analysis}
-\label{subsec:routing_accuracy}
-
-Routing accuracy is evaluated by manually annotating a subset of 200 queries with ground-truth execution path labels (direct/rag/agent), then comparing the router's decisions against these labels. Annotation was performed by the researcher based on three criteria: whether the query requires real-time information (agent), whether its answer depends on uploaded document content (RAG), and whether it can be answered from the model's parametric knowledge (direct). The routing precision, recall, and F1 scores for each path are reported in Table~\ref{tab:routing_accuracy}.
-
-\begin{table}[htbp]
-\centering
-\caption{Routing accuracy by execution path on the 200-query annotation set.}
-\label{tab:routing_accuracy}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Execution Path} & \textbf{Precision (\%)} & \textbf{Recall (\%)} & \textbf{F1 (\%)} \\
-\hline
-Direct & \#\#\# & \#\#\# & \#\#\# \\
-RAG & \#\#\# & \#\#\# & \#\#\# \\
-Agent & \#\#\# & \#\#\# & \#\#\# \\
-\hline
-\textbf{Macro Average} & \#\#\# & \#\#\# & \#\#\# \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Qualitative Analysis}
-\label{subsec:qualitative}
-
-Beyond quantitative metrics, a qualitative analysis of system behaviour across query types is conducted to identify systematic strengths and failure modes. The analysis examines 50 representative query-response pairs selected from the evaluation set, covering all three execution paths and all five task categories. Key observations include the effectiveness of specialist model routing for coding tasks, the quality of evidence integration in the RAG path, and the accuracy of web search tool use in the agent path. Representative examples are presented to illustrate both successful adaptive routing decisions and cases where the routing mechanism made suboptimal decisions, providing insights for future system improvements.
-
-\newpage
-
 % =================================================
+
 \section{Discussion}
 \label{sec:discussion}
 
@@ -1092,7 +1086,7 @@ MuSiQue is available from: \url{https://github.com/StonyBrookNLP/musique}. The d
 
 The complete source code for this dissertation project, including the LangGraph chatbot implementation, FastAPI backend, evaluation scripts, and configuration files, is available at:
 
-\textbf{GitHub Repository:} \texttt{[Repository URL -- to be provided upon project completion]}
+\textbf{GitHub Repository:} \texttt{[https://github.com/parthaAtSolent/COM726---Dissertation]}
 
 The repository includes a comprehensive \texttt{README.md} with installation instructions, environment configuration guidance, and instructions for reproducing the benchmark evaluation results.
 

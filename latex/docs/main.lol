@@ -6,4 +6,4 @@
 \contentsline {lstlisting}{\numberline {6}{\ignorespaces LLM factory function mapping model keys to Groq-hosted model instances.}}{20}{lstlisting.6}%
 \contentsline {lstlisting}{\numberline {7}{\ignorespaces Document ingestion pipeline showing chunking and ChromaDB indexing.}}{20}{lstlisting.7}%
 \contentsline {lstlisting}{\numberline {8}{\ignorespaces FastAPI REST endpoint definitions for the Android application backend.}}{22}{lstlisting.8}%
-\contentsline {lstlisting}{\numberline {9}{\ignorespaces Required environment variable configuration for system deployment.}}{38}{lstlisting.9}%
+\contentsline {lstlisting}{\numberline {9}{\ignorespaces Required environment variable configuration for system deployment.}}{37}{lstlisting.9}%
