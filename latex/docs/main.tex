@@ -1090,44 +1090,44 @@ The complete source code for this dissertation project, including the LangGraph 
 
 The repository includes a comprehensive \texttt{README.md} with installation instructions, environment configuration guidance, and instructions for reproducing the benchmark evaluation results.
 
-\subsection{Live Application}
+% \subsection{Live Application}
 
-A live demonstration of the Adaptive Multi-LLM Agentic RAG chatbot system is accessible at:
+% A live demonstration of the Adaptive Multi-LLM Agentic RAG chatbot system is accessible at:
 
-\textbf{Live Application URL:} \texttt{[Deployment URL -- to be provided upon production deployment]}
+% \textbf{Live Application URL:} \texttt{[Deployment URL -- to be provided upon production deployment]}
 
-\textbf{Android Application:} Available for download from the Google Play Store under the application name ``Adaptive RAG Chatbot'' (publication pending final submission approval).
+% \textbf{Android Application:} Available for download from the Google Play Store under the application name ``Adaptive RAG Chatbot'' (publication pending final submission approval).
 
-\section{System Configuration Reference}
-\label{app:config}
+% \section{System Configuration Reference}
+% \label{app:config}
 
-The system requires the following environment variables, configured in a \texttt{.env} file in the project root directory.
+% The system requires the following environment variables, configured in a \texttt{.env} file in the project root directory.
 
-\begin{lstlisting}[caption={Required environment variable configuration for system deployment.}, label={lst:env}, language=bash]
-# Groq API key for LLM inference
-GROQ_API_KEY=your_groq_api_key_here
+% \begin{lstlisting}[caption={Required environment variable configuration for system deployment.}, label={lst:env}, language=bash]
+% # Groq API key for LLM inference
+% GROQ_API_KEY=your_groq_api_key_here
 
-# MySQL database connection parameters
-MYSQL_HOST=localhost
-MYSQL_PORT=3306
-MYSQL_USER=chatbot_user
-MYSQL_PASSWORD=your_mysql_password
-MYSQL_DATABASE=langgraph_chatbot
+% # MySQL database connection parameters
+% MYSQL_HOST=localhost
+% MYSQL_PORT=3306
+% MYSQL_USER=chatbot_user
+% MYSQL_PASSWORD=your_mysql_password
+% MYSQL_DATABASE=langgraph_chatbot
 
-# Default model key (used when auto-routing is disabled)
-DEFAULT_MODEL_KEY=llama_3_1_8b_instant
+% # Default model key (used when auto-routing is disabled)
+% DEFAULT_MODEL_KEY=llama_3_1_8b_instant
 
-# ChromaDB vector store persistence directory
-VECTORSTORE_DIR=./vectorstore
+% # ChromaDB vector store persistence directory
+% VECTORSTORE_DIR=./vectorstore
 
-# FastAPI server configuration
-API_HOST=0.0.0.0
-API_PORT=8000
-\end{lstlisting}
+% # FastAPI server configuration
+% API_HOST=0.0.0.0
+% API_PORT=8000
+% \end{lstlisting}
 
-\section{Evaluation Reproducibility Guide}
-\label{app:reproducibility}
+% \section{Evaluation Reproducibility Guide}
+% \label{app:reproducibility}
 
-To reproduce the benchmark evaluation results reported in Section~\ref{sec:evaluation}, the following procedure should be followed. First, install the project dependencies using \texttt{pip install -r requirements.txt}. Second, configure the \texttt{.env} file with a valid Groq API key and MySQL connection parameters. Third, initialise the MySQL database schema by running \texttt{python -m app.core.bootstrap}. Fourth, download the HotpotQA and MuSiQue evaluation sets from their official repositories and place them in the \texttt{data/} directory. Fifth, run the evaluation script with \texttt{python -m scripts.evaluate --dataset hotpotqa --sample 500} and \texttt{python -m scripts.evaluate --dataset musique --sample 500}. Results are written to JSON files in the \texttt{results/} directory and can be summarised using \texttt{python -m scripts.summarise\_results}.
+% To reproduce the benchmark evaluation results reported in Section~\ref{sec:evaluation}, the following procedure should be followed. First, install the project dependencies using \texttt{pip install -r requirements.txt}. Second, configure the \texttt{.env} file with a valid Groq API key and MySQL connection parameters. Third, initialise the MySQL database schema by running \texttt{python -m app.core.bootstrap}. Fourth, download the HotpotQA and MuSiQue evaluation sets from their official repositories and place them in the \texttt{data/} directory. Fifth, run the evaluation script with \texttt{python -m scripts.evaluate --dataset hotpotqa --sample 500} and \texttt{python -m scripts.evaluate --dataset musique --sample 500}. Results are written to JSON files in the \texttt{results/} directory and can be summarised using \texttt{python -m scripts.summarise\_results}.
 
 \end{document}
