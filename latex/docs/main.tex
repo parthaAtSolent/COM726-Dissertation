@@ -694,6 +694,7 @@ The API is designed for stateless horizontal scalability; all state is managed t
 
 \newpage
 
+
 % =================================================
 \section{Android Application}
 \label{sec:android}
@@ -701,66 +702,38 @@ The API is designed for stateless horizontal scalability; all state is managed t
 \subsection{Overview}
 \label{subsec:android_overview}
 
-To extend the adaptive multi-LLM chatbot system to mobile users, a companion Android application was developed that mirrors the full feature set of the Streamlit web interface. The application communicates with the FastAPI REST backend described in Section~\ref{subsec:api}, leveraging the same LangGraph orchestration pipeline, model routing, RAG capabilities, and persistent conversation management for mobile users. The Android application targets API level 26 (Android 8.0) and above, covering the majority of active Android devices.
+To extend the adaptive multi-LLM chatbot system to mobile users, a companion Android application was developed that mirrors the core functionality of the Streamlit web interface. The application communicates with the FastAPI REST backend described in Section~\ref{subsec:api}, utilizing the same LangGraph-based orchestration, model routing, RAG pipeline, and persistent conversation handling. The application targets API level 26 (Android 8.0) and above.
 
-\subsection{Architecture}
-\label{subsec:android_arch}
-
-The Android application follows a clean architecture pattern with three layers: the Presentation layer (Jetpack Compose UI), the Domain layer (ViewModels and use cases), and the Data layer (Retrofit HTTP client interfacing with the FastAPI backend). This separation of concerns ensures that UI components remain decoupled from business logic and network communication, facilitating testability and maintainability.
+\subsection{Mobile Dashboard}
+\label{subsec:android_dashboard}
 
 \begin{figure}[htbp]
     \centering
-    \fbox{\parbox{0.85\linewidth}{
-        \centering
-        \vspace{0.4cm}
-        \textbf{[Figure Placeholder: Android Application Architecture Diagram]}\\[0.3cm]
-        Three-layer architecture diagram: Presentation Layer (Jetpack Compose: ChatScreen, ThreadListScreen, ModelSelectorComponent, DocumentUploadSheet) $\rightarrow$ Domain Layer (ChatViewModel, ThreadViewModel, RagViewModel) $\rightarrow$ Data Layer (ChatRepository $\rightarrow$ Retrofit HTTP Client $\rightarrow$ FastAPI REST Backend $\rightarrow$ LangGraph Pipeline).
-        \vspace{0.4cm}
-    }}
-    \caption{Android application three-layer architecture with Jetpack Compose and Retrofit.}
-    \label{fig:android_arch}
+    \includegraphics[height=0.7\linewidth]{../assets/mobile_dashboard.png}
+    \caption{Mobile dashboard of the Android application showing chat interface, model interaction, and routing transparency.}
+    \label{fig:mobile_dashboard}
 \end{figure}
+
+The mobile dashboard presents the primary user interface of the application. It includes a real-time chat interface with structured message bubbles, a user input field with a send action, and integrated routing transparency indicating model selection behavior. The interface is designed using Jetpack Compose to ensure responsiveness and a modern user experience.
 
 \subsection{Key Features}
 \label{subsec:android_features}
 
-The Android application implements the following features. The Chat Interface provides a scrollable conversation view with role-differentiated message bubbles, a text input field with send button, and progressive text display for streaming responses. The Model Selector presents a bottom-sheet picker allowing users to select from the ten available LLMs or use automatic model selection. The Thread Manager displays a list of past conversations retrievable from the server, allowing users to resume any previous thread. The Document Upload feature enables users to select PDF and text files from device storage for RAG indexing, with upload progress indication. The Routing Transparency panel shows the routing metadata for the most recent response, indicating which model was selected and the reason for selection.
+The application provides a streamlined set of features. The Chat Interface enables real-time conversations with dynamic message rendering. The Model Selection mechanism allows users to either manually select a model or rely on automatic routing. The Thread Management system supports retrieval and continuation of past conversations. The Document Upload functionality enables users to upload files for retrieval-augmented generation. Additionally, routing transparency is displayed to inform users about model decisions.
 
 \subsection{Interaction Flow}
 \label{subsec:android_flow}
 
 \begin{figure}[htbp]
     \centering
-    \fbox{\parbox{0.85\linewidth}{
-        \centering
-        \vspace{0.4cm}
-        \textbf{[Figure Placeholder: Android Application Interaction Flow]}\\[0.3cm]
-        Sequence diagram showing: User types message in Android app $\rightarrow$ ChatViewModel.sendMessage() $\rightarrow$ ChatRepository.postMessage() $\rightarrow$ HTTP POST /chat to FastAPI $\rightarrow$ FastAPI routes to LangGraph graph.invoke() $\rightarrow$ Router classifies query $\rightarrow$ Execution node processes query $\rightarrow$ Response streams back $\rightarrow$ ChatRepository updates state $\rightarrow$ ChatViewModel updates UI state $\rightarrow$ ChatScreen renders response.
-        \vspace{0.4cm}
-    }}
-    \caption{Android application interaction sequence from user input to response display.}
-    \label{fig:android_flow}
+    \includegraphics[height=0.7\linewidth]{../assets/android_flowchart.png}
+    \caption{End-to-End Interaction Flow of Android-based Multi-LLM Chatbot System}
+    \label{fig:mobile_flowchart}
 \end{figure}
 
-The interaction flow for a typical chat turn proceeds as follows. The user composes a message in the Compose \texttt{ChatScreen} and taps the send button. The \texttt{ChatViewModel} calls \texttt{ChatRepository.postMessage()}, which sends an HTTP POST request to the FastAPI \texttt{/chat} endpoint carrying the message text, thread ID, and selected model key. The FastAPI server processes the request through the LangGraph pipeline, invoking router, execution, and synthesis stages, and returns the completed response as a JSON payload. The response is delivered to the \texttt{ChatViewModel} via a Kotlin coroutine-based callback, updating the UI state observed by the Compose \texttt{ChatScreen}, which re-renders the conversation list to display the new response.
-
-\subsection{Offline and Error Handling}
-\label{subsec:android_errors}
-
-The application implements comprehensive error handling for network failures, API timeouts, and server errors. When the device is offline or the server is unreachable, the application displays a contextual error message and queues the pending message for automatic retry when connectivity is restored. HTTP error responses from the API are mapped to user-friendly error messages via a centralised error handler in the data layer.
+The interaction begins when a user submits a message through the chat interface. The request is handled by the ViewModel and sent via the repository layer to the FastAPI backend using an HTTP POST request. The backend processes the request through the LangGraph pipeline, performing routing and execution. The generated response is returned to the application, where the UI state is updated and rendered dynamically in the chat interface.
 
 \newpage
-
-
-
-
-% =================================================
-% Add to your preamble if not already present:
-%   \usepackage{natbib}
-% Or if using biblatex:
-%   \usepackage[backend=biber,style=authoryear]{biblatex}
-%   and replace \citep{} with \parencite{}
-% =================================================
 
 \section{Evaluation}
 \label{sec:evaluation}
