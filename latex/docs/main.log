@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  28 APR 2026 09:45
+This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  28 APR 2026 19:28
  restricted system commands enabled.
 **main.tex
 (./main.tex
@@ -1351,7 +1351,7 @@ ttf><C:/Windows/Fonts/trebucbd.ttf><C:/Users/parth/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/parth/AppData/Local/Program
 s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/parth/AppData/Local/
 Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (40 pages, 18622057 bytes).
+Output written on main.pdf (40 pages, 18622055 bytes).
 
 PDF statistics: 862 PDF objects out of 1000 (max. 8388607)
  310 named destinations out of 1000 (max. 131072)
