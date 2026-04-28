@@ -134,7 +134,7 @@ _QA_PROMPT = (
 
 TOKEN_LIMITS: dict[str, int] = {
     "llama-8b-instant":   4000,
-    "gemini-2.5-flash":   8000,
+    # "gemini-2.5-flash":   8000,
     "llama3.2-3b":        3000,
     "qwen3.5-0.8b":       3000,
     "phi3-3.8b":          3000,
@@ -151,7 +151,7 @@ TOKEN_LIMITS: dict[str, int] = {
 MODEL_KEY_MAP: dict[str, str] = {
     "deepseek_r1":          "deepseek_r1",
     "falcon3":              "falcon3",
-    "gemini_2_5_flash":     "gemini-2.5-flash",
+    # "gemini_2_5_flash":     "gemini-2.5-flash",
     "gemma3_270m":          "gemma3-270m",
     "granite3_dense_2b":    "granite3-dense-2b",
     "llama_3_1_8b_instant": "llama-8b-instant",

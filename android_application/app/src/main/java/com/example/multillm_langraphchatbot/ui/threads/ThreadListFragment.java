@@ -28,7 +28,7 @@ public class ThreadListFragment extends Fragment implements ThreadAdapter.OnThre
     private static final String[] MODELS = {
             "deepseek-r1",
             "falcon3",
-            "gemini-2.5-flash",
+            // "gemini-2.5-flash",
             "gemma3-270m",
             "granite3-dense-2b",
             "llama-3.1-8b-instant",

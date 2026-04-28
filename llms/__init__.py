@@ -18,8 +18,8 @@ from __future__ import annotations
 from llms.llama_3_1_8b_instant.config import MODEL_KEY as _k1, DISPLAY_NAME as _n1, ICON as _i1
 from llms.llama_3_1_8b_instant.factory import build as _build_llama_8b
 
-from llms.gemini_2_5_flash.config import MODEL_KEY as _k2, DISPLAY_NAME as _n2, ICON as _i2
-from llms.gemini_2_5_flash.factory import build as _build_gemini
+# from llms.gemini_2_5_flash.config import MODEL_KEY as _k2, DISPLAY_NAME as _n2, ICON as _i2
+# from llms.gemini_2_5_flash.factory import build as _build_gemini
 
 from llms.qwen3_5_0_8b.config import MODEL_KEY as _k4, DISPLAY_NAME as _n4, ICON as _i4
 from llms.qwen3_5_0_8b.factory import build as _build_qwen
@@ -59,7 +59,7 @@ REGISTRY: dict[str, dict] = {
     _k12: {"name": _n12, "icon": _i12, "build": _build_custom},
 
     _k1: {"name": _n1, "icon": _i1, "build": _build_llama_8b},
-    _k2: {"name": _n2, "icon": _i2, "build": _build_gemini},
+    # _k2: {"name": _n2, "icon": _i2, "build": _build_gemini},
     _k4: {"name": _n4, "icon": _i4, "build": _build_qwen},
     _k5: {"name": _n5, "icon": _i5, "build": _build_phi3},
     _k6: {"name": _n6, "icon": _i6, "build": _build_granite3},

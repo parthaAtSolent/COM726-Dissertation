@@ -64,7 +64,7 @@ MODEL_RAG_PREFERENCES = {
     "qwen3.5-0.8b": {"format": "structured", "strength": "medium"},
     "qwen2_5_coder_7b": {"format": "structured", "strength": "medium"},
     "llama-8b-instant": {"format": "structured", "strength": "high"},
-    "gemini-2.5-flash": {"format": "plain", "strength": "high"},
+    # "gemini-2.5-flash": {"format": "plain", "strength": "high"},
     "llama3.2-3b": {"format": "structured", "strength": "medium"},
     "phi3-3.8b": {"format": "structured", "strength": "medium"},
     "granite3-dense-2b": {"format": "structured", "strength": "medium"},
@@ -497,7 +497,7 @@ def _trim_messages(messages: list, max_tokens: int = 4000) -> list:
 
 TOKEN_LIMITS: dict[str, int] = {
     "llama-8b-instant":  4000,
-    "gemini-2.5-flash":  8000,
+    # "gemini-2.5-flash":  8000,
     "llama3.2-3b":       3000,
     "qwen3.5-0.8b":      3000,
     "phi3-3.8b":         3000,
@@ -595,7 +595,7 @@ def _call_llm_with_orchestrator(
                 query, raw_response, categories, selected_model
             )
             synthesis_llm = llms.build_llm(
-                "gemini-2.5-flash")
+                "llama-3.1-8b-instant")
             refined = synthesis_llm.invoke(synthesis_prompt)
             final_response = refined.content
             synthesis_used = True
@@ -608,7 +608,7 @@ def _call_llm_with_orchestrator(
             categories=categories,
             complexity=complexity,
             primary_model=selected_model,
-            synthesis_model="gemini-2.5-flash" if synthesis_used else None,
+            synthesis_model="llama-3.1-8b-instant" if synthesis_used else None,
             fallback_used=False
         )
 

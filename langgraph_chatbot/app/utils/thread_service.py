@@ -196,6 +196,7 @@ def get_thread(thread_id: str) -> Optional[ThreadMeta]:
 def save_message(thread_id: str, role: str, content: str) -> None:
     """
     Save a message to the database.
+    Auto-creates the thread if it doesn't exist to prevent FK constraint errors.
 
     Args:
         thread_id: The thread ID
@@ -204,16 +205,21 @@ def save_message(thread_id: str, role: str, content: str) -> None:
     """
     _validate(thread_id)
 
+    # ── Guard: ensure thread exists before inserting a message ──────────────
+    if not thread_exists(thread_id):
+        print(
+            f"[thread_service] Thread {thread_id} not found — auto-creating.")
+        create_thread(thread_id)
+    # ─────────────────────────────────────────────────────────────────────────
+
     conn = _get_connection()
     try:
         with conn.cursor() as cur:
-            # Insert the message
             cur.execute("""
                 INSERT INTO messages (thread_id, role, content)
                 VALUES (%s, %s, %s)
             """, (thread_id, role, content))
 
-            # Update the thread's updated_at timestamp
             cur.execute("""
                 UPDATE threads SET updated_at = CURRENT_TIMESTAMP 
                 WHERE thread_id = %s

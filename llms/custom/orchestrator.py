@@ -34,7 +34,7 @@ TASK_ROUTING: Dict[str, str] = {
     "coding":           "qwen2_5_coder_7b",
     "mathematical":     "deepseek_r1",
     "reasoning":        "llama-8b-instant",
-    "summarization":    "gemini-2.5-flash",
+    # "summarization":    "gemini-2.5-flash",
     "creative_writing": "llama-8b-instant",
     "data_extraction":  "granite3-dense-2b",
     "validation":       "granite3-dense-2b",
@@ -207,7 +207,7 @@ def build_specialist_prompt(
     specialist_instructions = {
         "deepseek_r1": "Step-by-step reasoning with full chain of thought.",
         "llama-8b-instant": "Thorough, multi-step analysis with clear reasoning.",
-        "gemini-2.5-flash": "Concise, well-structured, clearly formatted.",
+        # "gemini-2.5-flash": "Concise, well-structured, clearly formatted.",
         "qwen2_5_coder_7b": "Clean, production-ready code with comments and error handling.",
         "granite3-dense-2b": "Structured, precise, factually consistent output.",
         "qwen3.5-0.8b": "High-quality response in user's language.",
