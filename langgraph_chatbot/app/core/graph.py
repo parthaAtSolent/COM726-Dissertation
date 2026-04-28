@@ -58,6 +58,102 @@ from llms.custom.orchestrator import (
 
 load_dotenv(Path(__file__).resolve().parents[3] / ".env")
 
+# ── Model-specific RAG preferences ────────────────────────────────────────────
+MODEL_RAG_PREFERENCES = {
+    "falcon3": {"format": "plain", "strength": "high"},
+    "qwen3.5-0.8b": {"format": "structured", "strength": "medium"},
+    "qwen2_5_coder_7b": {"format": "structured", "strength": "medium"},
+    "llama-8b-instant": {"format": "structured", "strength": "high"},
+    "gemini-2.5-flash": {"format": "plain", "strength": "high"},
+    "llama3.2-3b": {"format": "structured", "strength": "medium"},
+    "phi3-3.8b": {"format": "structured", "strength": "medium"},
+    "granite3-dense-2b": {"format": "structured", "strength": "medium"},
+    "gemma3-270m": {"format": "simple", "strength": "low"},
+    "deepseek_r1": {"format": "structured", "strength": "high"},
+    "mistral-7b": {"format": "structured", "strength": "high"},
+}
+
+
+def format_rag_context_for_model(rag_result: dict, model_key: str) -> str:
+    """
+    Format RAG context according to model's preferences.
+
+    Args:
+        rag_result: Output from retrieve_context()
+        model_key: The model being used
+
+    Returns:
+        Formatted context string optimized for the specific model
+    """
+    if not rag_result.get('has_context', False):
+        return ""
+
+    pref = MODEL_RAG_PREFERENCES.get(
+        model_key, {"format": "structured", "strength": "medium"})
+    format_type = pref["format"]
+
+    if format_type == "plain":
+        # Simple plain text format
+        return rag_result.get('formatted_text', '')
+
+    elif format_type == "structured":
+        # Structured format with clear markers
+        parts = []
+        parts.append("=== RELEVANT DOCUMENT EXCERPTS ===")
+        parts.append("")
+        for i, chunk in enumerate(rag_result.get('raw_chunks', []), 1):
+            parts.append(f"[{i}] From '{chunk['source']}':")
+            parts.append(chunk['content'])
+            parts.append("")
+        parts.append("=== END OF EXCERPTS ===")
+        parts.append("")
+        parts.append(
+            "IMPORTANT: Answer the user's question based ONLY on the information above.")
+        parts.append(
+            "If the excerpts don't contain the answer, say so clearly.")
+        return "\n".join(parts)
+
+    elif format_type == "simple":
+        # Very simple format for small models
+        parts = []
+        parts.append("Context from documents:")
+        # Limit to 3 chunks for small models
+        for chunk in rag_result.get('raw_chunks', [])[:3]:
+            # Truncate for small models
+            truncated = chunk['content'][:500] if len(
+                chunk['content']) > 500 else chunk['content']
+            parts.append(f"- {truncated}")
+        return "\n".join(parts)
+
+    else:
+        return rag_result.get('formatted_text', '')
+
+
+def format_rag_instructions(model_key: str) -> str:
+    """
+    Get model-specific RAG instructions.
+    """
+    pref = MODEL_RAG_PREFERENCES.get(
+        model_key, {"format": "structured", "strength": "medium"})
+    strength = pref["strength"]
+
+    if strength == "high":
+        return """
+CRITICAL INSTRUCTIONS FOR USING THE PROVIDED CONTEXT:
+1. The "RELEVANT DOCUMENT EXCERPTS" section contains information from uploaded documents
+2. Base your answer STRICTLY on this information
+3. If the excerpts don't contain the answer, say "Based on the uploaded documents, I cannot find information about this topic."
+4. Do not invent or hallucinate information not present in the excerpts
+5. Cite which document each piece of information comes from
+"""
+    elif strength == "medium":
+        return """
+Instructions: Use the document excerpts above to answer the user's question.
+If the information isn't in the excerpts, say so honestly.
+"""
+    else:
+        return "Use the context above to answer the question if relevant."
+
 
 # ── Serialization ─────────────────────────────────────────────────────────────
 
@@ -407,24 +503,26 @@ TOKEN_LIMITS: dict[str, int] = {
     "phi3-3.8b":         3000,
     "granite3-dense-2b": 3000,
     "gemma3-270m":       2000,
-    "qwen2_5_coder_7b":  4000,  # Added for orchestrator
-    "deepseek_r1":       8000,  # Added for orchestrator
-    "falcon3":           3000,  # Added for orchestrator
-    "mistral-7b":        4000,  # Added for orchestrator
+    "qwen2_5_coder_7b":  4000,
+    "deepseek_r1":       8000,
+    "falcon3":           3000,
+    "mistral-7b":        4000,
 }
 
 # Keywords that strongly signal web/real-time information need
 _AGENT_KEYWORDS = (
     "latest", "current", "today", "news", "recent", "now", "live",
     "price", "weather", "stock", "score", "calculate", "compute",
-    "what is", "how much", "convert", "solve",
+    "how much", "convert", "solve",
 )
 
 # Keywords that signal document retrieval need
 _RAG_KEYWORDS = (
     "document", "uploaded", "file", "pdf", "according to", "in the",
-    "what does it say", "from the", "based on the", "summary",
-    "mentioned", "context",
+    "what does it say", "from the", "based on the", "summary", "summarize",
+    "summarise", "mentioned", "context", "explain from", "what does",
+    "tell me about", "describe", "what is in", "find in", "search the",
+    "extract", "highlight", "key points", "main points", "outline",
 )
 
 
@@ -465,12 +563,10 @@ def _call_llm_with_orchestrator(
     categories, complexity = classify_task(query)
 
     # Step 2: Select the best specialist model (or use provided model_key)
-    if model_key and model_key != DEFAULT_MODEL_KEY:
-        # User manually selected a model - respect their choice but still use orchestrator prompt
+    if model_key:
         selected_model = model_key
-        auto_selected = False
+        auto_selected = (model_key == DEFAULT_MODEL_KEY)
     else:
-        # Auto-select based on task classification
         selected_model = select_primary_model(categories, complexity)
         auto_selected = True
 
@@ -499,7 +595,7 @@ def _call_llm_with_orchestrator(
                 query, raw_response, categories, selected_model
             )
             synthesis_llm = llms.build_llm(
-                "gemini-2.5-flash")  # Synthesis model
+                "gemini-2.5-flash")
             refined = synthesis_llm.invoke(synthesis_prompt)
             final_response = refined.content
             synthesis_used = True
@@ -516,10 +612,8 @@ def _call_llm_with_orchestrator(
             fallback_used=False
         )
 
-        # Combine response with footer
         final_response_with_footer = final_response + footer
 
-        # Return metadata for routing_info
         routing_metadata = {
             "model_key": selected_model,
             "model_name": llms.get_display_name(selected_model),
@@ -534,7 +628,6 @@ def _call_llm_with_orchestrator(
 
     except Exception as e:
         print(f"[_call_llm_with_orchestrator] Error: {e}")
-        # Fallback to default model
         fallback_llm = llms.build_llm(DEFAULT_MODEL_KEY)
         response = fallback_llm.invoke(query)
         return response.content, {
@@ -557,32 +650,26 @@ def _classify_route(query: str, has_documents: bool) -> RouteLabel:
     Uses orchestrator's task classification to make smarter decisions.
 
     Priority:
-      1. agent   — query needs real-time data or calculation
-      2. rag     — query needs uploaded document context AND documents exist
+      1. rag     — documents exist AND query clearly targets them (checked FIRST)
+      2. agent   — query needs real-time data or calculation
       3. direct  — everything else
+
+    RAG is checked before agent to prevent document queries being
+    incorrectly hijacked by broad agent keywords.
     """
     q_lower = query.lower()
 
-    # Agent: real-time / calculation signals
+    categories, complexity = classify_task(query)
+
+    if has_documents:
+        if "data_extraction" in categories or "summarization" in categories:
+            return "rag"
+        if any(kw in q_lower for kw in _RAG_KEYWORDS):
+            return "rag"
+
     if any(kw in q_lower for kw in _AGENT_KEYWORDS):
         return "agent"
 
-    # Use orchestrator to detect if this is a document-heavy task
-    categories, complexity = classify_task(query)
-
-    # Data extraction ALWAYS needs documents
-    if "data_extraction" in categories and has_documents:
-        return "rag"
-
-    # Summarization with documents present
-    if "summarization" in categories and has_documents:
-        return "rag"
-
-    # RAG: document signals AND documents are present
-    if has_documents and any(kw in q_lower for kw in _RAG_KEYWORDS):
-        return "rag"
-
-    # Fallback: direct LLM answer
     return "direct"
 
 
@@ -596,7 +683,6 @@ def router_node(state: ChatState) -> dict:
     query = _get_user_message(state) or ""
     model_key = state.get("model") or DEFAULT_MODEL_KEY
 
-    # Check whether ChromaDB has any indexed documents
     has_documents = False
     try:
         from app.rag.retriever import get_vectorstore_count
@@ -604,7 +690,6 @@ def router_node(state: ChatState) -> dict:
     except Exception:
         has_documents = False
 
-    # Get orchestrator classification for richer routing info
     categories, complexity = classify_task(query)
     route = _classify_route(query, has_documents)
 
@@ -622,7 +707,7 @@ def router_node(state: ChatState) -> dict:
         "routing_info": routing_info,
         "route":        route,
         "rag_context":  None,
-        "orchestrator_info": {  # Store for later use in execution nodes
+        "orchestrator_info": {
             "categories": categories,
             "complexity": complexity,
         }
@@ -651,7 +736,6 @@ def direct_node(state: ChatState) -> dict:
     model_key = state.get("model") or DEFAULT_MODEL_KEY
     history_block = _build_history_block(state['messages'], model_key)
 
-    # Use orchestrator for smart response generation
     response_content, routing_metadata = _call_llm_with_orchestrator(
         query=query,
         history_block=history_block,
@@ -659,7 +743,6 @@ def direct_node(state: ChatState) -> dict:
         rag_context=None
     )
 
-    # Update routing_info with actual model used
     routing_info = state.get("routing_info", {})
     routing_info.update(routing_metadata)
 
@@ -675,7 +758,7 @@ def direct_node(state: ChatState) -> dict:
 def rag_node(state: ChatState) -> dict:
     """
     Retrieval-augmented node — only reached when router says 'rag'.
-    Uses orchestrator for intelligent model selection.
+    Uses orchestrator for intelligent model selection with enhanced RAG formatting.
     """
     query = _get_user_message(state)
     if not query:
@@ -686,11 +769,12 @@ def rag_node(state: ChatState) -> dict:
 
     model_key = state.get("model") or DEFAULT_MODEL_KEY
 
-    # Retrieve context
-    rag_context = ""
+    # Retrieve context with structured result
+    rag_context_result = {"has_context": False,
+                          "formatted_text": "", "count": 0, "raw_chunks": []}
     try:
         from app.rag.retriever import retrieve_context
-        rag_context = retrieve_context(query)
+        rag_context_result = retrieve_context(query, model_key=model_key)
     except RuntimeError as rag_err:
         return {
             "messages": [AIMessage(
@@ -706,37 +790,60 @@ def rag_node(state: ChatState) -> dict:
         }
     except Exception as e:
         print(f"[rag_node] Unexpected RAG error: {e}")
-        rag_context = ""
+        rag_context_result = {"has_context": False,
+                              "formatted_text": "", "count": 0, "raw_chunks": []}
 
     history_block = _build_history_block(state['messages'], model_key)
 
-    if rag_context:
+    # Get model-specific context formatting
+    formatted_context = format_rag_context_for_model(
+        rag_context_result, model_key)
+    rag_instructions = format_rag_instructions(model_key)
+
+    if rag_context_result.get('has_context', False):
+        # Build enhanced prompt with clear RAG instructions
+        enhanced_query = f"""{rag_instructions}
+
+{formatted_context}
+
+User Question: {query}
+
+Now provide your answer based on the document excerpts above:"""
+
         # Use orchestrator with RAG context
         response_content, routing_metadata = _call_llm_with_orchestrator(
-            query=query,
+            query=enhanced_query,
             history_block=history_block,
             model_key=model_key,
-            rag_context=rag_context
+            rag_context=None  # Already embedded in enhanced_query
         )
     else:
-        # No relevant context found — fall back to direct with orchestrator
+        # No relevant context found — be explicit about it
+        no_context_msg = f"""I searched the uploaded documents but couldn't find information related to "{query}".
+
+Based on the documents I have access to, I cannot answer this question. Could you please:
+1. Rephrase your question, or
+2. Upload more relevant documents
+
+Is there something else I can help you with regarding the existing documents?"""
+
+        # Still use orchestrator for natural response
         response_content, routing_metadata = _call_llm_with_orchestrator(
-            query=query,
+            query=no_context_msg,
             history_block=history_block,
             model_key=model_key,
             rag_context=None
         )
-        # Add a note about no context found
-        response_content = "Based on the uploaded documents, I couldn't find specific information about this.\n\n" + response_content
 
     # Update routing_info
     routing_info = state.get("routing_info", {})
     routing_info.update(routing_metadata)
-    routing_info["rag_used"] = bool(rag_context)
+    routing_info["rag_used"] = rag_context_result.get('has_context', False)
+    routing_info["rag_chunks_used"] = rag_context_result.get('count', 0)
 
     return {
         "messages":    [AIMessage(content=response_content)],
-        "rag_context": rag_context or None,
+        "rag_context": rag_context_result.get('formatted_text') if rag_context_result.get('has_context') else None,
         "routing_info": routing_info,
     }
 
@@ -760,11 +867,9 @@ def agent_node(state: ChatState) -> dict:
 
     model_key = state.get("model") or DEFAULT_MODEL_KEY
 
-    # Get orchestrator's recommended model for this task
     categories, complexity = classify_task(query)
     recommended_model = select_primary_model(categories, complexity)
 
-    # Use orchestrator's recommendation unless user overrode
     agent_model = recommended_model if model_key == DEFAULT_MODEL_KEY else model_key
 
     try:
@@ -775,10 +880,8 @@ def agent_node(state: ChatState) -> dict:
         import ast
         import operator as _op
 
-        # ── Tool 1: Web search ────────────────────────────────────────────
         search_tool = DuckDuckGoSearchRun()
 
-        # ── Tool 2: Safe calculator ───────────────────────────────────────
         _SAFE_OPS = {
             ast.Add:  _op.add,
             ast.Sub:  _op.sub,
@@ -820,7 +923,6 @@ def agent_node(state: ChatState) -> dict:
 
         tools = [search_tool, calculator]
 
-        # ── ReAct prompt with orchestrator context ──────────────────────────
         react_prompt = PromptTemplate.from_template(
             "You are a helpful assistant with access to tools.\n\n"
             "Task classification: {categories} (complexity: {complexity})\n"
@@ -859,7 +961,6 @@ def agent_node(state: ChatState) -> dict:
         })
         answer = result.get("output", "No answer returned by agent.")
 
-        # Add attribution footer
         footer = build_attribution_footer(
             categories=categories,
             complexity=complexity,
@@ -870,7 +971,6 @@ def agent_node(state: ChatState) -> dict:
 
         final_answer = answer + footer
 
-        # Update routing_info
         routing_info = state.get("routing_info", {})
         routing_info.update({
             "model_key": agent_model,
@@ -888,13 +988,11 @@ def agent_node(state: ChatState) -> dict:
         }
 
     except ImportError as e:
-        # Graceful fallback if langchain-community not installed
         print(f"[agent_node] Import error — falling back to direct: {e}")
         return direct_node(state)
 
     except Exception as exc:
         print(f"[agent_node] Agent error: {exc}")
-        # Fallback to direct node with orchestrator
         return direct_node(state)
 
 
@@ -904,16 +1002,13 @@ def _compile():
     try:
         builder = StateGraph(ChatState)
 
-        # Register all nodes
         builder.add_node("router_node", router_node)
         builder.add_node("direct_node", direct_node)
         builder.add_node("rag_node",    rag_node)
         builder.add_node("agent_node",  agent_node)
 
-        # Entry: always go to router first
         builder.add_edge(START, "router_node")
 
-        # Conditional branching based on router decision
         builder.add_conditional_edges(
             "router_node",
             _route_selector,
@@ -924,7 +1019,6 @@ def _compile():
             },
         )
 
-        # All execution nodes terminate at END
         builder.add_edge("direct_node", END)
         builder.add_edge("rag_node",    END)
         builder.add_edge("agent_node",  END)
@@ -933,7 +1027,6 @@ def _compile():
 
     except Exception as e:
         print(f"[graph.py] Failed to compile graph: {e}")
-        # Fallback — single node, no checkpointer
         builder = StateGraph(ChatState)
         builder.add_node("router_node", router_node)
         builder.add_node("direct_node", direct_node)

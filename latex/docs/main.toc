@@ -7,7 +7,6 @@
 \contentsline {subsection}{\numberline {1.2}Research Context and Motivation}{2}{subsection.1.2}%
 \contentsline {subsection}{\numberline {1.3}Research Objectives and Questions}{2}{subsection.1.3}%
 \contentsline {subsection}{\numberline {1.4}Research Contributions}{3}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Structure of the Report}{3}{subsection.1.5}%
 \contentsline {section}{\numberline {2}Literature Review}{4}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Large Language Models: Foundations and Architectures}{4}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Retrieval-Augmented Generation}{4}{subsection.2.2}%
@@ -24,46 +23,37 @@
 \contentsline {subsection}{\numberline {3.4}The Ten Deployed Language Models}{10}{subsection.3.4}%
 \contentsline {subsection}{\numberline {3.5}The Orchestrator: Task Classification and Model Selection}{12}{subsection.3.5}%
 \contentsline {subsection}{\numberline {3.6}Query Routing}{13}{subsection.3.6}%
-\contentsline {subsection}{\numberline {3.7}Direct Inference Node}{13}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.7}Direct Inference Node}{14}{subsection.3.7}%
 \contentsline {subsection}{\numberline {3.8}Retrieval-Augmented Generation Node}{14}{subsection.3.8}%
 \contentsline {subsection}{\numberline {3.9}Agentic Execution Node}{15}{subsection.3.9}%
-\contentsline {subsection}{\numberline {3.10}Persistence Layer: MySQL Checkpointing}{15}{subsection.3.10}%
+\contentsline {subsection}{\numberline {3.10}Persistence Layer: MySQL Checkpointing}{16}{subsection.3.10}%
 \contentsline {subsection}{\numberline {3.11}User Interface: Streamlit Application}{16}{subsection.3.11}%
-\contentsline {subsection}{\numberline {3.12}System Design Summary}{16}{subsection.3.12}%
-\contentsline {section}{\numberline {4}Implementation}{19}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Technology Stack}{19}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Project Structure}{19}{subsection.4.2}%
+\contentsline {subsection}{\numberline {3.12}System Design Summary}{17}{subsection.3.12}%
+\contentsline {section}{\numberline {4}Implementation}{18}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Technology Stack}{18}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Project Structure}{18}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}LLM Integration via Groq}{19}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}RAG Document Ingestion Pipeline}{20}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Conversation Thread Management}{21}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.5}Conversation Thread Management}{20}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}Streaming Responses}{21}{subsection.4.6}%
 \contentsline {subsection}{\numberline {4.7}FastAPI REST Backend}{21}{subsection.4.7}%
-\contentsline {section}{\numberline {5}Android Application}{23}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Overview}{23}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Architecture}{23}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Key Features}{23}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}Interaction Flow}{24}{subsection.5.4}%
-\contentsline {subsection}{\numberline {5.5}Offline and Error Handling}{24}{subsection.5.5}%
-\contentsline {section}{\numberline {6}Evaluation}{25}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Experimental Setup}{25}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}HotpotQA Results}{25}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}MuSiQue Results}{25}{subsection.6.3}%
-\contentsline {section}{\numberline {7}Discussion}{26}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Analysis of Research Questions}{26}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Limitations}{26}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Future Work}{27}{subsection.7.3}%
-\contentsline {section}{\numberline {8}Project Resources and Feasibility Analysis}{28}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Required Resources}{28}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Data Requirements}{28}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Ethical Considerations}{28}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Risk Assessment}{28}{subsection.8.4}%
-\contentsline {section}{\numberline {9}Project Implementation Plan}{29}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Methodology Overview}{29}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}System Architecture Flow}{29}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Project Timeline}{29}{subsection.9.3}%
-\contentsline {subsection}{\numberline {9.4}Gantt Chart}{29}{subsection.9.4}%
-\contentsline {section}{\numberline {10}Conclusion}{31}{section.10}%
-\contentsline {section}{References}{32}{section*.18}%
-\contentsline {section}{\numberline {A}Dataset Access and Supplementary Resources}{36}{appendix.A}%
-\contentsline {subsection}{\numberline {A.1}Benchmark Datasets}{36}{subsection.A.1}%
-\contentsline {subsection}{\numberline {A.2}GitHub Repository}{36}{subsection.A.2}%
+\contentsline {section}{\numberline {5}Android Application}{22}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Overview}{22}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Architecture}{22}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Key Features}{22}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Interaction Flow}{23}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Offline and Error Handling}{23}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Evaluation}{24}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Experimental Setup}{24}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}HotpotQA Results}{24}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}MuSiQue Results}{24}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Discussion}{25}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Analysis of Research Questions}{25}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Limitations}{25}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Future Work}{26}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Gantt Chart}{27}{subsection.7.4}%
+\contentsline {section}{\numberline {8}Conclusion}{28}{section.8}%
+\contentsline {section}{References}{29}{section*.17}%
+\contentsline {section}{\numberline {A}Dataset Access and Supplementary Resources}{33}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Benchmark Datasets}{33}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}GitHub Repository}{33}{subsection.A.2}%

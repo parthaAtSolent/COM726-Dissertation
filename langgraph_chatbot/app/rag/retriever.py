@@ -1,36 +1,40 @@
 """
 app/rag/retriever.py
 ─────────────────────
-Retrieves top-K relevant chunks from ChromaDB for a given query.
+Enhanced retrieval with model-compatible formatting.
 """
 
 from __future__ import annotations
 
-# instead of from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
-
 from app.rag.ingestion import VECTORSTORE_DIR, COLLECTION_NAME
 from app.rag.embedder import get_embedder
 
 TOP_K = 4
 
 
-def retrieve_context(query: str) -> str:
+def retrieve_context(query: str, model_key: str = None) -> dict:
     """
-    Run similarity search against the vectorstore.
+    Run similarity search and return structured context.
 
-    Returns a formatted string of relevant chunks ready to inject into the
-    LLM prompt, or an empty string if the vectorstore is empty.
-
-    Raises
-    ------
-    RuntimeError
-        If the vectorstore exists but the similarity search fails (e.g.
-        Ollama is not running). The caller in graph.py should surface this
-        to the user rather than silently dropping context.
+    Returns:
+        dict with keys:
+        - 'has_context': bool
+        - 'raw_chunks': list of dicts with 'content', 'source'
+        - 'formatted_text': str ready for prompt
+        - 'formatted_markdown': str with XML tags (better for some models)
+        - 'count': int number of chunks
     """
     print(f"[RAG] Retrieving context for query: '{query[:100]}...'")
     print(f"[RAG] vectorstore path: {VECTORSTORE_DIR}")
+
+    result = {
+        'has_context': False,
+        'raw_chunks': [],
+        'formatted_text': '',
+        'formatted_markdown': '',
+        'count': 0
+    }
 
     vectorstore = Chroma(
         collection_name=COLLECTION_NAME,
@@ -38,7 +42,7 @@ def retrieve_context(query: str) -> str:
         persist_directory=VECTORSTORE_DIR,
     )
 
-    # Check collection is populated — using public API (chromadb 1.x compatible)
+    # Check if vectorstore has content
     try:
         count = len(vectorstore.get(include=[])["ids"])
         print(f"[RAG] vectorstore has {count} chunks")
@@ -48,11 +52,11 @@ def retrieve_context(query: str) -> str:
 
     if count == 0:
         print("[RAG] vectorstore is empty — skipping retrieval")
-        return ""
+        return result
 
     print(f"[RAG] Searching {count} chunks for relevant content...")
 
-    # Embed query and search — raises if Ollama is down
+    # Embed query and search
     try:
         docs = vectorstore.similarity_search(query, k=TOP_K)
         print(f"[RAG] Similarity search returned {len(docs)} documents")
@@ -66,23 +70,38 @@ def retrieve_context(query: str) -> str:
 
     if not docs:
         print("[RAG] No relevant chunks found")
-        return ""
+        return result
 
     print(f"[RAG] Retrieved {len(docs)} chunk(s)")
 
-    # Print scores if available (for debugging)
+    # Store raw chunks
     for i, doc in enumerate(docs):
         source = doc.metadata.get("source", "unknown")
-        content_preview = doc.page_content[:100]
+        result['raw_chunks'].append({
+            'content': doc.page_content,
+            'source': source,
+            'index': i + 1
+        })
         print(
-            f"[RAG] Chunk {i+1}: source={source}, preview={content_preview}...")
+            f"[RAG] Chunk {i+1}: source={source}, preview={doc.page_content[:100]}...")
 
-    chunks = []
-    for doc in docs:
-        source = doc.metadata.get("source", "unknown")
-        chunks.append(f"[Source: {source}]\n{doc.page_content}")
+    result['count'] = len(docs)
+    result['has_context'] = True
 
-    return "\n\n---\n\n".join(chunks)
+    # Format as plain text with clear separators
+    text_parts = []
+    for chunk in result['raw_chunks']:
+        text_parts.append(f"[Document: {chunk['source']}]\n{chunk['content']}")
+    result['formatted_text'] = "\n\n---\n\n".join(text_parts)
+
+    # Format with clear XML-style tags (works better for instruction-following models)
+    xml_parts = []
+    for chunk in result['raw_chunks']:
+        xml_parts.append(
+            f"<document source='{chunk['source']}'>\n{chunk['content']}\n</document>")
+    result['formatted_markdown'] = "\n\n".join(xml_parts)
+
+    return result
 
 
 def get_vectorstore_count() -> int:

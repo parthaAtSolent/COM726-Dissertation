@@ -204,10 +204,10 @@ The research questions guiding this investigation are: (RQ1) How accurately can 
 
 The principal contributions of this dissertation are as follows. A novel adaptive multi-LLM routing architecture is designed and implemented, capable of classifying queries and directing them to specialist models with task-specific prompting. A selective retrieval necessity predictor is developed that reduces redundant retrieval calls and associated distraction effects. A comprehensive comparative evaluation of ten LLMs is conducted under controlled benchmark conditions using HotpotQA and MuSiQue datasets. An end-to-end Android mobile application is developed that mirrors the full chatbot system through a FastAPI-based REST interface. Finally, a modular, reproducible codebase is released demonstrating integration of LangGraph, ChromaDB, MySQL persistence, and Groq-hosted inference within a unified production-oriented architecture.
 
-\subsection{Structure of the Report}
-\label{subsec:structure}
+% \subsection{Structure of the Report}
+% \label{subsec:structure}
 
-The remainder of this dissertation is organised as follows. Section 2 presents a comprehensive literature review covering LLMs, multi-agent systems, RAG architectures, and benchmark datasets. Section 3 details the system methodology and design. Section 4 describes the full implementation. Section 5 presents the Android application. Section 6 reports experimental evaluation results. Section 7 discusses findings and limitations. Section 8 concludes the dissertation. Appendices provide supplementary materials including dataset links and repository information.
+% The remainder of this dissertation is organised as follows. Section 2 presents a comprehensive literature review covering LLMs, multi-agent systems, RAG architectures, and benchmark datasets. Section 3 details the system methodology and design. Section 4 describes the full implementation. Section 5 presents the Android application. Section 6 reports experimental evaluation results. Section 7 discusses findings and limitations. Section 8 concludes the dissertation. Appendices provide supplementary materials including dataset links and repository information.
 
 \newpage
 
@@ -297,13 +297,7 @@ The proposed system is designed around a modular, graph-based orchestration arch
 
 \begin{figure}[htbp]
     \centering
-    \fbox{\parbox{0.85\linewidth}{
-        \centering
-        \vspace{0.4cm}
-        \textbf{[Figure Placeholder: High-Level System Architecture]}\\[0.3cm]
-        Illustrates the layered architecture of the Adaptive Multi-LLM Agentic RAG system, showing the User Interface layer (Streamlit + session management), the Persistence layer (MySQL + LangGraph checkpointing), the Core Orchestration layer (LangGraph StateGraph), the Routing layer (Intent Classifier + Complexity Estimator), the three Execution Paths (Direct Node, RAG Node, Agent Node), the Model Pool (10 specialist LLMs via Groq), and the Response Synthesis layer.
-        \vspace{0.4cm}
-    }}
+    \includegraphics[width=0.9\linewidth]{../assets/architecture_diagram.png}
     \caption{High-level architecture of the Adaptive Multi-LLM Agentic RAG system.}
     \label{fig:arch_overview}
 \end{figure}
@@ -446,13 +440,7 @@ def _classify_route(query: str, has_documents: bool) -> RouteLabel:
 
 \begin{figure}[htbp]
     \centering
-    \fbox{\parbox{0.85\linewidth}{
-        \centering
-        \vspace{0.4cm}
-        \textbf{[Figure Placeholder: Query Routing Decision Flow]}\\[0.3cm]
-        A detailed flowchart showing the routing decision process: Query Input $\rightarrow$ Keyword Scan (Agent Keywords?) $\rightarrow$ if yes: Agent Path; if no: Orchestrator Classification (categories, complexity) $\rightarrow$ Document-Heavy Task + Documents Present? $\rightarrow$ if yes: RAG Path; if no: Direct Path. Shows how each path proceeds to model selection and response generation.
-        \vspace{0.4cm}
-    }}
+    \includegraphics[height=0.7\linewidth]{../assets/query_routing.png}
     \caption{Query routing decision flowchart for the adaptive multi-path execution architecture.}
     \label{fig:routing_flow}
 \end{figure}
@@ -469,13 +457,7 @@ The \texttt{rag\_node} is activated when the router determines that document con
 
 \begin{figure}[htbp]
     \centering
-    \fbox{\parbox{0.85\linewidth}{
-        \centering
-        \vspace{0.4cm}
-        \textbf{[Figure Placeholder: RAG Pipeline Architecture]}\\[0.3cm]
-        Diagram showing the RAG pipeline: Document Upload $\rightarrow$ Text Extraction (PDF/DOCX/TXT) $\rightarrow$ Chunking (RecursiveCharacterTextSplitter) $\rightarrow$ Embedding (Sentence-Transformer) $\rightarrow$ ChromaDB Vector Store $\rightarrow$ Similarity Search (top-K=4) $\rightarrow$ Context Injection into Specialist Prompt $\rightarrow$ LLM Generation $\rightarrow$ Grounded Response.
-        \vspace{0.4cm}
-    }}
+    \includegraphics[width=0.9\linewidth]{../assets/rag_pipeline.png}
     \caption{RAG pipeline showing document ingestion, embedding, retrieval, and context injection.}
     \label{fig:rag_pipeline}
 \end{figure}
@@ -543,29 +525,13 @@ The web-based user interface is implemented using Streamlit, providing a respons
     \label{fig:ui}
 \end{figure}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[
-        width=0.9\linewidth,
-        height=0.6\textheight,
-        keepaspectratio
-    ]{../assets/flowchart.png}
-    \caption{High-level system flowchart illustrating adaptive routing, retrieval, and agent execution.}
-    \label{fig:system_flowchart}
-\end{figure}
 
 \subsection{System Design Summary}
 \label{subsec:design_summary}
 
 \begin{figure}[htbp]
     \centering
-    \fbox{\parbox{0.85\linewidth}{
-        \centering
-        \vspace{0.4cm}
-        \textbf{[Figure Placeholder: LangGraph StateGraph Topology]}\\[0.3cm]
-        Visual representation of the compiled LangGraph StateGraph showing nodes (router\_node, direct\_node, rag\_node, agent\_node), directed edges, conditional branching edges from router\_node to the three execution nodes based on route value in state, and convergence edges from execution nodes to END.
-        \vspace{0.4cm}
-    }}
+    \includegraphics[width=0.9\linewidth]{../assets/graphical_abstract.png}
     \caption{LangGraph StateGraph topology showing nodes, conditional edges, and execution paths.}
     \label{fig:langgraph_topology}
 \end{figure}
@@ -574,14 +540,16 @@ The system design achieves several key properties that address the limitations i
 
 \newpage
 
-% =================================================
+% % =================================================
+
+
 \section{Implementation}
 \label{sec:implementation}
 
 \subsection{Technology Stack}
 \label{subsec:tech_stack}
 
-The system is implemented in Python 3.12, selected for its extensive ecosystem of AI and NLP libraries and its strong support for asynchronous and concurrent programming patterns. The core dependencies are LangGraph 0.2 for stateful orchestration, LangChain 0.3 for LLM abstraction and tool integration, ChromaDB for vector storage, pymysql for MySQL connectivity, Streamlit for the web frontend, and the Groq Python SDK for accessing hosted LLM inference. The complete dependency set is specified in the project's \texttt{requirements.txt} and \texttt{pyproject.toml} files.
+The system is implemented in Python 3.12, selected for its extensive ecosystem of AI and NLP libraries and its strong support for asynchronous and concurrent programming patterns. The core dependencies are LangGraph 1.1.9 for stateful orchestration, LangChain 1.2.15 for LLM abstraction and tool integration, ChromaDB for vector storage, pymysql for MySQL connectivity, Streamlit for the web frontend, and the Groq Python SDK for accessing hosted LLM inference. The complete dependency set is specified in the project's \texttt{requirements.txt} and \texttt{pyproject.toml} files.
 
 \subsection{Project Structure}
 \label{subsec:project_structure}
@@ -907,49 +875,49 @@ Several promising directions for future research are identified. A learned query
 \newpage
 
 % =================================================
-\section{Project Resources and Feasibility Analysis}
-\label{sec:resources}
+% \section{Project Resources and Feasibility Analysis}
+% \label{sec:resources}
 
-\subsection{Required Resources}
-\label{subsec:resources}
+% \subsection{Required Resources}
+% \label{subsec:resources}
 
-The implementation of the proposed system required the following resources. The software environment comprised Python 3.12, LangGraph 0.2, LangChain 0.3, ChromaDB, Streamlit, FastAPI, and supporting libraries. LLM inference was provided by the Groq free-tier API, which offers rate-limited access to open-weight models without GPU hardware requirements. The MySQL database was deployed as a local development instance and can be migrated to a managed cloud database service for production deployment. Vector storage was handled by a locally persisted ChromaDB instance with planned migration to a managed vector database for scalable production use.
+% The implementation of the proposed system required the following resources. The software environment comprised Python 3.12, LangGraph 0.2, LangChain 0.3, ChromaDB, Streamlit, FastAPI, and supporting libraries. LLM inference was provided by the Groq free-tier API, which offers rate-limited access to open-weight models without GPU hardware requirements. The MySQL database was deployed as a local development instance and can be migrated to a managed cloud database service for production deployment. Vector storage was handled by a locally persisted ChromaDB instance with planned migration to a managed vector database for scalable production use.
 
-\subsection{Data Requirements}
-\label{subsec:data_requirements}
+% \subsection{Data Requirements}
+% \label{subsec:data_requirements}
 
-Publicly available datasets were used exclusively, eliminating significant ethical data access concerns. HotpotQA and MuSiQue are both freely available through their respective official repositories. No personally identifiable information was collected or processed at any stage of the project.
+% Publicly available datasets were used exclusively, eliminating significant ethical data access concerns. HotpotQA and MuSiQue are both freely available through their respective official repositories. No personally identifiable information was collected or processed at any stage of the project.
 
-\subsection{Ethical Considerations}
-\label{subsec:ethics}
+% \subsection{Ethical Considerations}
+% \label{subsec:ethics}
 
-No personal or sensitive data is processed by the system. The project aligns with Solent University institutional ethics policies. The conversational AI system is designed for general-purpose question answering and does not implement features that could be used for surveillance, disinformation generation, or other harmful applications. Model outputs are clearly labelled as AI-generated, and the routing transparency feature actively discloses which model produced each response, supporting informed and critical use of the system.
+% No personal or sensitive data is processed by the system. The project aligns with Solent University institutional ethics policies. The conversational AI system is designed for general-purpose question answering and does not implement features that could be used for surveillance, disinformation generation, or other harmful applications. Model outputs are clearly labelled as AI-generated, and the routing transparency feature actively discloses which model produced each response, supporting informed and critical use of the system.
 
-\subsection{Risk Assessment}
-\label{subsec:risks}
+% \subsection{Risk Assessment}
+% \label{subsec:risks}
 
-The primary technical risks identified for this project include API rate limiting by Groq, which was mitigated through response caching and evaluation scheduling. Integration complexity between LangGraph, LangChain, and ChromaDB was managed through incremental implementation with comprehensive unit testing at each integration point. Model instability arising from external API changes was addressed through abstraction layers that isolate model-specific code behind the \texttt{build\_llm} factory interface. Data quality risks for the benchmark evaluation were mitigated through the use of well-established, peer-reviewed datasets with standardised evaluation protocols.
+% The primary technical risks identified for this project include API rate limiting by Groq, which was mitigated through response caching and evaluation scheduling. Integration complexity between LangGraph, LangChain, and ChromaDB was managed through incremental implementation with comprehensive unit testing at each integration point. Model instability arising from external API changes was addressed through abstraction layers that isolate model-specific code behind the \texttt{build\_llm} factory interface. Data quality risks for the benchmark evaluation were mitigated through the use of well-established, peer-reviewed datasets with standardised evaluation protocols.
 
-\newpage
+% \newpage
 
-% =================================================
-\section{Project Implementation Plan}
-\label{sec:plan}
+% % =================================================
+% \section{Project Implementation Plan}
+% \label{sec:plan}
 
-\subsection{Methodology Overview}
-\label{subsec:methodology_overview}
+% \subsection{Methodology Overview}
+% \label{subsec:methodology_overview}
 
-The project adopted a modular and iterative development methodology structured around four phases. Phase 1 (Research and Planning, January 2026) focused on literature review, dataset selection, and foundational learning of LangGraph, LangChain, and RAG architectures. Phase 2 (Core System Development, February--March 2026) implemented the baseline system, MySQL persistence layer, adaptive routing logic, ChromaDB integration, and agent execution. Phase 3 (System Integration and Evaluation, March--April 2026) conducted benchmark evaluation, hallucination analysis, routing accuracy assessment, and comparative benchmarking. Phase 4 (Documentation and Reporting, April--May 2026) consolidated results and prepared the final dissertation.
+% The project adopted a modular and iterative development methodology structured around four phases. Phase 1 (Research and Planning, January 2026) focused on literature review, dataset selection, and foundational learning of LangGraph, LangChain, and RAG architectures. Phase 2 (Core System Development, February--March 2026) implemented the baseline system, MySQL persistence layer, adaptive routing logic, ChromaDB integration, and agent execution. Phase 3 (System Integration and Evaluation, March--April 2026) conducted benchmark evaluation, hallucination analysis, routing accuracy assessment, and comparative benchmarking. Phase 4 (Documentation and Reporting, April--May 2026) consolidated results and prepared the final dissertation.
 
-\subsection{System Architecture Flow}
-\label{subsec:arch_flow}
+% \subsection{System Architecture Flow}
+% \label{subsec:arch_flow}
 
-The full LangGraph execution flow, from user input to response delivery, proceeds through the following sequence. The user submits a message through the Streamlit interface. The message is appended to the \texttt{ChatState} messages list. The LangGraph graph is invoked with the updated state, entering at the \texttt{router\_node}. The router classifies the query and sets the \texttt{route} field. The conditional edge function reads the route and directs execution to the appropriate node. The selected execution node processes the query through the orchestrator, retrieval, or agent pipeline. The response is returned as an \texttt{AIMessage} appended to the state. The completed state is persisted to MySQL by the \texttt{MySQLSaver} checkpointer. The streaming module yields the response tokens to the Streamlit frontend for progressive display.
+% The full LangGraph execution flow, from user input to response delivery, proceeds through the following sequence. The user submits a message through the Streamlit interface. The message is appended to the \texttt{ChatState} messages list. The LangGraph graph is invoked with the updated state, entering at the \texttt{router\_node}. The router classifies the query and sets the \texttt{route} field. The conditional edge function reads the route and directs execution to the appropriate node. The selected execution node processes the query through the orchestrator, retrieval, or agent pipeline. The response is returned as an \texttt{AIMessage} appended to the state. The completed state is persisted to MySQL by the \texttt{MySQLSaver} checkpointer. The streaming module yields the response tokens to the Streamlit frontend for progressive display.
 
-\subsection{Project Timeline}
-\label{subsec:timeline}
+% \subsection{Project Timeline}
+% \label{subsec:timeline}
 
-The project was scheduled over a multi-phase timeline spanning from mid-January to early May 2026. The implementation progressed through four structured stages. The initial phase focused on research and planning, including literature review, dataset selection, and foundational learning of retrieval and orchestration frameworks. This was followed by a core system execution phase, where the baseline system, persistence layer, adaptive routing logic, retrieval components, and agent execution mechanisms were incrementally implemented. Subsequent stages emphasised system integration and experimental evaluation, including hallucination analysis, routing accuracy assessment, and comparative benchmarking across different execution paths. The final phase was dedicated to documentation, result consolidation, and preparation of the final report.
+% The project was scheduled over a multi-phase timeline spanning from mid-January to early May 2026. The implementation progressed through four structured stages. The initial phase focused on research and planning, including literature review, dataset selection, and foundational learning of retrieval and orchestration frameworks. This was followed by a core system execution phase, where the baseline system, persistence layer, adaptive routing logic, retrieval components, and agent execution mechanisms were incrementally implemented. Subsequent stages emphasised system integration and experimental evaluation, including hallucination analysis, routing accuracy assessment, and comparative benchmarking across different execution paths. The final phase was dedicated to documentation, result consolidation, and preparation of the final report.
 
 \subsection{Gantt Chart}
 \label{subsec:gantt}
