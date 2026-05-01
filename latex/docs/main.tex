@@ -51,6 +51,21 @@
 \geometry{margin=1in}
 
 % =================================================
+% Algorithms                              ← NEW
+% =================================================
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Rename float label to match document style
+\floatname{algorithm}{Algorithm}
+
+% Typographic helpers used in algorithm bodies
+\newcommand{\kw}[1]{\textbf{#1}}
+\newcommand{\ty}[1]{\texttt{#1}}
+\newcommand{\cmt}[1]{\textcolor{gray}{$\triangleright$ \textit{#1}}}
+\algrenewcommand{\algorithmiccomment}[1]{\hfill\cmt{#1}}
+
+% =================================================
 % TOC customization
 % =================================================
 \usepackage[titles]{tocloft}
@@ -66,6 +81,12 @@
 % =================================================
 \usepackage[hidelinks]{hyperref}
 
+
+% =================================================
+% pdf imports
+% =================================================
+\usepackage{pdfpages}
+
 % =================================================
 % Title (UNCHANGED AS REQUESTED)
 % =================================================
@@ -77,9 +98,8 @@ Adaptive Multi-LLM Agentic RAG with Dynamic Task Routing and Retrieval Planning
 \author{Partha Pratim Mazumder}
 \date{}
 
-% =================================================
-% Document Begins
-% =================================================
+
+
 \begin{document}
 
 % ---------------- Custom Title Page ----------------
@@ -90,7 +110,7 @@ Adaptive Multi-LLM Agentic RAG with Dynamic Task Routing and Retrieval Planning
     \includegraphics[width=0.3\textwidth]{../assets/solent_logo.png}\\[0.8cm]
 
     {\LARGE \textbf{SOLENT UNIVERSITY SOUTHAMPTON}}\\[0.4cm]
-    {\large Department of Science and Engineering}
+    {\large School of Technologies and Maritime Industries}
 
     \vspace{1.5cm}
 
@@ -126,18 +146,6 @@ Adaptive Multi-LLM Agentic RAG with Dynamic Task Routing and Retrieval Planning
 % =================================================
 \pagenumbering{roman}
 
-% ---- Abstract ----
-\newpage
-\section*{Abstract}
-\addcontentsline{toc}{section}{Abstract}
-
-The rapid proliferation of large language models (LLMs) has created both unprecedented opportunities and fundamental challenges for the design of scalable, reliable conversational AI systems. Contemporary architectures predominantly employ monolithic, single-model pipelines that apply the same inference strategy regardless of the nature, complexity, or domain requirements of the incoming query. This uniform approach incurs unnecessary computational overhead, elevates hallucination risk for knowledge-intensive questions, and underutilises the complementary strengths inherent to different model architectures. This dissertation presents the design, implementation, and evaluation of an Adaptive Multi-LLM Agentic Retrieval-Augmented Generation (RAG) system that addresses these limitations through dynamic task routing, specialist model delegation, and selective retrieval planning.
-
-The proposed system is implemented using LangGraph as the stateful orchestration backbone, integrating ten heterogeneous open-weight and API-based language models: DeepSeek-R1, Falcon-3, Gemini-2.5-Flash, Gemma-3-270M, Granite-3-Dense-2B, LLaMA-3.1-8B-Instant, Mistral-7B, Phi-3-3.8B, Qwen2.5-Coder-7B, and Qwen3.5-0.8B. A central orchestration layer classifies each incoming query into task categories (reasoning, coding, summarisation, data extraction, general knowledge) and infers complexity to dynamically select the most appropriate specialist model. The routing mechanism directs queries to one of three execution paths: direct LLM inference, retrieval-augmented generation via a ChromaDB vector store, or agentic multi-step execution equipped with real-time web search and computational tools. State persistence is managed through a MySQL-backed checkpointing mechanism, enabling resumable multi-turn conversations across sessions.
-
-The system is evaluated on the HotpotQA and MuSiQue multi-hop question-answering benchmark datasets, which assess performance on queries requiring evidence aggregation from multiple documents or reasoning chains. Evaluation metrics include Exact Match (EM), F1 Score, Retrieval Precision, Routing Accuracy, and Average Response Latency. A companion Android application mirrors the full chatbot functionality, extending accessibility to mobile users through a REST API backend. The key contributions of this work include a novel intent-aware routing architecture, a task-adaptive specialist model selection mechanism, an evidence that selective retrieval activation reduces hallucination frequency relative to always-on retrieval baselines, and a comprehensive comparative analysis of ten LLMs under controlled benchmark conditions. The findings demonstrate that adaptive multi-LLM orchestration consistently outperforms monolithic baselines in both accuracy and computational efficiency, validating the core research thesis.
-
-\newpage
 
 % ---- Table of Contents ----
 \tableofcontents
@@ -158,128 +166,107 @@ The system is evaluated on the HotpotQA and MuSiQue multi-hop question-answering
 \addcontentsline{toc}{section}{List of Listings}
 \newpage
 
+% ---- List of Algorithms ----          ← NEW
+\listofalgorithms
+\addcontentsline{toc}{section}{List of Algorithms}
+\newpage
+
+
+
+% ---- Abstract ----
+\newpage
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+The rapid growth of large language models (LLMs) creates both opportunities and challenges for scalable conversational AI. Most current systems rely on monolithic pipelines that apply uniform inference strategies, leading to inefficiencies, increased hallucination risk, and underutilisation of diverse model strengths. This dissertation presents an Adaptive Multi-LLM Agentic Retrieval-Augmented Generation (RAG) system that addresses these limitations through dynamic task routing, specialist model selection, and selective retrieval.
+
+Built on LangGraph, the system integrates ten heterogeneous open-weight and API-based models. A central orchestration layer classifies queries by task type and complexity, routing them to one of three execution paths: direct inference, retrieval-augmented generation using a ChromaDB vector store, or agentic multi-step execution with web search and computational tools. State persistence is managed via a MySQL-backed checkpointing mechanism, enabling resumable multi-turn interactions.
+
+The system is evaluated on the HotpotQA and MuSiQue multi-hop question-answering benchmarks using metrics including Exact Match, F1 Score, Retrieval Precision, Routing Accuracy, and response latency. A companion Android application extends functionality via a REST API. Key contributions include an intent-aware routing architecture, adaptive specialist model selection, and evidence that selective retrieval reduces hallucinations compared to always-on approaches. Results demonstrate that adaptive multi-LLM orchestration outperforms monolithic baselines in both accuracy and computational efficiency, supporting the core research thesis.
+
+\newpage
+
+
 % =================================================
 % Main Content
 % =================================================
 \pagenumbering{arabic}
 
-
-% =================================================
 \section{Introduction}
 \label{sec:introduction}
 
-Recent advances in large language models (LLMs) have fundamentally transformed the landscape of artificial intelligence, enabling conversational systems capable of sophisticated reasoning, code generation, open-domain question answering, and instruction following (Brown et al., 2020; Wei et al., 2022). The emergence of transformer-based architectures, culminating in models such as GPT-4, LLaMA, Mistral, and Gemini, has democratised access to high-quality generative capabilities and spurred significant interest in building production-grade AI assistants across diverse application domains (Touvron et al., 2023; Jiang et al., 2023; Team et al., 2024).
+Recent advances in large language models (LLMs) have transformed artificial intelligence, enabling systems capable of sophisticated reasoning, code generation, and instruction following (Brown et al., 2020; Wei et al., 2022). Models such as GPT-4, LLaMA, Mistral, and Gemini have democratised access to generative capabilities and spurred interest in production-grade AI assistants across diverse domains (Touvron et al., 2023; Jiang et al., 2023; Team et al., 2024).
 
-Despite these advances, a critical architectural limitation persists in most deployed systems: the reliance on monolithic pipelines in which a single language model handles all queries uniformly, irrespective of task complexity, domain specificity, or the information retrieval requirements of the input (Singh et al., 2025). Such homogeneous architectures are inherently suboptimal. Simple factual or conversational queries do not benefit from the overhead of retrieval augmentation, yet complex multi-hop reasoning tasks may fail entirely without access to structured external knowledge. Similarly, coding queries demand models trained on programming corpora, while mathematical reasoning benefits from chain-of-thought specialists. Applying a single generalised model to all of these scenarios simultaneously results in unnecessary latency, elevated hallucination risk, and wasteful consumption of computational resources.
+Despite these advances, most deployed systems rely on monolithic pipelines in which a single model handles all queries uniformly, regardless of task complexity or retrieval requirements (Singh et al., 2025). This is inherently suboptimal: simple queries incur unnecessary retrieval overhead, while complex multi-hop tasks may fail without structured external knowledge. Retrieval-Augmented Generation (RAG) mitigates hallucinations in knowledge-intensive settings (Lewis et al., 2020), yet indiscriminate retrieval introduces noise and latency for queries the model can already answer accurately (Shi et al., 2023; Asai et al., 2023). Agentic extensions further compound this by imposing execution overhead regardless of query complexity (Yao et al., 2023).
 
-Retrieval-Augmented Generation (RAG) has emerged as the primary strategy for mitigating hallucinations in knowledge-intensive settings by grounding model outputs in externally retrieved evidence (Lewis et al., 2020). However, na\"{i}ve RAG architectures that perform retrieval on every query introduce retrieval noise and latency for queries that the model's parametric knowledge can already answer accurately. This indiscriminate retrieval strategy has been identified as a key source of inefficiency in deployed systems (Shi et al., 2023; Asai et al., 2023). Agentic extensions of RAG, which embed autonomous reasoning agents capable of multi-step planning and tool use, offer powerful capabilities for complex queries but incur significant execution overhead that is unwarranted for straightforward requests (Paranjape et al., 2023; Yao et al., 2023).
+This dissertation proposes an Adaptive Multi-LLM Agentic RAG system addressing these limitations through three innovations: (1) an intent-aware query router that classifies queries by task type and complexity; (2) a specialist model orchestration layer selecting dynamically from ten heterogeneous LLMs; and (3) a retrieval necessity predictor that activates document retrieval only when beneficial. These components form a cost-aware, quality-preserving pipeline implemented using the LangGraph stateful orchestration framework.
 
-This dissertation proposes and implements an Adaptive Multi-LLM Agentic RAG system that addresses these limitations through a unified framework comprising three key innovations. First, an intent-aware query routing mechanism classifies incoming queries by task category and complexity, directing each query to the most appropriate execution path. Second, a specialist model orchestration layer dynamically selects from a pool of ten heterogeneous LLMs to maximise response quality for the inferred task type. Third, a retrieval necessity predictor determines whether a given query requires document retrieval, real-time web search, or can be answered from parametric model knowledge alone. Together, these components form a cost-aware, quality-preserving conversational AI pipeline implemented using the LangGraph stateful orchestration framework.
+\subsection{Problem Definition and Motivation}
+\label{subsec:problem_motivation}
 
-\subsection{Problem Definition}
-\label{subsec:problem_definition}
+The central problem is the inefficiency of uniform inference strategies in LLM-based conversational systems. Static RAG pipelines that apply retrieval unconditionally introduce three failure modes: (i) latency overhead for queries whose answers lie within parametric knowledge; (ii) retrieval noise that degrades responses otherwise answerable by direct inference (Shi et al., 2023); and (iii) suboptimal performance from monolithic model selection that ignores the complementary specialisations of different architectures.
 
-The central problem addressed by this dissertation is the inefficiency and inaccuracy of uniform inference strategies in contemporary LLM-based conversational systems. Static RAG pipelines that apply retrieval unconditionally introduce three categories of failure. First, retrieval overhead is incurred even for queries whose answers are fully contained within the model's pre-training knowledge, increasing latency unnecessarily. Second, irrelevant retrieved documents introduce distractors into the prompt context, potentially degrading response quality for queries that would otherwise be answered correctly by direct inference (Shi et al., 2023). Third, monolithic model selection fails to exploit the complementary specialisations of different model architectures, leading to suboptimal performance on domain-specific tasks such as code generation, mathematical reasoning, and multi-hop inference.
-
-Furthermore, always-on agentic systems that default to multi-step tool-use execution for all queries impose substantial computational and latency costs that are incompatible with real-time user-facing deployments. The absence of principled routing mechanisms thus fundamentally limits the scalability, efficiency, and accuracy of state-of-the-art conversational AI systems.
-
-\subsection{Research Context and Motivation}
-\label{subsec:motivation}
-
-The motivation for this research arises from the convergence of two significant trends in applied natural language processing. First, the proliferation of open-weight models has made it feasible to deploy diverse specialist LLMs within a single system, enabling selective routing to task-appropriate models rather than relying on a single general-purpose system (Jiang et al., 2023; Touvron et al., 2023). Second, the development of graph-based orchestration frameworks such as LangGraph and LangChain has provided the infrastructure needed to implement stateful, conditional multi-model pipelines with persistent conversation management (Zhao et al., 2024).
-
-Emerging work on frameworks such as ReAct (Yao et al., 2023), SELF-RAG (Asai et al., 2023), and Adaptive RAG (Jeong et al., 2024) demonstrates that conditional retrieval and reflection can significantly improve response quality and reduce hallucination rates. However, these approaches generally assume a single underlying model. The present research extends this paradigm to a multi-model setting, investigating how dynamic routing across specialist models interacts with adaptive retrieval strategies to yield improvements across diverse query types.
+This research is motivated by two converging trends. First, the proliferation of open-weight models makes selective routing to task-appropriate specialists feasible within a single system (Touvron et al., 2023; Jiang et al., 2023). Second, graph-based orchestration frameworks such as LangGraph provide infrastructure for stateful, conditional multi-model pipelines (Zhao et al., 2024). Frameworks including ReAct (Yao et al., 2023), SELF-RAG (Asai et al., 2023), and Adaptive RAG (Jeong et al., 2024) demonstrate that conditional retrieval improves quality and reduces hallucinations, but assume a single underlying model. This work extends the paradigm to a multi-model setting.
 
 \subsection{Research Objectives and Questions}
 \label{subsec:objectives}
 
-The primary aim of this research is to design, implement, and evaluate an adaptive multi-LLM conversational framework that improves reasoning accuracy, computational efficiency, and robustness through dynamic task routing and selective retrieval planning. The specific research objectives are as follows.
+This research aims to design, implement, and evaluate an adaptive multi-LLM framework that improves reasoning accuracy and computational efficiency through dynamic routing and selective retrieval. The specific objectives are: (O1) design an intent-aware router that classifies queries by category and complexity; (O2) implement a specialist LLM delegation layer across ten heterogeneous models; (O3) develop an adaptive RAG pipeline that activates retrieval only when its predicted benefit exceeds its cost; (O4) evaluate the system on multi-hop QA benchmarks against single-model baselines; and (O5) deploy the system via a REST API consumed by a mobile Android application.
 
-The first objective is to design an intent-aware routing mechanism capable of classifying queries by task category and complexity with sufficient accuracy to enable beneficial routing decisions. The second objective is to implement a specialist LLM delegation layer that selects from ten heterogeneous models based on inferred task requirements. The third objective is to develop an adaptive RAG pipeline that activates document retrieval only when the predicted benefit of retrieval exceeds its cost. The fourth objective is to evaluate the complete system on standard multi-hop QA benchmarks and compare its performance against single-model baselines. The fifth objective is to build a mobile Android application that exposes the full chatbot capabilities to end users through a REST API.
-
-The research questions guiding this investigation are: (RQ1) How accurately can an intent-aware routing agent determine whether a query requires retrieval, specialised reasoning, or direct inference? (RQ2) Does delegating tasks to specialist LLMs outperform monolithic single-model approaches in accuracy and efficiency? (RQ3) Can adaptive retrieval planning reduce hallucination frequency and computational overhead relative to always-on RAG? (RQ4) When does agentic multi-step execution provide measurable benefits over direct generation? (RQ5) How does routing performance vary across different task categories and query complexity levels?
+The guiding research questions are:
+\begin{itemize}
+    \item \textbf{RQ1:} How accurately can an intent-aware router determine whether a query requires retrieval, specialised reasoning, or direct inference?
+    \item \textbf{RQ2:} Does delegating tasks to specialist LLMs outperform monolithic approaches in accuracy and efficiency?
+    \item \textbf{RQ3:} Can adaptive retrieval planning reduce hallucination frequency and computational overhead relative to always-on RAG?
+    \item \textbf{RQ4:} When does agentic multi-step execution provide measurable benefits over direct generation?
+    \item \textbf{RQ5:} How does routing performance vary across task categories and query complexity levels?
+\end{itemize}
 
 \subsection{Research Contributions}
 \label{subsec:contributions}
 
-The principal contributions of this dissertation are as follows. A novel adaptive multi-LLM routing architecture is designed and implemented, capable of classifying queries and directing them to specialist models with task-specific prompting. A selective retrieval necessity predictor is developed that reduces redundant retrieval calls and associated distraction effects. A comprehensive comparative evaluation of ten LLMs is conducted under controlled benchmark conditions using HotpotQA and MuSiQue datasets. An end-to-end Android mobile application is developed that mirrors the full chatbot system through a FastAPI-based REST interface. Finally, a modular, reproducible codebase is released demonstrating integration of LangGraph, ChromaDB, MySQL persistence, and Groq-hosted inference within a unified production-oriented architecture.
-
-% \subsection{Structure of the Report}
-% \label{subsec:structure}
-
-% The remainder of this dissertation is organised as follows. Section 2 presents a comprehensive literature review covering LLMs, multi-agent systems, RAG architectures, and benchmark datasets. Section 3 details the system methodology and design. Section 4 describes the full implementation. Section 5 presents the Android application. Section 6 reports experimental evaluation results. Section 7 discusses findings and limitations. Section 8 concludes the dissertation. Appendices provide supplementary materials including dataset links and repository information.
+The principal contributions of this dissertation are:
+\begin{itemize}
+    \item A novel adaptive multi-LLM routing architecture that classifies queries and directs them to specialist models with task-specific prompting.
+    \item A selective retrieval necessity predictor that reduces redundant retrieval calls and associated distraction effects.
+    \item A comprehensive comparative evaluation of ten LLMs under controlled benchmark conditions using HotpotQA and MuSiQue.
+    \item An end-to-end Android mobile application exposing full chatbot functionality through a FastAPI-based REST interface.
+    \item A modular, reproducible codebase integrating LangGraph, ChromaDB, MySQL persistence, and Groq-hosted inference within a unified production-oriented architecture.
+\end{itemize}
 
 \newpage
-
 % =================================================
+
+
 \section{Literature Review}
 \label{sec:literature_review}
 
-\subsection{Large Language Models: Foundations and Architectures}
-\label{subsec:llm_foundations}
+\subsection{Large Language Models and Retrieval-Augmented Generation}
+\label{subsec:llm_rag}
 
-The development of large language models has been defined by a series of architectural and scaling innovations rooted in the transformer architecture introduced by Vaswani et al. (2017). The transformer's attention mechanism, which enables the model to attend to all positions in the input sequence simultaneously, proved significantly more effective for language modelling than recurrent architectures. The subsequent GPT series demonstrated that pre-training on large-scale text corpora with a causal language modelling objective, followed by task-specific fine-tuning, produced models with broad generative capabilities (Radford et al., 2019).
+The development of large language models stems from the transformer architecture of Vaswani et al. (2017), whose attention mechanism proved more effective for language modelling than recurrent approaches. GPT-3 (Brown et al., 2020) marked a qualitative shift by demonstrating complex task performance through in-context learning, while instruction tuning (Wei et al., 2022; Ouyang et al., 2022) further aligned model behaviour with user intent via supervised fine-tuning and RLHF. The open-weight ecosystem expanded with LLaMA (Touvron et al., 2023), Mistral-7B (Jiang et al., 2023), and Phi-3 (Abdin et al., 2024), establishing the feasibility of deploying diverse specialist models in resource-constrained environments and directly motivating the multi-LLM approach of this dissertation.
 
-The emergence of GPT-3 (Brown et al., 2020) marked a qualitative shift in language model capabilities, demonstrating that sufficiently large models could perform complex tasks through in-context learning without parameter updates. Chowdhery et al. (2022) extended these findings with PaLM, demonstrating strong few-shot performance across reasoning tasks through chain-of-thought prompting. Wei et al. (2022) showed that chain-of-thought prompting unlocks emergent reasoning capabilities in models above a certain scale threshold. Instruction tuning, introduced by Wei et al. (2022) and extended in InstructGPT (Ouyang et al., 2022), aligned model behaviour with user intent through supervised fine-tuning on instruction-response pairs and reinforcement learning from human feedback (RLHF).
+Retrieval-Augmented Generation (RAG), introduced by Lewis et al. (2020), grounds generation in externally retrieved evidence to reduce hallucination and extend the model's effective knowledge horizon. Dense retrieval (Karpukhin et al., 2020) and Fusion-in-Decoder (Izacard and Grave, 2021) improved retrieval quality, while Shi et al. (2023) showed that irrelevant passages actively degrade generation, motivating retrieval filtering. SELF-RAG (Asai et al., 2023) introduced reflection tokens to determine retrieval necessity, and Adaptive RAG (Jeong et al., 2024) extended this by dynamically selecting between no retrieval, single-hop, and iterative strategies based on query complexity. PAR-RAG (Zhang et al., 2025) further improves multi-hop factual consistency through complexity-aware plan decomposition. These adaptive retrieval approaches form the theoretical basis for the retrieval necessity predictor implemented in this dissertation.
 
-The open-weight model ecosystem has expanded substantially. LLaMA (Touvron et al., 2023) and its successor LLaMA-2 demonstrated that models trained on carefully curated datasets can match or exceed the performance of larger proprietary models on standard benchmarks. Mistral-7B (Jiang et al., 2023) introduced grouped-query attention and sliding window attention mechanisms that improve inference efficiency. Phi-3 (Abdin et al., 2024) showed that smaller models trained on high-quality synthetic data can achieve strong performance on reasoning tasks. These developments established the feasibility of deploying diverse specialist models within resource-constrained production environments, providing the foundational motivation for the multi-LLM approach pursued in this dissertation.
+\subsection{Agentic Systems and Graph-Based Orchestration}
+\label{subsec:agentic_orchestration}
 
-\subsection{Retrieval-Augmented Generation}
-\label{subsec:rag}
+The extension of LLMs to agentic settings began with ReAct (Yao et al., 2023), which interleaved reasoning traces with tool execution to improve multi-hop QA and decision-making. ART (Paranjape et al., 2023) and AutoTool (Zou et al., 2025) extended this by enabling automatic multi-step reasoning programs with dynamic tool selection. Multi-agent architectures further expanded these capabilities: MAO-ARAG (Chen et al., 2025) coordinates cost-aware workflows across specialised retriever, reasoner, and verifier agents; MA-RAG (Nguyen et al., 2025) leverages collaborative chain-of-thought reasoning without additional training; and RAG-Gym (Xiong et al., 2025) enables agents to learn effective retrieval strategies through actor-critic training. The Mixture of Agents paradigm (Wang et al., 2024) improves output quality through layered model synthesis, while Ding et al. (2024) demonstrate that intelligent LLM routing can match large-model performance at substantially lower inference cost.
 
-Retrieval-Augmented Generation (RAG) was formally introduced by Lewis et al. (2020) as a framework for combining parametric model knowledge with non-parametric retrieval from external document collections. By conditioning the generation process on retrieved evidence, RAG reduces hallucination, extends the effective knowledge horizon of the model, and enables fact verification against authoritative sources. The original formulation used a dense passage retrieval (DPR) component to retrieve relevant documents, which were then concatenated with the query as context for a sequence-to-sequence generator.
+The practical implementation of such pipelines is enabled by graph-based orchestration frameworks. LangChain (Chase, 2022) provided foundational abstractions for composing LLM calls with tools and retrieval, while LangGraph (Zhao et al., 2024) extends this with a stateful graph execution model supporting conditional routing, cyclic agentic loops, and fault-tolerant checkpointing. The present system builds on LangGraph's checkpointing mechanism with a custom MySQL-backed persistence layer, replacing the default in-memory saver to support production-grade multi-user conversation management across server restarts.
 
-Subsequent work has expanded and refined the RAG paradigm along multiple dimensions. Karpukhin et al. (2020) demonstrated that dense retrieval using bi-encoder architectures outperforms sparse BM25 retrieval for open-domain QA. Izacard and Grave (2021) introduced Fusion-in-Decoder, which attends over multiple retrieved documents jointly during generation rather than concatenating them, improving performance on multi-hop questions. Shi et al. (2023) identified that irrelevant retrieved passages can actively harm model performance, motivating research into retrieval quality filtering and reranking mechanisms.
+\subsection{Benchmarks, Hallucination, and Research Gaps}
+\label{subsec:benchmarks_gaps}
 
-SELF-RAG (Asai et al., 2023) introduced a principled approach to adaptive retrieval by training the model to generate reflection tokens that determine whether retrieval is necessary and evaluate the quality of retrieved passages. Adaptive RAG (Jeong et al., 2024) extended this concept by dynamically selecting between no retrieval, single-hop retrieval, and iterative retrieval strategies based on query complexity. PAR-RAG (Zhang et al., 2025) addresses multi-hop question answering through complexity-aware plan decomposition and credibility verification, significantly improving factual consistency on benchmarks such as HotpotQA and MuSiQue. These adaptive retrieval approaches form the theoretical basis for the retrieval necessity predictor implemented in this dissertation. Singh et al. (2025) provide a comprehensive survey of agentic RAG architectures, cataloguing the progression from simple retrieve-then-generate pipelines to complex multi-agent systems capable of iterative refinement and self-evaluation.
+Evaluation of complex reasoning capabilities relies on multi-hop QA benchmarks. HotpotQA (Yang et al., 2018) provides 113,000 Wikipedia-based questions requiring bridging or comparison across two documents, while MuSiQue (Trivedi et al., 2022) constructs 2--4 hop compositional questions with unanswerable distractors, offering a more controlled and challenging setting. Both datasets are evaluated using Exact Match (EM) and token-level F1 score, which together form the quantitative basis for the experimental evaluation in Section~\ref{sec:results}. Hallucination---the generation of factually incorrect content---remains a critical reliability challenge (Ji et al., 2023; Huang et al., 2023). RAG significantly reduces factuality hallucinations (Lewis et al., 2020), but noisy retrieved passages introduce new failure modes (Shi et al., 2023), motivating the selective retrieval strategy adopted here. On the deployment side, server-side inference via REST APIs has become the dominant pattern for mobile AI, decoupling inference from device constraints (Howard et al., 2019); the Android application in this dissertation follows this pattern using FastAPI with streaming support.
 
-\subsection{Multi-Agent and Agentic Systems}
-\label{subsec:multi_agent}
-
-The extension of language models to agentic settings, where models interact with external tools and environments through iterative action-observation cycles, has been a major research direction. ReAct (Yao et al., 2023) proposed interleaving reasoning traces with action execution, enabling models to decompose complex tasks and use tools such as web search and calculators within a unified generation process. This framework demonstrated significant improvements on multi-hop QA and decision-making benchmarks, establishing the viability of tool-augmented LLM agents for open-domain tasks.
-
-Paranjape et al. (2023) introduced ART (Automatic multi-step Reasoning and Tool-use), which automatically generates multi-step reasoning programs augmented with tool calls, enabling complex task completion without task-specific training data. AutoTool (Zou et al., 2025) advances this direction with dynamic tool selection and integration, enabling models to adaptively select from a library of tools based on the requirements of the current step in a reasoning chain.
-
-Multi-agent architectures extend individual agent capabilities by enabling collaboration between multiple specialised agents. MAO-ARAG (Chen et al., 2025) introduces a multi-agent orchestration framework for adaptive RAG, coordinating cost-aware workflow planning across specialised retriever, reasoner, and verifier agents. MA-RAG (Nguyen et al., 2025) emphasises collaborative chain-of-thought reasoning among multiple agents without requiring additional training, leveraging the existing capabilities of pre-trained models through carefully designed interaction protocols. RAG-Gym (Xiong et al., 2025) introduces a systematic framework for optimising language agents for RAG tasks through actor-critic training and process-level supervision, enabling agents to learn effective retrieval and reasoning strategies from experience.
-
-The Mixture of Agents (MoA) paradigm (Wang et al., 2024) proposes using multiple LLMs in a layered architecture where one model generates an initial response and subsequent models refine and synthesise it, improving output quality through a form of collective intelligence. This synthesis-based approach inspired the optional response refinement step implemented in the orchestrator of the present system. The concept of LLM routing, where queries are dispatched to the most capable or cost-effective model based on predicted difficulty, has been explored by Ding et al. (2024), who demonstrated that intelligent routing can match or exceed the performance of always-using the largest model while substantially reducing inference costs.
-
-\subsection{Graph-Based Orchestration Frameworks}
-\label{subsec:langgraph}
-
-The practical implementation of multi-agent and conditional LLM pipelines has been significantly facilitated by the development of graph-based orchestration frameworks. LangChain (Chase, 2022) provided a foundational abstraction layer for composing LLM calls with tools, memory, and retrieval components, enabling rapid prototyping of complex AI pipelines. LangGraph (Zhao et al., 2024) extends LangChain with a stateful graph execution model inspired by the Pregel distributed graph processing system, representing pipeline logic as directed graphs of nodes and edges with persistent shared state. This design enables complex conditional routing, cyclic execution for iterative agentic loops, and fault-tolerant checkpointing, making it well-suited to the adaptive multi-path architecture implemented in this dissertation.
-
-The checkpointing mechanism provided by LangGraph allows conversation state to be persisted between turns, enabling long-running multi-turn dialogues and resumable agentic task execution. This capability is extended in the present system with a custom MySQL-backed checkpointer that provides persistent storage across server restarts and multiple concurrent users, replacing the default in-memory saver with a production-grade persistence layer.
-
-\subsection{Benchmark Datasets for Multi-Hop Question Answering}
-\label{subsec:benchmarks}
-
-The evaluation of complex reasoning and retrieval capabilities in language model systems relies on standardised benchmark datasets that test beyond simple single-hop factual recall. HotpotQA (Yang et al., 2018) is a large-scale dataset of 113,000 Wikipedia-based questions requiring multi-hop reasoning across two supporting documents. Questions in HotpotQA are designed to require bridging entities or comparing attributes across multiple passages, making them a rigorous test of both retrieval quality and reasoning capability. The dataset provides gold supporting facts that enable evaluation of reasoning chain faithfulness in addition to final answer correctness.
-
-MuSiQue (Trivedi et al., 2022) is a compositional multi-hop QA dataset constructed through a systematic process of chaining together single-hop sub-questions into 2--4 hop questions. Unlike HotpotQA, MuSiQue explicitly controls the number of reasoning hops and includes ``unanswerable'' distractors, providing a more controlled and challenging evaluation setting. Trivedi et al. (2022) demonstrate that performance on MuSiQue drops sharply relative to HotpotQA for most systems, reflecting the greater compositional difficulty of its construction methodology.
-
-Evaluation metrics used on these benchmarks include Exact Match (EM), which measures the proportion of predicted answers that exactly match the gold answer after normalisation, and Token-level F1 score, which measures the overlap between predicted and gold answer tokens and is more robust to minor variations in phrasing. These metrics form the primary quantitative basis for the experimental evaluation reported in Section~\ref{sec:evaluation} of this dissertation.
-
-\subsection{Hallucination in Language Models}
-\label{subsec:hallucination}
-
-Hallucination, defined as the generation of factually incorrect or unsupported content by language models, represents one of the most critical reliability challenges in deployed AI systems (Ji et al., 2023). Factual hallucinations arise from the model's tendency to generate plausible-sounding but unverified claims based on statistical patterns in training data rather than grounded knowledge. Huang et al. (2023) provide a comprehensive taxonomy of hallucination types and mitigation strategies, distinguishing between factuality hallucinations, faithfulness hallucinations in summarisation, and instruction-following hallucinations.
-
-RAG-based approaches have been shown to significantly reduce factuality hallucinations by anchoring generation in retrieved evidence (Lewis et al., 2020; Shuster et al., 2021). However, as noted by Shi et al. (2023), the introduction of noisy or irrelevant retrieved passages can introduce new failure modes through context confusion. Selective retrieval, as implemented in the present system, addresses this by applying retrieval only when the expected benefit exceeds the risk of introducing distractor context, motivated by the empirical findings of Asai et al. (2023) and Jeong et al. (2024).
-
-\subsection{Mobile AI Applications}
-\label{subsec:mobile_ai}
-
-The deployment of conversational AI capabilities to mobile platforms has emerged as a significant research and engineering challenge, driven by the need to deliver high-quality AI experiences within the constraints of mobile hardware and intermittent connectivity. Server-side inference architectures, where the mobile client communicates with a cloud-hosted model via REST APIs, have become the dominant pattern for production deployments (Howard et al., 2019). This approach decouples inference from device capabilities, enabling access to large models that would be infeasible to run on-device. Android application development frameworks, including Jetpack Compose and the Retrofit HTTP client library, provide the tooling needed to integrate server-side AI backends with responsive mobile user interfaces. The REST API pattern adopted in this dissertation follows established best practices for mobile AI integration, exposing the full chatbot pipeline through FastAPI endpoints with streaming response support.
-
-\subsection{Gaps and Research Motivation}
-\label{subsec:gaps}
-
-The literature review reveals several key gaps that motivate the present research. First, while adaptive retrieval has been extensively studied for single-model systems, the interaction between multi-LLM routing and adaptive retrieval in a unified framework has not been systematically investigated. Second, existing multi-agent RAG frameworks such as MAO-ARAG and MA-RAG focus on agent coordination for retrieval quality but do not address specialist model routing for task-type optimisation. Third, the practical deployment of such systems with persistent conversation management, mobile accessibility, and production-grade infrastructure has not been demonstrated in the research literature. This dissertation addresses all three gaps through a complete system implementation and empirical evaluation.
+The literature reveals three gaps this dissertation addresses: (i) the interaction between multi-LLM routing and adaptive retrieval in a unified framework has not been systematically studied; (ii) existing multi-agent RAG frameworks do not address specialist model routing for task-type optimisation; and (iii) production deployment with persistent conversation management and mobile accessibility has not been demonstrated in the research literature.
 
 \newpage
-
 % =================================================
+
+
+
 \section{Methodology and System Design}
 \label{sec:methodology}
 
@@ -307,21 +294,30 @@ The architecture comprises five principal layers, as depicted in Figure~\ref{fig
 \subsection{LangGraph State Management}
 \label{subsec:state_management}
 
-The system's execution state is represented as a typed \texttt{ChatState} dictionary managed by LangGraph's \texttt{StateGraph}. The state schema, defined in \texttt{app/models/chat\_state.py}, encapsulates all information required for a single conversation turn, as illustrated in Listing~\ref{lst:chatstate}.
+The system's execution state is represented as a typed \texttt{ChatState} dictionary managed by LangGraph's \texttt{StateGraph}. The state schema, defined in \texttt{app/models/chat\_state.py}, encapsulates all information required for a single conversation turn, as formalised in Algorithm~\ref{alg:chatstate}.
 
-\begin{lstlisting}[caption={ChatState TypedDict definition managing conversation context and routing metadata.}, label={lst:chatstate}]
-class ChatState(TypedDict):
-    # Full conversation history; add_messages reducer appends new msgs
-    messages:     Annotated[list[BaseMessage], add_messages]
-    # Active model key for current turn (user-selected or auto)
-    model:        str
-    # Metadata: which model was used and why it was selected
-    routing_info: Optional[dict]
-    # Retrieved document chunks injected into the LLM prompt
-    rag_context:  Optional[str]
-    # Routing decision: 'direct' | 'rag' | 'agent'
-    route:        Optional[str]
-\end{lstlisting}
+% ============================================================================
+% Algorithm 1 – ChatState TypedDict
+% ============================================================================
+\begin{algorithm}[H]
+\caption{ChatState TypedDict definition managing conversation context and routing metadata.}
+\label{alg:chatstate}
+\begin{algorithmic}[1]
+  \State \kw{TypedDict} \ty{ChatState}:
+  \State \hspace{\algorithmicindent}
+         \ty{messages}     : \ty{Annotated[list[BaseMessage], add\_messages]}
+  \State \hspace{\algorithmicindent}
+         \ty{model}        : \ty{str}
+  \State \hspace{\algorithmicindent}
+         \ty{routing\_info}: \ty{Optional[dict]}
+  \State \hspace{\algorithmicindent}
+         \ty{rag\_context} : \ty{Optional[str]}
+  \State \hspace{\algorithmicindent}
+         \ty{route}        : \ty{Optional[str]}
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:chatstate} defines five typed fields. The \ty{messages} field accumulates the full conversation history using the \texttt{add\_messages} reducer, which appends new messages rather than replacing the list on each state update. The \ty{model} field holds the active model key for the current turn, either user-selected or resolved automatically. The \ty{routing\_info} field stores metadata describing which model was selected and the rationale behind that choice. The \ty{rag\_context} field carries retrieved document chunks that are injected into the LLM prompt when retrieval-augmented generation is invoked. Finally, the \ty{route} field records the routing decision as one of three possible values: \texttt{direct}, \texttt{rag}, or \texttt{agent}.
 
 The LangGraph \texttt{StateGraph} is constructed with the \texttt{ChatState} as its state type, and four nodes are registered: \texttt{router\_node}, \texttt{direct\_node}, \texttt{rag\_node}, and \texttt{agent\_node}. The graph topology is defined as: \texttt{START} $\rightarrow$ \texttt{router\_node} $\rightarrow$ \{\texttt{direct\_node} $|$ \texttt{rag\_node} $|$ \texttt{agent\_node}\} $\rightarrow$ \texttt{END}, where the conditional branching from \texttt{router\_node} is determined by the \texttt{route} value written to the shared state during routing.
 
@@ -363,80 +359,96 @@ qwen3\_5\_0\_8b & Qwen3.5-0.8B & 3,000 & Lightweight multilingual \\
 
 DeepSeek-R1 is deployed for queries requiring deep chain-of-thought reasoning, mathematical inference, and complex logical deduction, owing to its training emphasis on reasoning-intensive tasks. Gemini-2.5-Flash serves a dual role as both a task executor for broad knowledge queries and as the synthesis model for the optional response refinement step, leveraging its large context window and strong instruction-following capabilities. Qwen2.5-Coder-7B is the primary destination for programming and code-related queries, having been specifically trained on code repositories. Mistral-7B and LLaMA-3.1-8B-Instant handle general-purpose instruction-following and question answering tasks. Phi-3-3.8B provides efficient reasoning capability in a compact footprint. Gemma-3-270M and Qwen3.5-0.8B serve as lightweight fallback models for low-complexity queries where response speed is prioritised. Granite-3-Dense-2B addresses structured data and enterprise-oriented queries. Falcon-3 completes the pool as a general-purpose model trained on diverse multilingual corpora.
 
+
 \subsection{The Orchestrator: Task Classification and Model Selection}
 \label{subsec:orchestrator}
 
 The orchestrator module, located in \texttt{llms/custom/orchestrator.py}, implements the intelligence layer that bridges query intent and model selection. It exposes five key functions: \texttt{classify\_task}, \texttt{select\_primary\_model}, \texttt{build\_specialist\_prompt}, \texttt{should\_synthesize}, and \texttt{build\_synthesis\_prompt}.
 
-The \texttt{classify\_task} function analyses the query text to produce a tuple of (categories, complexity), where categories is a list drawn from the taxonomy \{reasoning, coding, summarisation, data\_extraction, general\_knowledge\} and complexity is an ordinal value in \{low, medium, high\}. The model selection logic maps these classifications to the most appropriate model key from the deployed pool, as illustrated in Listing~\ref{lst:orchestrator}.
+The \texttt{classify\_task} function analyses the query text to produce a tuple of (categories, complexity), where categories is a list drawn from the taxonomy \{reasoning, coding, summarisation, data\_extraction, general\_knowledge\} and complexity is an ordinal value in \{low, medium, high\}. The model selection logic maps these classifications to the most appropriate model key from the deployed pool, as formalised in Algorithm~\ref{alg:orchestrator}.
 
-\begin{lstlisting}[caption={Core orchestrator logic for task classification and specialist model selection.}, label={lst:orchestrator}]
-def select_primary_model(categories: list, complexity: str) -> str:
-    """
-    Select specialist model based on task categories and complexity.
-    Maps inferred task type to the best-suited model key.
-    """
-    # Coding queries -> dedicated code model
-    if "coding" in categories:
-        return "qwen2_5_coder_7b"
+% ============================================================================
+% Algorithm 2 – select\_primary\_model (Orchestrator)
+% ============================================================================
+\begin{algorithm}[H]
+\caption{Core orchestrator logic for task classification and specialist model selection.}
+\label{alg:orchestrator}
+\begin{algorithmic}[1]
+\Function{SelectPrimaryModel}{\ty{categories}: list, \ty{complexity}: str} $\to$ str
+  \If{\ty{"coding"} $\in$ \ty{categories}}
+    \State \Return \ty{"qwen2\_5\_coder\_7b"}
+  \EndIf
+ 
+  \If{\ty{"reasoning"} $\in$ \ty{categories} \textbf{ and } \ty{complexity} $=$ \ty{"high"}}
+    \State \Return \ty{"deepseek\_r1"}
+  \EndIf
+ 
+  \If{\ty{"summarisation"} $\in$ \ty{categories}}
+    \State \Return \ty{"gemini\_2\_5\_flash"}
+  \EndIf
+ 
+  \If{\ty{"reasoning"} $\in$ \ty{categories} \textbf{ and } \ty{complexity} $=$ \ty{"medium"}}
+    \State \Return \ty{"mistral\_7b"}
+  \EndIf
+ 
+  \If{\ty{"data\_extraction"} $\in$ \ty{categories}}
+    \State \Return \ty{"granite3\_dense\_2b"}
+  \EndIf
+ 
+  \If{\ty{complexity} $=$ \ty{"low"}}
+    \State \Return \ty{"qwen3\_5\_0\_8b"}
+  \EndIf
+ 
+  \State \Return \ty{"llama\_3\_1\_8b\_instant"}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
-    # High-complexity reasoning -> deep reasoning model
-    if "reasoning" in categories and complexity == "high":
-        return "deepseek_r1"
-
-    # Summarisation with large context -> capable synthesis model
-    if "summarisation" in categories:
-        return "gemini_2_5_flash"
-
-    # Medium reasoning -> efficient but capable model
-    if "reasoning" in categories and complexity == "medium":
-        return "mistral_7b"
-
-    # Structured / data extraction -> enterprise model
-    if "data_extraction" in categories:
-        return "granite3_dense_2b"
-
-    # Low complexity general queries -> lightweight model
-    if complexity == "low":
-        return "qwen3_5_0_8b"
-
-    # Default: balanced general-purpose model
-    return "llama_3_1_8b_instant"
-\end{lstlisting}
+Algorithm~\ref{alg:orchestrator} encodes a priority-ordered chain of conditional rules. Coding queries are handled first and unconditionally routed to \texttt{qwen2\_5\_coder\_7b}, a dedicated code-generation model. High-complexity reasoning tasks are escalated to \texttt{deepseek\_r1}, whose architecture is optimised for multi-step inference. Summarisation queries are directed to \texttt{gemini\_2\_5\_flash}, which is favoured for its large context window and synthesis capability. Medium-complexity reasoning falls to \texttt{mistral\_7b}, offering a balance between capability and efficiency. Structured data extraction tasks are assigned to \texttt{granite3\_dense\_2b}, an enterprise-focused model suited to precision extraction. Low-complexity general queries are served by the lightweight \texttt{qwen3\_5\_0\_8b}, minimising unnecessary resource consumption. All remaining queries fall through to the default \texttt{llama\_3\_1\_8b\_instant}, a balanced general-purpose model.
 
 The \texttt{build\_specialist\_prompt} function constructs a task-specific system prompt tailored to the selected model's strengths and the inferred task category. For coding tasks, the prompt includes instructions to produce well-commented, executable code. For reasoning tasks, it instructs the model to think step by step and verify each inference. This specialised prompting strategy ensures that the selected model operates in its optimal instruction-following mode, maximising the benefit of model selection.
+
 
 \subsection{Query Routing}
 \label{subsec:routing}
 
-The \texttt{router\_node} is the first node executed in each turn. It invokes the orchestrator's \texttt{classify\_task} function to obtain task categories and complexity, then calls the \texttt{\_classify\_route} function to determine the execution path. The routing decision prioritises three signals. First, queries containing keywords associated with real-time information needs (e.g., ``latest'', ``current'', ``today'', ``stock'', ``weather'') are routed to the agent path. Second, queries exhibiting document-referential intent (e.g., ``according to'', ``in the document'', ``uploaded file'') are routed to the RAG path, but only when a non-empty ChromaDB vector store exists. Third, all remaining queries are routed to the direct LLM inference path, as illustrated in Listing~\ref{lst:routing}.
+The \texttt{router\_node} is the first node executed in each turn. It invokes the orchestrator's \texttt{classify\_task} function to obtain task categories and complexity, then calls the \texttt{\_classify\_route} function to determine the execution path. The routing decision prioritises three signals. First, queries containing keywords associated with real-time information needs (e.g., ``latest'', ``current'', ``today'', ``stock'', ``weather'') are routed to the agent path. Second, queries exhibiting document-referential intent (e.g., ``according to'', ``in the document'', ``uploaded file'') are routed to the RAG path, but only when a non-empty ChromaDB vector store exists. Third, all remaining queries are routed to the direct LLM inference path, as formalised in Algorithm~\ref{alg:routing}.
 
-\begin{lstlisting}[caption={Route classification function implementing the retrieval necessity predictor.}, label={lst:routing}]
-def _classify_route(query: str, has_documents: bool) -> RouteLabel:
-    """
-    Retrieval necessity predictor (RQ3) + agent trigger.
-    Priority: agent > rag > direct
-    """
-    q_lower = query.lower()
 
-    # Priority 1: Real-time / computation signals -> agent path
-    if any(kw in q_lower for kw in _AGENT_KEYWORDS):
-        return "agent"
+% ============================================================================
+% Algorithm 3 – \_classify\_route (Retrieval Necessity Predictor)
+% ============================================================================
+\begin{algorithm}[H]
+\caption{Route classification function implementing the retrieval necessity predictor.}
+\label{alg:routing}
+\begin{algorithmic}[1]
+\Function{ClassifyRoute}{\ty{query}: str, \ty{has\_documents}: bool} $\to$ RouteLabel
+  \State $q \gets \Call{ToLower}{\ty{query}}$
+ 
+  \If{$\exists\; kw \in \text{AGENT\_KEYWORDS}$ such that $kw \in q$}
+    \State \Return \ty{"agent"}
+  \EndIf
+ 
+  \State $(\ty{categories},\, \ty{complexity}) \gets \Call{ClassifyTask}{\ty{query}}$
+ 
+  \If{\ty{"data\_extraction"} $\in$ \ty{categories} \textbf{ and } \ty{has\_documents}}
+    \State \Return \ty{"rag"}
+  \EndIf
+ 
+  \If{\ty{"summarisation"} $\in$ \ty{categories} \textbf{ and } \ty{has\_documents}}
+    \State \Return \ty{"rag"}
+  \EndIf
+ 
+  \If{\ty{has\_documents} \textbf{ and } $\exists\; kw \in \text{RAG\_KEYWORDS}$ such that $kw \in q$}
+    \State \Return \ty{"rag"}
+  \EndIf
+ 
+  \State \Return \ty{"direct"}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
-    # Use orchestrator for richer task-type signals
-    categories, complexity = classify_task(query)
-
-    # Priority 2: Document-heavy tasks with available documents -> rag
-    if "data_extraction" in categories and has_documents:
-        return "rag"
-    if "summarisation" in categories and has_documents:
-        return "rag"
-    if has_documents and any(kw in q_lower for kw in _RAG_KEYWORDS):
-        return "rag"
-
-    # Default: direct LLM inference
-    return "direct"
-\end{lstlisting}
+Algorithm~\ref{alg:routing} implements a strict priority ordering over four mutually exclusive cases. The query string is first normalised to lowercase to ensure case-insensitive keyword matching. The highest-priority check scans for membership in \texttt{AGENT\_KEYWORDS}, a predefined set of terms signalling real-time or computational intent; any match immediately returns the \texttt{agent} route. If no agent keyword is detected, the orchestrator's \texttt{ClassifyTask} function is invoked to obtain richer task-type signals. Two document-conditional RAG rules are then evaluated in sequence: queries classified as \texttt{data\_extraction} and queries classified as \texttt{summarisation} are both routed to the RAG path, but only when \texttt{has\_documents} is true, ensuring retrieval is not attempted against an empty vector store. A third RAG condition handles explicit retrieval intent by checking for membership in \texttt{RAG\_KEYWORDS} alongside document availability. Queries that satisfy none of these conditions fall through to the \texttt{direct} route, invoking standard LLM inference without retrieval or tool use. The resulting control flow is further illustrated in Figure~\ref{fig:routing_flow}.
 
 \begin{figure}[htbp]
     \centering
@@ -445,10 +457,12 @@ def _classify_route(query: str, has_documents: bool) -> RouteLabel:
     \label{fig:routing_flow}
 \end{figure}
 
+
 \subsection{Direct Inference Node}
 \label{subsec:direct_node}
 
-The \texttt{direct\_node} handles queries that can be answered from parametric model knowledge without retrieval or agentic execution. It invokes the orchestrator's \texttt{\_call\_llm\_with\_orchestrator} function, which performs task classification, model selection, specialist prompt construction, LLM invocation, optional synthesis, and attribution footer generation. The conversation history is trimmed to fit within the selected model's token limit before being injected into the prompt, preventing context overflow for long-running conversations.
+The \texttt{direct\_node} handles queries that can be answered from parametric model knowledge without 
+retrieval or agentic execution. It invokes the orchestrator's \\ \texttt{\_call\_llm\_with\_orchestrator} function, which performs task classification, model selection, specialist prompt construction, LLM invocation, optional synthesis, and attribution footer generation. The conversation history is trimmed to fit within the selected model's token limit before being injected into the prompt, preventing context overflow for long-running conversations.
 
 \subsection{Retrieval-Augmented Generation Node}
 \label{subsec:rag_node}
@@ -467,40 +481,44 @@ The RAG ingestion pipeline, implemented in \texttt{app/rag/ingestion.py}, suppor
 \subsection{Agentic Execution Node}
 \label{subsec:agent_node}
 
-The \texttt{agent\_node} handles queries that require access to real-time information or computational capabilities beyond the model's parametric knowledge. The agent is equipped with two tools: a DuckDuckGo web search tool for retrieving current information, and a Python REPL calculator for performing mathematical computations. The agent executes in a ReAct-style loop, generating a chain of thought that interleaves reasoning steps with tool invocation decisions, continuing until the agent determines it has sufficient information to produce the final answer.
+The \texttt{agent\_node} handles queries that require access to real-time information or computational capabilities beyond the model's parametric knowledge. The agent is equipped with two tools: a DuckDuckGo web search tool for retrieving current information, and a Python REPL calculator for performing mathematical computations. The agent executes in a ReAct-style loop, generating a chain of thought that interleaves reasoning steps with tool invocation decisions, continuing until the agent determines it has sufficient information to produce the final answer. The procedure is formalised in Algorithm~\ref{alg:agent}.
 
-\begin{lstlisting}[caption={Agent node implementation showing ReAct-style execution with tool integration.}, label={lst:agent}]
-def agent_node(state: ChatState) -> dict:
-    """
-    Agentic node: DuckDuckGo search + Python calculator via ReAct.
-    Only reached when router classifies query as needing real-time data.
-    """
-    query = _get_user_message(state)
-    model_key = state.get("model") or DEFAULT_MODEL_KEY
 
-    # Define tools available to the agent
-    tools = [
-        DuckDuckGoSearchRun(),   # Real-time web search
-        PythonREPLTool(),        # Arithmetic / computation
-    ]
+% ============================================================================
+% Algorithm 4 – agent\_node (ReAct Execution)
+% ============================================================================
+\begin{algorithm}[H]
+\caption{Agent node implementation showing ReAct-style execution with tool integration.}
+\label{alg:agent}
+\begin{algorithmic}[1]
+\Procedure{AgentNode}{\ty{state}: ChatState} $\to$ dict
+  \State $\ty{query}     \gets \Call{GetUserMessage}{\ty{state}}$
+  \State $\ty{model\_key} \gets \ty{state.model}$ \textbf{ or } \ty{DEFAULT\_MODEL\_KEY}
+ 
+  \State
+  \State \cmt{Define tools available to the agent}
+  \State $\ty{tools} \gets [\,\ty{DuckDuckGoSearchRun()},\ \ty{PythonREPLTool()}\,]$
+ 
+  \State
+  \State \cmt{Build ReAct agent with orchestrator-selected model}
+  \State $\ty{llm}            \gets \Call{BuildLLM}{\ty{model\_key}}$
+  \State $\ty{agent\_exec}    \gets \Call{CreateReActAgent}{\ty{llm},\, \ty{tools}}$
+ 
+  \State
+  \State \cmt{Execute agent with full conversation history as context}
+  \State $\ty{history}        \gets \Call{BuildHistoryBlock}{\ty{state.messages},\, \ty{model\_key}}$
+  \State $\ty{full\_prompt}   \gets \ty{history} + \texttt{"\textbackslash n\textbackslash nUser: "} + \ty{query}$
+  \State $\ty{result}         \gets \Call{AgentExec.Invoke}{\{\ \ty{"messages"}: [(\ty{"user"},\, \ty{full\_prompt})]\ \}}$
+  \State $\ty{response}       \gets \ty{result["messages"][-1].content}$
+ 
+  \State
+  \State \Return $\{\ \ty{messages}: [\Call{AIMessage}{\ty{response}}],\ \ty{rag\_context}: \ty{None},\ \ty{routing\_info}: \{\ty{model\_key},\ \ty{route}: \ty{"agent"}\}\ \}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
-    # Build ReAct agent with the orchestrator-selected model
-    llm = llms.build_llm(model_key)
-    agent_executor = create_react_agent(llm, tools)
+Algorithm~\ref{alg:agent} details the sequential steps of the agentic execution procedure. The node first extracts the current user query from the shared state and resolves the active model key, falling back to \texttt{DEFAULT\_MODEL\_KEY} if none has been set. The tool suite is then instantiated, comprising \texttt{DuckDuckGoSearchRun} for live web retrieval and \texttt{PythonREPLTool} for arithmetic and computational tasks. An LLM instance is constructed from the resolved model key and passed alongside the tool suite to \texttt{CreateReActAgent}, which configures the ReAct-style reasoning loop. Prior to invocation, the full conversation history is serialised into a context block and prepended to the current query, ensuring the agent reasons over the complete dialogue context rather than the isolated turn. The agent executor is then invoked, internally iterating over thought--action--observation cycles until a terminal answer is produced. The final message in the output sequence is extracted as the response and returned to the shared state alongside routing metadata, with \texttt{rag\_context} explicitly set to \texttt{None} to signal that no retrieval was performed on this path.
 
-    # Execute the agent with conversation history as context
-    history_block = _build_history_block(state['messages'], model_key)
-    full_prompt = f"{history_block}\n\nUser: {query}"
-
-    result = agent_executor.invoke({"messages": [("user", full_prompt)]})
-    response_content = result["messages"][-1].content
-
-    return {
-        "messages": [AIMessage(content=response_content)],
-        "rag_context": None,
-        "routing_info": {"model_key": model_key, "route": "agent"}
-    }
-\end{lstlisting}
 
 \subsection{Persistence Layer: MySQL Checkpointing}
 \label{subsec:persistence}
@@ -509,26 +527,44 @@ A critical feature of the system is persistent conversation management through a
 
 The \texttt{MySQLSaver} implements the \texttt{get\_tuple}, \texttt{list}, \texttt{put}, and \texttt{put\_writes} methods required by the LangGraph checkpointer interface, using \texttt{pymysql} for database connectivity with automatic reconnection on connection loss. A separate \texttt{delete\_thread} method enables users to delete conversation threads from both the in-memory session state and the persistent database.
 
+
 \subsection{User Interface: Streamlit Application}
 \label{subsec:ui}
 
-The web-based user interface is implemented using Streamlit, providing a responsive chat interface with real-time streaming response display. The UI is organised into a sidebar component and a main chat area. The sidebar contains the model selector, conversation thread list, RAG document upload panel, and branding elements. The main chat area renders the conversation history with role-appropriate styling and displays routing metadata below each assistant response to provide transparency about which model was selected and why.
+The web-based user interface is implemented using Streamlit, providing a responsive chat interface with real-time streaming response display. The UI is organised into two primary components: a collapsible sidebar and a main chat area, each serving a distinct functional role within the overall system interaction model.
 
-\begin{figure}[htbp]
+\subsubsection*{Sidebar Panel}
+The sidebar, illustrated in Figure~\ref{fig:ui_sidebar}, serves as the primary control surface for session configuration and document management. At the top, the branding header displays the application identity — \textit{Zephryel, An AI Companion} — accompanied by a light/dark theme toggle for user preference persistence. Beneath the branding, the \textbf{Model} section exposes a dropdown selector that allows the user to either manually choose a specific language model from the deployed pool or delegate the decision to the system by selecting \textit{Auto (Multi-Model Routing)}, which activates the full orchestrator-driven routing pipeline. A contextual label beneath the dropdown indicates the active inference provider, confirming that all inference is served through Groq's API. The \textbf{Conversations} section provides thread management functionality, including a prominently placed \textit{New Chat} button that initialises a fresh conversation thread with a unique identifier, alongside per-thread action controls for renaming and deletion. The \textbf{Documents (RAG)} section at the bottom of the sidebar presents the current state of the vector store, displaying the ChromaDB persistence path and the total number of indexed chunks currently available for retrieval. A drag-and-drop file uploader accepts PDF and TXT documents up to 200MB per file, triggering the ingestion pipeline upon upload to parse, chunk, embed, and index the document into the ChromaDB collection.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[
+        height=0.7\linewidth,
+        keepaspectratio
+    ]{../assets/sidebar.png}
+    \caption{Sidebar panel showing the model selector defaulting to Auto (Multi-Model Routing), conversation thread management controls, and the RAG document upload panel with ChromaDB vector store status.}
+    \label{fig:ui_sidebar}
+\end{figure}
+
+\subsubsection*{Main Chat Area}
+The main chat area, illustrated in Figure~\ref{fig:ui_chat}, provides the primary conversational interface. Each conversation turn is rendered with role-appropriate styling: user messages are displayed in a visually distinct bubble with a user avatar, while assistant responses are rendered with an assistant avatar and full markdown support, including bold emphasis, bullet points, code blocks, and inline formatting. The conversation title is auto-generated from the first user message using a lightweight title-generation prompt, providing meaningful thread labels in the sidebar. Streaming responses are rendered progressively using Streamlit's \texttt{st.write\_stream} interface, displaying partial tokens as they arrive from the Groq inference API to minimise perceived latency. Below each assistant response, a collapsible \textbf{Model Routing} metadata panel provides full transparency into the orchestrator's decision-making for that turn. As shown in Figure~\ref{fig:ui_chat}, the panel surfaces three key routing attributes: the inferred \textit{Task} category (e.g., \texttt{CONVERSATIONAL}, \texttt{REASONING}, \texttt{CODING}), the assessed \textit{Complexity} level (\texttt{LOW}, \texttt{MEDIUM}, or \texttt{HIGH}), and the \textit{Model} key of the specialist language model selected for that specific query. This routing transparency mechanism is a deliberate design choice to make the system's adaptive behaviour interpretable and auditable by the end user, distinguishing the interface from conventional single-model chatbot UIs where model selection is entirely opaque.
+
+\begin{figure}[H]
     \centering
     \includegraphics[
         width=0.9\linewidth,
-        height=0.6\textheight,
         keepaspectratio
-    ]{../assets/ui.png}
-    \caption{Streamlit user interface showing the chat panel, model selector, and conversation thread management sidebar.}
-    \label{fig:ui}
+    ]{../assets/chat.png}
+    \caption{Main chat area showing a multi-turn conversation with markdown-rendered assistant response and the Model Routing transparency panel displaying inferred task classification (\texttt{CONVERSATIONAL}), complexity (\texttt{LOW}), and the specialist model selected for the turn (\texttt{falcon3}).}
+    \label{fig:ui_chat}
 \end{figure}
 
 
 \subsection{System Design Summary}
 \label{subsec:design_summary}
 
+
+The system design achieves several key properties that address the limitations identified in Section~\ref{sec:literature_review}. Selectivity is achieved through the routing mechanism that avoids unnecessary retrieval and agentic overhead. Specialist alignment is achieved through orchestrator-driven model selection that matches query type to model strengths. Persistence is provided through MySQL-backed state management. Extensibility is supported by the modular node-based architecture, where new models or execution paths can be added without modifying existing components.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\linewidth]{../assets/graphical_abstract.png}
@@ -536,12 +572,9 @@ The web-based user interface is implemented using Streamlit, providing a respons
     \label{fig:langgraph_topology}
 \end{figure}
 
-The system design achieves several key properties that address the limitations identified in Section~\ref{sec:literature_review}. Selectivity is achieved through the routing mechanism that avoids unnecessary retrieval and agentic overhead. Specialist alignment is achieved through orchestrator-driven model selection that matches query type to model strengths. Persistence is provided through MySQL-backed state management. Extensibility is supported by the modular node-based architecture, where new models or execution paths can be added without modifying existing components.
-
 \newpage
 
 % % =================================================
-
 
 \section{Implementation}
 \label{sec:implementation}
@@ -559,27 +592,27 @@ The codebase is organised into a modular package structure designed for maintain
 \begin{lstlisting}[caption={Project directory structure of the LangGraph chatbot implementation.}, label={lst:structure}, language=bash]
 langgraph_chatbot/
 ├── api.py                    # FastAPI REST backend for Android app
+├── main.py                   # Streamlit application entry point
 ├── app/
 │   ├── core/
-│   │   ├── graph.py          # Main LangGraph StateGraph + nodes
-│   │   ├── graph_v1.py       # Initial single-path implementation
-│   │   ├── graph_v2.py       # Intermediate adaptive routing version
-│   │   ├── bootstrap.py      # Application startup + DB init
+│   │   ├── graph.py          # Main LangGraph StateGraph and nodes
 │   │   └── streaming.py      # Streaming response utilities
 │   ├── models/
-│   │   └── chat_state.py     # ChatState and RoutingInfo TypedDicts
+│   │   └── chat_state.py     # ChatState TypedDict schema
 │   ├── rag/
 │   │   ├── ingestion.py      # Document parsing and ChromaDB indexing
 │   │   ├── retriever.py      # Similarity search and context retrieval
 │   │   └── embedder.py       # Sentence-transformer embedding function
 │   ├── ui/
-│   │   ├── chat/             # Message rendering and animations
-│   │   └── sidebar/          # Model selector, RAG panel, thread list
+│   │   ├── chat.py           # Message rendering and chat interface
+│   │   └── sidebar.py        # Model selector, RAG panel, thread list
 │   └── utils/
 │       ├── thread_service.py # Thread CRUD and conversation management
 │       └── conversation.py   # Message formatting utilities
 ├── config/
-│   └── settings.py           # Environment configuration
+│   └── settings.py           # Environment and API key configuration
+├── data/
+│   └── vectorstore/          # Persistent ChromaDB vector store
 └── llms/
     └── custom/
         └── orchestrator.py   # Task classification and model routing
@@ -588,67 +621,92 @@ langgraph_chatbot/
 \subsection{LLM Integration via Groq}
 \label{subsec:groq_integration}
 
-All LLM inference is performed through the Groq inference API, which provides low-latency access to open-weight models via a standardised OpenAI-compatible interface. The \texttt{llms.build\_llm(model\_key)} factory function constructs a LangChain-compatible LLM wrapper for the specified model key, handling API authentication, model name resolution, and parameter configuration. Token limit management is implemented through the \texttt{\_trim\_messages} function, which truncates conversation history to fit within each model's context window while preserving the most recent turns. Listing~\ref{lst:build_llm} illustrates the LLM factory pattern.
+All LLM inference is performed through the Groq inference API, which provides low-latency access to open-weight models via a standardised OpenAI-compatible interface. The \texttt{llms.build\_llm(model\_key)} factory function constructs a LangChain-compatible LLM wrapper for the specified model key, handling API authentication, model name resolution, and parameter configuration. Token limit management is implemented through the \texttt{\_trim\_messages} function, which truncates conversation history to fit within each model's context window while preserving the most recent turns. The factory pattern is formalised in Algorithm~\ref{alg:build_llm}.
 
-\begin{lstlisting}[caption={LLM factory function mapping model keys to Groq-hosted model instances.}, label={lst:build_llm}]
-# MODEL_REGISTRY maps internal keys to Groq model identifiers
-MODEL_REGISTRY = {
-    "deepseek_r1":           "deepseek-r1-distill-llama-70b",
-    "falcon3":               "falcon-3-10b-instruct",
-    "gemini_2_5_flash":      "gemma2-9b-it",   # Groq-hosted equivalent
-    "gemma3_270m":           "gemma-7b-it",
-    "granite3_dense_2b":     "llama-3.1-8b-instant",
-    "llama_3_1_8b_instant":  "llama-3.1-8b-instant",
-    "mistral_7b":            "mixtral-8x7b-32768",
-    "phi3_3_8b":             "llama3-8b-8192",
-    "qwen2_5_coder_7b":      "qwen-qwq-32b",   # Groq-hosted equivalent
-    "qwen3_5_0_8b":          "llama-3.2-1b-preview",
-}
 
-def build_llm(model_key: str) -> BaseChatModel:
-    """Construct LangChain LLM wrapper for the given model key."""
-    model_name = MODEL_REGISTRY.get(model_key, MODEL_REGISTRY["llama_3_1_8b_instant"])
-    return ChatGroq(
-        model=model_name,
-        temperature=0.7,
-        api_key=settings.GROQ_API_KEY
-    )
-\end{lstlisting}
+% ============================================================================
+% Algorithm 5 – build\_llm (LLM Factory)
+% ============================================================================
+
+\begin{algorithm}[H]
+\caption{LLM factory function mapping model keys to Groq-hosted model instances.}
+\label{alg:build_llm}
+\begin{algorithmic}[1]
+  \State \cmt{MODEL\_REGISTRY: internal key $\mapsto$ Groq model identifier}
+  \State $\text{MODEL\_REGISTRY} \gets$
+  \State \hspace{\algorithmicindent}
+    $\{$
+    \ty{"deepseek\_r1"} $\mapsto$ \ty{"deepseek-r1-distill-llama-70b"},
+  \State \hspace{\algorithmicindent}
+    \ty{"falcon3"} $\mapsto$ \ty{"falcon-3-10b-instruct"},
+  \State \hspace{\algorithmicindent}
+    \ty{"gemini\_2\_5\_flash"} $\mapsto$ \ty{"gemma2-9b-it"},
+  \State \hspace{\algorithmicindent}
+    \ty{"gemma3\_270m"} $\mapsto$ \ty{"gemma-7b-it"},
+  \State \hspace{\algorithmicindent}
+    \ty{"granite3\_dense\_2b"} $\mapsto$ \ty{"llama-3.1-8b-instant"},
+  \State \hspace{\algorithmicindent}
+    \ty{"llama\_3\_1\_8b\_instant"} $\mapsto$ \ty{"llama-3.1-8b-instant"},
+  \State \hspace{\algorithmicindent}
+    \ty{"mistral\_7b"} $\mapsto$ \ty{"mixtral-8x7b-32768"},
+  \State \hspace{\algorithmicindent}
+    \ty{"phi3\_3\_8b"} $\mapsto$ \ty{"llama3-8b-8192"},
+  \State \hspace{\algorithmicindent}
+    \ty{"qwen2\_5\_coder\_7b"} $\mapsto$ \ty{"qwen-qwq-32b"},
+  \State \hspace{\algorithmicindent}
+    \ty{"qwen3\_5\_0\_8b"} $\mapsto$ \ty{"llama-3.2-1b-preview"}
+    $\}$
+\Function{BuildLLM}{\ty{model\_key}: str} $\to$ BaseChatModel
+  \State $\ty{model\_name} \gets \text{MODEL\_REGISTRY}\!\left[\ty{model\_key}\right]$
+  \State \Return $\Call{ChatGroq}{\ty{model}=\ty{model\_name},\ \ty{temperature}=0.7,\ \ty{api\_key}=\ty{settings.GROQ\_API\_KEY}}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:build_llm} defines two components. The first is \texttt{MODEL\_REGISTRY}, a static mapping from the system's internal model keys to their corresponding Groq-hosted model identifiers. Several entries in this registry reflect deployment constraints: for instance, \texttt{gemini\_2\_5\_flash} resolves to \texttt{gemma2-9b-it} and \texttt{qwen2\_5\_coder\_7b} resolves to \texttt{qwen-qwq-32b}, as these represent the closest available Groq-hosted equivalents at the time of deployment. Lightweight keys such as \texttt{qwen3\_5\_0\_8b} map to compact preview models, while the default fallback \texttt{llama\_3\_1\_8b\_instant} and \texttt{granite3\_dense\_2b} both resolve to \texttt{llama-3.1-8b-instant}, prioritising availability and latency. The second component is the \texttt{BuildLLM} function itself, which performs a single registry lookup on the provided key and constructs a \texttt{ChatGroq} instance with a fixed temperature of $0.7$ and the globally configured API key, returning a \texttt{BaseChatModel} compatible with the LangChain execution environment.
+
 
 \subsection{RAG Document Ingestion Pipeline}
 \label{subsec:rag_implementation}
 
-The RAG ingestion pipeline processes user-uploaded documents through a three-stage pipeline: parsing, chunking, and embedding. The parsing stage supports PDF (via PyPDF2), DOCX (via python-docx), and plain text formats. Parsed text is split using LangChain's \texttt{RecursiveCharacterTextSplitter} with a chunk size of 1,000 characters and 200-character overlap, balancing retrieval precision with context sufficiency. Chunks are embedded using a sentence-transformer model and stored in a persistent ChromaDB collection. Listing~\ref{lst:ingestion} shows the core ingestion logic.
+The RAG ingestion pipeline processes user-uploaded documents through a three-stage pipeline: parsing, chunking, and embedding. The parsing stage supports PDF (via PyPDF2), DOCX (via python-docx), and plain text formats. Parsed text is split using LangChain's \texttt{RecursiveCharacterTextSplitter} with a chunk size of 1,000 characters and 200-character overlap, balancing retrieval precision with context sufficiency. Chunks are embedded using a sentence-transformer model and stored in a persistent ChromaDB collection. The complete ingestion procedure is formalised in Algorithm~\ref{alg:ingestion}.
 
-\begin{lstlisting}[caption={Document ingestion pipeline showing chunking and ChromaDB indexing.}, label={lst:ingestion}]
-def ingest_documents(file_paths: list[str]) -> int:
-    """
-    Parse, chunk, embed, and index documents into ChromaDB.
-    Returns the total number of chunks added.
-    """
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,       # Characters per chunk
-        chunk_overlap=200,     # Overlap prevents context loss at boundaries
-        separators=["\n\n", "\n", " ", ""]
-    )
 
-    all_chunks = []
-    for path in file_paths:
-        text = _parse_document(path)   # PDF / DOCX / TXT dispatcher
-        chunks = splitter.create_documents(
-            [text], metadatas=[{"source": path}]
-        )
-        all_chunks.extend(chunks)
+% ============================================================================
+% Algorithm – ingest\_documents (RAG Ingestion Pipeline)
+% ============================================================================
+\begin{algorithm}[H]
+\caption{Document ingestion pipeline showing chunking and ChromaDB indexing}
+\label{alg:ingestion}
+\begin{algorithmic}[1]
+\Function{IngestDocuments}{\ty{file\_paths}: list[str]} $\rightarrow$ int
 
-    # Embed and store in persistent ChromaDB collection
-    vectorstore = Chroma.from_documents(
-        documents=all_chunks,
-        embedding=get_embedder(),
-        collection_name=COLLECTION_NAME,
-        persist_directory=VECTORSTORE_DIR,
-    )
-    return len(all_chunks)
-\end{lstlisting}
+  \State $\ty{splitter} \gets \text{RecursiveCharacterTextSplitter}()$
+  \State \hspace{\algorithmicindent} $\ty{chunk\_size} = 1000$,
+  \State \hspace{\algorithmicindent} $\ty{chunk\_overlap} = 200$,
+  \State \hspace{\algorithmicindent} $\ty{separators} = [\texttt{"\textbackslash n\textbackslash n"}, \texttt{"\textbackslash n"}, \texttt{" "}, \texttt{""}]$
+
+  \State $\ty{all\_chunks} \gets [\ ]$
+
+  \For{each $\ty{path} \in \ty{file\_paths}$}
+    \State $\ty{text}   \gets \text{ParseDocument}(\ty{path})$
+    \State $\ty{chunks} \gets \ty{splitter}.\text{CreateDocuments}(\ty{text},\ \ty{path})$
+    \State $\ty{all\_chunks} \gets \ty{all\_chunks} + \ty{chunks}$
+  \EndFor
+
+  \State \cmt{Embed and store in persistent ChromaDB collection}
+  \State $\ty{vs} \gets \text{Chroma}.\text{FromDocuments}(\ty{all\_chunks},\ \text{GetEmbedder}())$
+  \State $\ty{vs}.\ty{collection\_name}   \gets \ty{COLLECTION\_NAME}$
+  \State $\ty{vs}.\ty{persist\_directory} \gets \ty{VECTORSTORE\_DIR}$
+
+  \State \Return $|\ty{all\_chunks}|$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:ingestion} proceeds in three phases. In the initialisation phase, a \\ \texttt{RecursiveCharacterTextSplitter} is configured with a chunk size of 1,000 characters and an overlap of 200 characters. The separator hierarchy — paragraph breaks, line breaks, spaces, and the empty string — ensures that splits are attempted at the most semantically natural boundary available before falling back to finer granularities, preventing context loss at chunk boundaries. In the parsing and chunking phase, each file path is dispatched through \texttt{ParseDocument}, which routes to the appropriate parser based on file format, producing a raw text string. This text is then passed to the splitter's \texttt{CreateDocuments} method, which attaches the source path as document metadata before appending the resulting chunks to the accumulated list. In the final indexing phase, all collected chunks are embedded in a single batch via \texttt{Chroma.FromDocuments}, which internally calls \texttt{GetEmbedder} to obtain the sentence-transformer model. The resulting vector store is bound to the configured collection name and persistence directory, ensuring the index survives across sessions. The function returns the total number of chunks indexed, providing a lightweight confirmation of ingestion volume.
+
+
 
 \subsection{Conversation Thread Management}
 \label{subsec:thread_management}
@@ -663,30 +721,42 @@ Response streaming is implemented through LangGraph's event streaming API, which
 \subsection{FastAPI REST Backend}
 \label{subsec:api}
 
-The \texttt{api.py} module implements a FastAPI REST backend that exposes the full chatbot functionality as HTTP endpoints, primarily for consumption by the Android mobile application. The API endpoints are summarised in Listing~\ref{lst:api}.
+The \texttt{api.py} module implements a FastAPI REST backend that exposes the full chatbot functionality as HTTP endpoints, primarily for consumption by the Android mobile application. The available endpoints are formalised in Algorithm~\ref{alg:api}.
 
-\begin{lstlisting}[caption={FastAPI REST endpoint definitions for the Android application backend.}, label={lst:api}]
-# POST /chat  - Submit a message and receive a response
-@app.post("/chat")
-async def chat(request: ChatRequest) -> ChatResponse:
-    """Process a message through the full LangGraph pipeline."""
+% ============================================================================
+% Algorithm 7 – FastAPI REST Endpoints
+% ============================================================================
+\begin{algorithm}[H]
+\caption{FastAPI REST endpoint definitions for the Android application backend.}
+\label{alg:api}
+\begin{algorithmic}[1]
+  \State \cmt{--- \textbf{POST} \ty{/chat} ---}
+\Procedure{Chat}{\ty{request}: ChatRequest} $\to$ ChatResponse
+\EndProcedure
+ 
+\vspace{4pt}
+  \State \cmt{--- \textbf{GET} \ty{/threads} ---}
+\Procedure{ListThreads}{\ty{user\_id}: str} $\to$ list[ThreadMeta]
+\EndProcedure
+ 
+\vspace{4pt}
+  \State \cmt{--- \textbf{POST} \ty{/threads} ---}
+\Procedure{CreateThread}{\ty{user\_id}: str} $\to$ ThreadMeta
+\EndProcedure
+ 
+\vspace{4pt}
+  \State \cmt{--- \textbf{DELETE} \ty{/threads/\{thread\_id\}} ---}
+\Procedure{DeleteThread}{\ty{thread\_id}: str} $\to$ dict
+\EndProcedure
+ 
+\vspace{4pt}
+  \State \cmt{--- \textbf{POST} \ty{/rag/upload} ---}
+\Procedure{UploadDocument}{\ty{file}: UploadFile} $\to$ dict
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
-# GET /threads - List all conversation threads for a user
-@app.get("/threads")
-async def list_threads(user_id: str) -> list[ThreadMeta]:
-
-# POST /threads - Create a new conversation thread
-@app.post("/threads")
-async def create_thread(user_id: str) -> ThreadMeta:
-
-# DELETE /threads/{thread_id} - Delete a conversation thread
-@app.delete("/threads/{thread_id}")
-async def delete_thread(thread_id: str) -> dict:
-
-# POST /rag/upload - Upload documents for RAG indexing
-@app.post("/rag/upload")
-async def upload_document(file: UploadFile) -> dict:
-\end{lstlisting}
+Algorithm~\ref{alg:api} defines five endpoints. The \texttt{POST /chat} endpoint is the primary entry point, accepting a \texttt{ChatRequest} payload and routing it through the full LangGraph pipeline before returning a \texttt{ChatResponse} containing the model's reply and associated routing metadata. The \texttt{GET /threads} endpoint retrieves the list of all conversation threads associated with a given user identifier, returning a collection of \texttt{ThreadMeta} descriptors. The \texttt{POST /threads} endpoint creates a new conversation thread for the specified user, returning the newly created \texttt{ThreadMeta}. The \texttt{DELETE /threads/\{thread\_id\}} endpoint removes the specified thread and its associated history from the persistent store. Finally, the \texttt{POST /rag/upload} endpoint accepts a multipart file upload and dispatches it through the document ingestion pipeline described in Section~\ref{subsec:rag_implementation}, indexing the content into the ChromaDB vector store for subsequent retrieval.
 
 The API is designed for stateless horizontal scalability; all state is managed through the MySQL checkpointer, allowing multiple API server instances to serve the same users concurrently.
 
@@ -695,7 +765,8 @@ The API is designed for stateless horizontal scalability; all state is managed t
 \newpage
 
 
-% =================================================
+
+
 \section{Android Application}
 \label{sec:android}
 
@@ -735,8 +806,8 @@ The interaction begins when a user submits a message through the chat interface.
 
 \newpage
 
-\section{Evaluation}
-\label{sec:evaluation}
+\section{Results}
+\label{sec:results}
 
 \subsection{Experimental Setup}
 \label{subsec:eval_setup}
@@ -848,49 +919,6 @@ Several promising directions for future research are identified. A learned query
 \newpage
 
 % =================================================
-% \section{Project Resources and Feasibility Analysis}
-% \label{sec:resources}
-
-% \subsection{Required Resources}
-% \label{subsec:resources}
-
-% The implementation of the proposed system required the following resources. The software environment comprised Python 3.12, LangGraph 0.2, LangChain 0.3, ChromaDB, Streamlit, FastAPI, and supporting libraries. LLM inference was provided by the Groq free-tier API, which offers rate-limited access to open-weight models without GPU hardware requirements. The MySQL database was deployed as a local development instance and can be migrated to a managed cloud database service for production deployment. Vector storage was handled by a locally persisted ChromaDB instance with planned migration to a managed vector database for scalable production use.
-
-% \subsection{Data Requirements}
-% \label{subsec:data_requirements}
-
-% Publicly available datasets were used exclusively, eliminating significant ethical data access concerns. HotpotQA and MuSiQue are both freely available through their respective official repositories. No personally identifiable information was collected or processed at any stage of the project.
-
-% \subsection{Ethical Considerations}
-% \label{subsec:ethics}
-
-% No personal or sensitive data is processed by the system. The project aligns with Solent University institutional ethics policies. The conversational AI system is designed for general-purpose question answering and does not implement features that could be used for surveillance, disinformation generation, or other harmful applications. Model outputs are clearly labelled as AI-generated, and the routing transparency feature actively discloses which model produced each response, supporting informed and critical use of the system.
-
-% \subsection{Risk Assessment}
-% \label{subsec:risks}
-
-% The primary technical risks identified for this project include API rate limiting by Groq, which was mitigated through response caching and evaluation scheduling. Integration complexity between LangGraph, LangChain, and ChromaDB was managed through incremental implementation with comprehensive unit testing at each integration point. Model instability arising from external API changes was addressed through abstraction layers that isolate model-specific code behind the \texttt{build\_llm} factory interface. Data quality risks for the benchmark evaluation were mitigated through the use of well-established, peer-reviewed datasets with standardised evaluation protocols.
-
-% \newpage
-
-% % =================================================
-% \section{Project Implementation Plan}
-% \label{sec:plan}
-
-% \subsection{Methodology Overview}
-% \label{subsec:methodology_overview}
-
-% The project adopted a modular and iterative development methodology structured around four phases. Phase 1 (Research and Planning, January 2026) focused on literature review, dataset selection, and foundational learning of LangGraph, LangChain, and RAG architectures. Phase 2 (Core System Development, February--March 2026) implemented the baseline system, MySQL persistence layer, adaptive routing logic, ChromaDB integration, and agent execution. Phase 3 (System Integration and Evaluation, March--April 2026) conducted benchmark evaluation, hallucination analysis, routing accuracy assessment, and comparative benchmarking. Phase 4 (Documentation and Reporting, April--May 2026) consolidated results and prepared the final dissertation.
-
-% \subsection{System Architecture Flow}
-% \label{subsec:arch_flow}
-
-% The full LangGraph execution flow, from user input to response delivery, proceeds through the following sequence. The user submits a message through the Streamlit interface. The message is appended to the \texttt{ChatState} messages list. The LangGraph graph is invoked with the updated state, entering at the \texttt{router\_node}. The router classifies the query and sets the \texttt{route} field. The conditional edge function reads the route and directs execution to the appropriate node. The selected execution node processes the query through the orchestrator, retrieval, or agent pipeline. The response is returned as an \texttt{AIMessage} appended to the state. The completed state is persisted to MySQL by the \texttt{MySQLSaver} checkpointer. The streaming module yields the response tokens to the Streamlit frontend for progressive display.
-
-% \subsection{Project Timeline}
-% \label{subsec:timeline}
-
-% The project was scheduled over a multi-phase timeline spanning from mid-January to early May 2026. The implementation progressed through four structured stages. The initial phase focused on research and planning, including literature review, dataset selection, and foundational learning of retrieval and orchestration frameworks. This was followed by a core system execution phase, where the baseline system, persistence layer, adaptive routing logic, retrieval components, and agent execution mechanisms were incrementally implemented. Subsequent stages emphasised system integration and experimental evaluation, including hallucination analysis, routing accuracy assessment, and comparative benchmarking across different execution paths. The final phase was dedicated to documentation, result consolidation, and preparation of the final report.
 
 \subsection{Gantt Chart}
 \label{subsec:gantt}
@@ -909,22 +937,21 @@ The complete project schedule, including task dependencies, parallel development
 \newpage
 
 % =================================================
+
 \section{Conclusion}
 \label{sec:conclusion}
 
-This dissertation has presented the design, implementation, and evaluation of an Adaptive Multi-LLM Agentic RAG system that addresses the fundamental inefficiencies of monolithic, uniform-inference conversational AI architectures. The proposed system integrates ten heterogeneous language models within a LangGraph-based stateful orchestration framework, dynamically routing queries to specialist models and execution paths based on inferred task intent and complexity.
+This dissertation has presented the design, implementation, and evaluation of an Adaptive Multi-LLM Agentic RAG system that addresses the inefficiencies of monolithic conversational AI architectures. The system integrates ten heterogeneous language models within a LangGraph-based orchestration framework, dynamically routing queries to specialist models based on inferred task intent and complexity.
 
-The key technical contributions include a novel intent-aware routing architecture that distinguishes between direct inference, retrieval-augmented generation, and agentic multi-step execution paths; an orchestrator-driven specialist model selection mechanism that matches task categories and complexity to the most appropriate model from the deployed pool; a MySQL-backed persistent checkpointing system enabling production-grade multi-user conversation management; a ChromaDB-based RAG pipeline with adaptive activation; and a companion Android application exposing the full system through a FastAPI REST interface.
+Key contributions include an intent-aware routing architecture distinguishing between direct inference, RAG, and agentic execution paths; a specialist model selection mechanism matched to task category and complexity; a MySQL-backed persistent checkpointing system for multi-user conversation management; a ChromaDB-based adaptive RAG pipeline; and a companion Android application via a FastAPI REST interface.
 
-The experimental evaluation on HotpotQA and MuSiQue benchmark datasets provides a comprehensive quantitative comparison of all ten deployed models, establishing the performance profile of each model across multi-hop reasoning tasks. The adaptive multi-LLM configuration demonstrates the benefits of selective model routing, achieving improved accuracy for task-typed queries while maintaining competitive latency through the use of lightweight models for low-complexity requests.
-
-The work makes a broader contribution to the research community by demonstrating a practical, deployable architecture for multi-LLM orchestration that integrates adaptive retrieval, agentic tool use, and persistent conversation management within a unified, modular codebase. The system design principles and implementation patterns documented in this dissertation provide a foundation for future research into cost-aware, quality-optimising conversational AI systems, and for practitioners seeking to build production-grade adaptive AI pipelines.
-
-Several important limitations have been identified and future research directions proposed, including learned routing classifiers, graph-based RAG integration, domain-specific model specialisation, and extended benchmark evaluation. These directions represent a rich agenda for continued work building on the foundations established by this dissertation.
+Experimental evaluation on HotpotQA and MuSiQue benchmarks demonstrates that the adaptive multi-LLM configuration improves accuracy for task-typed queries while maintaining competitive latency through lightweight model selection for low-complexity requests. The system provides a practical, deployable foundation for future research into cost-aware, quality-optimising conversational AI, with promising directions including learned routing classifiers, graph-based RAG, and extended benchmark evaluation.
 
 \newpage
 
 % =================================================
+
+
 \section*{References}
 \addcontentsline{toc}{section}{References}
 
@@ -934,77 +961,75 @@ Several important limitations have been identified and future research direction
 \justifying
 \sloppy
 
-ABDIN, M., ANEJA, J., AWADALLA, H., AWADALLAH, A., AWAN, A.A., BACH, N., BAHREE, A., BAKHTIARI, A., BAO, J., BEHL, H. et al., 2024. Phi-3 technical report: A highly capable language model locally on your phone. \textit{arXiv preprint arXiv:2404.14219}. Available from: \url{https://arxiv.org/abs/2404.14219}
-
-ASAI, A., WU, Z., WANG, Y., SRINIVASAN, V., JIN, H., CHOI, Y. and HAJISHIRZI, H., 2023. Self-RAG: Learning to retrieve, generate, and critique through self-reflection. \textit{arXiv preprint arXiv:2310.11511}. Available from: \url{https://arxiv.org/abs/2310.11511}
+% -------------------------------------------------
+% References cited in the Introduction
+% -------------------------------------------------
 
 BROWN, T., MANN, B., RYDER, N., SUBBIAH, M., KAPLAN, J.D., DHARIWAL, P., NEELAKANTAN, A., SHYAM, P., SASTRY, G., ASKELL, A. et al., 2020. Language models are few-shot learners. \textit{Advances in Neural Information Processing Systems}, 33, pp. 1877--1901. Available from: \url{https://arxiv.org/abs/2005.14165}
 
-CHASE, H., 2022. LangChain. \textit{GitHub repository}. Available from: \url{https://github.com/langchain-ai/langchain}
-
-CHEN, Y., ZHANG, E., YAN, L., WANG, S., HUANG, J., YIN, D. and MAO, J., 2025. MAO-ARAG: Multi-Agent Orchestration for Adaptive Retrieval-Augmented Generation. \textit{arXiv preprint arXiv:2508.01005}. Available from: \url{https://arxiv.org/abs/2508.01005}
-
-CHOWDHERY, A., NARANG, S., DEVLIN, J., BOSMA, M., MISHRA, G., ROBERTS, A., BARHAM, P., CHUNG, H.W., SUTTON, C., GEHRMANN, S. et al., 2022. PaLM: Scaling language modeling with pathways. \textit{arXiv preprint arXiv:2204.02311}. Available from: \url{https://arxiv.org/abs/2204.02311}
-
-DING, D., MALLINAR, N., HAUGEN, M., SAHOO, O. and MAJI, S., 2024. Hybrid LLM: Cost-efficient and quality-aware query routing. \textit{arXiv preprint arXiv:2404.14618}. Available from: \url{https://arxiv.org/abs/2404.14618}
-
-EDGE, D., TRINH, H., CHENG, N., BRADLEY, J., CHAO, A., MODY, A., TRUITT, S. and LARSON, J., 2024. From local to global: A graph RAG approach to query-focused summarization. \textit{arXiv preprint arXiv:2404.16130}. Available from: \url{https://arxiv.org/abs/2404.16130}
-
-HEVNER, A.R., MARCH, S.T., PARK, J. and RAM, S., 2004. Design science in information systems research. \textit{MIS Quarterly}, 28(1), pp. 75--105.
-
-HOWARD, A., SANDLER, M., CHU, G., CHEN, L.-C., CHEN, B., TAN, M., WANG, W., ZHU, Y., PANG, R., VASUDEVAN, V. et al., 2019. Searching for MobileNetV3. \textit{Proceedings of the IEEE/CVF International Conference on Computer Vision}, pp. 1314--1324.
-
-HUANG, L., YU, W., MA, W., ZHONG, W., FENG, Z., WANG, H., CHEN, Q., PENG, W., FENG, X., QIN, B. and LIU, T., 2023. A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. \textit{arXiv preprint arXiv:2311.05232}. Available from: \url{https://arxiv.org/abs/2311.05232}
-
-IZACARD, G. and GRAVE, E., 2021. Leveraging passage retrieval with generative models for open domain question answering. \textit{Proceedings of the 16th Conference of the European Chapter of the ACL}, pp. 874--880. Available from: \url{https://arxiv.org/abs/2007.01282}
-
-JEONG, S., BAEK, J., CHO, S., HWANG, S.J. and PARK, J.C., 2024. Adaptive-RAG: Learning to adapt retrieval-augmented large language models through question complexity. \textit{arXiv preprint arXiv:2403.14403}. Available from: \url{https://arxiv.org/abs/2403.14403}
-
-JI, Z., LEE, N., FRIESKE, R., YU, T., SU, D., XU, Y., ISHII, E., BANG, Y.J., MADOTTO, A. and FUNG, P., 2023. Survey of hallucination in natural language generation. \textit{ACM Computing Surveys}, 55(12), pp. 1--38.
-
-JIANG, A.Q., SABLAYROLLES, A., MENSCH, A., BAMFORD, C., CHAPLOT, D.S., DE LAS CASAS, D., BRESSAND, F., LENGYEL, G., LAMPLE, G., SAULNIER, L. et al., 2023. Mistral 7B. \textit{arXiv preprint arXiv:2310.06825}. Available from: \url{https://arxiv.org/abs/2310.06825}
-
-KARPUKHIN, V., OGUZ, B., MIN, S., LEWIS, P., WU, L., EDUNOV, S., CHEN, D. and YIH, W., 2020. Dense passage retrieval for open-domain question answering. \textit{Proceedings of the 2020 Conference on EMNLP}, pp. 6769--6781. Available from: \url{https://arxiv.org/abs/2004.04906}
-
-LEWIS, P., PEREZ, E., PIKTUS, A., PETRONI, F., KARPUKHIN, V., GOYAL, N., KÜTTLER, H., LEWIS, M., YIH, W., ROCKTÄSCHEL, T. et al., 2020. Retrieval-augmented generation for knowledge-intensive NLP tasks. \textit{Advances in Neural Information Processing Systems}, 33, pp. 9459--9474. Available from: \url{https://arxiv.org/abs/2005.11401}
-
-NGUYEN, T., CHIN, P. and TAI, Y.-W., 2025. MA-RAG: Multi-Agent Retrieval-Augmented Generation via Collaborative Chain-of-Thought Reasoning. \textit{arXiv preprint arXiv:2505.20096}. Available from: \url{https://arxiv.org/abs/2505.20096}
-
-OUYANG, L., WU, J., JIANG, X., ALMEIDA, D., WAINWRIGHT, C., MISHKIN, P., ZHANG, C., AGARWAL, S., SLAMA, K., RAY, A. et al., 2022. Training language models to follow instructions with human feedback. \textit{Advances in Neural Information Processing Systems}, 35, pp. 27730--27744. Available from: \url{https://arxiv.org/abs/2203.02155}
-
-PARANJAPE, B., LUNDBERG, S., SINGH, S., HAJISHIRZI, H., ZETTLEMOYER, L. and RIBEIRO, M.T., 2023. ART: Automatic multi-step reasoning and tool-use for large language models. \textit{arXiv preprint arXiv:2303.09014}. Available from: \url{https://arxiv.org/abs/2303.09014}
-
-RADFORD, A., WU, J., CHILD, R., LUAN, D., AMODEI, D. and SUTSKEVER, I., 2019. Language models are unsupervised multitask learners. \textit{OpenAI Blog}, 1(8), p. 9.
-
-SHI, F., CHEN, X., MISRA, K., SCALES, N., DOHAN, D., CHI, E.H., SCHARLI, N. and ZHOU, D., 2023. Large language models can be easily distracted by irrelevant context. \textit{Proceedings of the 40th International Conference on Machine Learning}, pp. 31210--31227. Available from: \url{https://arxiv.org/abs/2302.00093}
-
-SHUSTER, K., PO\'{F}, S., CHEN, M., KIELA, D. and WESTON, J., 2021. Retrieval augmentation reduces hallucination in conversation. \textit{arXiv preprint arXiv:2104.07567}. Available from: \url{https://arxiv.org/abs/2104.07567}
-
-SINGH, A., EHTESHAM, A., KUMAR, S. and TALAEI KHOEI, T., 2025. Agentic Retrieval-Augmented Generation: A survey on Agentic RAG. \textit{arXiv preprint arXiv:2501.09136}. Available from: \url{https://arxiv.org/abs/2501.09136}
-
-TEAM, G., ANIL, R., BORGEAUD, S., ALAYRAC, J.B., YU, J., SORICUT, R., SCHALKWYK, J., DAI, A.M., HAUTH, A., MILLICAN, K. et al., 2024. Gemini: A family of highly capable multimodal models. \textit{arXiv preprint arXiv:2312.11805}. Available from: \url{https://arxiv.org/abs/2312.11805}
+WEI, J., WANG, X., SCHUURMANS, D., BOSMA, M., ICHTER, B., XIA, F., CHI, E., LE, Q. and ZHOU, D., 2022. Chain-of-thought prompting elicits reasoning in large language models. \textit{Advances in Neural Information Processing Systems}, 35, pp. 24824--24837. Available from: \url{https://arxiv.org/abs/2201.11903}
 
 TOUVRON, H., LAVRIL, T., IZACARD, G., MARTINET, X., LACHAUX, M.A., LACROIX, T., ROZIÈRE, B., GOYAL, N., HAMBRO, E., AZHAR, F. et al., 2023. LLaMA: Open and efficient foundation language models. \textit{arXiv preprint arXiv:2302.13971}. Available from: \url{https://arxiv.org/abs/2302.13971}
 
-TRIVEDI, H., BALASUBRAMANIAN, N., KHOT, T. and SABHARWAL, A., 2022. MuSiQue: Multihop questions via single-hop question composition. \textit{Transactions of the Association for Computational Linguistics}, 10, pp. 539--554. Available from: \url{https://arxiv.org/abs/2108.00573}
+JIANG, A.Q., SABLAYROLLES, A., MENSCH, A., BAMFORD, C., CHAPLOT, D.S., DE LAS CASAS, D., BRESSAND, F., LENGYEL, G., LAMPLE, G., SAULNIER, L. et al., 2023. Mistral 7B. \textit{arXiv preprint arXiv:2310.06825}. Available from: \url{https://arxiv.org/abs/2310.06825}
 
-VASWANI, A., SHAZEER, N., PARMAR, N., USZKOREIT, J., JONES, L., GOMEZ, A.N., KAISER, Ł. and POLOSUKHIN, I., 2017. Attention is all you need. \textit{Advances in Neural Information Processing Systems}, 30. Available from: \url{https://arxiv.org/abs/1706.03762}
+TEAM, G., ANIL, R., BORGEAUD, S., ALAYRAC, J.B., YU, J., SORICUT, R., SCHALKWYK, J., DAI, A.M., HAUTH, A., MILLICAN, K. et al., 2024. Gemini: A family of highly capable multimodal models. \textit{arXiv preprint arXiv:2312.11805}. Available from: \url{https://arxiv.org/abs/2312.11805}
 
-WANG, J., WANG, X., JAVAHERIPI, M., CORIA, R., SHAN, Y. and HAN, J., 2024. Mixture-of-Agents enhances large language model capabilities. \textit{arXiv preprint arXiv:2406.04692}. Available from: \url{https://arxiv.org/abs/2406.04692}
+SINGH, A., EHTESHAM, A., KUMAR, S. and TALAEI KHOEI, T., 2025. Agentic Retrieval-Augmented Generation: A survey on Agentic RAG. \textit{arXiv preprint arXiv:2501.09136}. Available from: \url{https://arxiv.org/abs/2501.09136}
 
-WEI, J., WANG, X., SCHUURMANS, D., BOSMA, M., ICHTER, B., XIA, F., CHI, E., LE, Q. and ZHOU, D., 2022. Chain-of-thought prompting elicits reasoning in large language models. \textit{Advances in Neural Information Processing Systems}, 35, pp. 24824--24837. Available from: \url{https://arxiv.org/abs/2201.11903}
+LEWIS, P., PEREZ, E., PIKTUS, A., PETRONI, F., KARPUKHIN, V., GOYAL, N., KÜTTLER, H., LEWIS, M., YIH, W., ROCKTÄSCHEL, T. et al., 2020. Retrieval-augmented generation for knowledge-intensive NLP tasks. \textit{Advances in Neural Information Processing Systems}, 33, pp. 9459--9474. Available from: \url{https://arxiv.org/abs/2005.11401}
 
-XIONG, G., JIN, Q., WANG, X., FANG, Y., LIU, H., YANG, Y., CHEN, F., SONG, Z., WANG, D., ZHANG, M., LU, Z. and ZHANG, A., 2025. RAG-Gym: Systematic Optimization of Language Agents for Retrieval-Augmented Generation. \textit{arXiv preprint arXiv:2502.13957}. Available from: \url{https://arxiv.org/abs/2502.13957}
+SHI, F., CHEN, X., MISRA, K., SCALES, N., DOHAN, D., CHI, E.H., SCHARLI, N. and ZHOU, D., 2023. Large language models can be easily distracted by irrelevant context. \textit{Proceedings of the 40th International Conference on Machine Learning}, pp. 31210--31227. Available from: \url{https://arxiv.org/abs/2302.00093}
 
-YANG, Z., QI, P., ZHANG, S., BENGIO, Y., COHEN, W.W., SALAKHUTDINOV, R. and MANNING, C.D., 2018. HotpotQA: A dataset for diverse, explainable multi-hop question answering. \textit{Proceedings of the 2018 Conference on EMNLP}, pp. 2369--2380. Available from: \url{https://arxiv.org/abs/1809.09600}
+ASAI, A., WU, Z., WANG, Y., SRINIVASAN, V., JIN, H., CHOI, Y. and HAJISHIRZI, H., 2023. Self-RAG: Learning to retrieve, generate, and critique through self-reflection. \textit{arXiv preprint arXiv:2310.11511}. Available from: \url{https://arxiv.org/abs/2310.11511}
 
 YAO, S., ZHAO, J., YU, D., DU, N., SHAFRAN, I., NARASIMHAN, K. and CAO, Y., 2023. ReAct: Synergizing reasoning and acting in language models. \textit{Proceedings of the 11th International Conference on Learning Representations}. Available from: \url{https://arxiv.org/abs/2210.03629}
 
-ZHANG, N., ZHANG, C., TAN, Z., YANG, X., DENG, W. and WANG, W., 2025. Credible plan-driven RAG method for multi-hop question answering. \textit{arXiv preprint arXiv:2504.16787}. Available from: \url{https://arxiv.org/abs/2504.16787}
-
 ZHAO, L., WANG, H., CHEN, Y., ZHANG, Y., CHEN, J. and HU, B., 2024. LangGraph: A framework for building stateful, multi-actor applications with LLMs. \textit{GitHub repository}. Available from: \url{https://github.com/langchain-ai/langgraph}
 
+JEONG, S., BAEK, J., CHO, S., HWANG, S.J. and PARK, J.C., 2024. Adaptive-RAG: Learning to adapt retrieval-augmented large language models through question complexity. \textit{arXiv preprint arXiv:2403.14403}. Available from: \url{https://arxiv.org/abs/2403.14403}
+
+% -------------------------------------------------
+% References cited in the Literature Review only
+% -------------------------------------------------
+
+VASWANI, A., SHAZEER, N., PARMAR, N., USZKOREIT, J., JONES, L., GOMEZ, A.N., KAISER, Ł. and POLOSUKHIN, I., 2017. Attention is all you need. \textit{Advances in Neural Information Processing Systems}, 30. Available from: \url{https://arxiv.org/abs/1706.03762}
+
+OUYANG, L., WU, J., JIANG, X., ALMEIDA, D., WAINWRIGHT, C., MISHKIN, P., ZHANG, C., AGARWAL, S., SLAMA, K., RAY, A. et al., 2022. Training language models to follow instructions with human feedback. \textit{Advances in Neural Information Processing Systems}, 35, pp. 27730--27744. Available from: \url{https://arxiv.org/abs/2203.02155}
+
+ABDIN, M., ANEJA, J., AWADALLA, H., AWADALLAH, A., AWAN, A.A., BACH, N., BAHREE, A., BAKHTIARI, A., BAO, J., BEHL, H. et al., 2024. Phi-3 technical report: A highly capable language model locally on your phone. \textit{arXiv preprint arXiv:2404.14219}. Available from: \url{https://arxiv.org/abs/2404.14219}
+
+KARPUKHIN, V., OGUZ, B., MIN, S., LEWIS, P., WU, L., EDUNOV, S., CHEN, D. and YIH, W., 2020. Dense passage retrieval for open-domain question answering. \textit{Proceedings of the 2020 Conference on EMNLP}, pp. 6769--6781. Available from: \url{https://arxiv.org/abs/2004.04906}
+
+IZACARD, G. and GRAVE, E., 2021. Leveraging passage retrieval with generative models for open domain question answering. \textit{Proceedings of the 16th Conference of the European Chapter of the ACL}, pp. 874--880. Available from: \url{https://arxiv.org/abs/2007.01282}
+
+ZHANG, N., ZHANG, C., TAN, Z., YANG, X., DENG, W. and WANG, W., 2025. Credible plan-driven RAG method for multi-hop question answering. \textit{arXiv preprint arXiv:2504.16787}. Available from: \url{https://arxiv.org/abs/2504.16787}
+
+PARANJAPE, B., LUNDBERG, S., SINGH, S., HAJISHIRZI, H., ZETTLEMOYER, L. and RIBEIRO, M.T., 2023. ART: Automatic multi-step reasoning and tool-use for large language models. \textit{arXiv preprint arXiv:2303.09014}. Available from: \url{https://arxiv.org/abs/2303.09014}
+
 ZOU, J., YANG, L., QI, Y., CHEN, S., AI, M., SHEN, K., HE, J. and WANG, M., 2025. AutoTool: Dynamic tool selection and integration for agentic reasoning. \textit{arXiv preprint arXiv:2508.xxxxx}. Available from: \url{https://arxiv.org/abs/2508.xxxxx}
+
+CHEN, Y., ZHANG, E., YAN, L., WANG, S., HUANG, J., YIN, D. and MAO, J., 2025. MAO-ARAG: Multi-Agent Orchestration for Adaptive Retrieval-Augmented Generation. \textit{arXiv preprint arXiv:2508.01005}. Available from: \url{https://arxiv.org/abs/2508.01005}
+
+NGUYEN, T., CHIN, P. and TAI, Y.-W., 2025. MA-RAG: Multi-Agent Retrieval-Augmented Generation via Collaborative Chain-of-Thought Reasoning. \textit{arXiv preprint arXiv:2505.20096}. Available from: \url{https://arxiv.org/abs/2505.20096}
+
+XIONG, G., JIN, Q., WANG, X., FANG, Y., LIU, H., YANG, Y., CHEN, F., SONG, Z., WANG, D., ZHANG, M., LU, Z. and ZHANG, A., 2025. RAG-Gym: Systematic Optimization of Language Agents for Retrieval-Augmented Generation. \textit{arXiv preprint arXiv:2502.13957}. Available from: \url{https://arxiv.org/abs/2502.13957}
+
+WANG, J., WANG, X., JAVAHERIPI, M., CORIA, R., SHAN, Y. and HAN, J., 2024. Mixture-of-Agents enhances large language model capabilities. \textit{arXiv preprint arXiv:2406.04692}. Available from: \url{https://arxiv.org/abs/2406.04692}
+
+DING, D., MALLINAR, N., HAUGEN, M., SAHOO, O. and MAJI, S., 2024. Hybrid LLM: Cost-efficient and quality-aware query routing. \textit{arXiv preprint arXiv:2404.14618}. Available from: \url{https://arxiv.org/abs/2404.14618}
+
+CHASE, H., 2022. LangChain. \textit{GitHub repository}. Available from: \url{https://github.com/langchain-ai/langchain}
+
+YANG, Z., QI, P., ZHANG, S., BENGIO, Y., COHEN, W.W., SALAKHUTDINOV, R. and MANNING, C.D., 2018. HotpotQA: A dataset for diverse, explainable multi-hop question answering. \textit{Proceedings of the 2018 Conference on EMNLP}, pp. 2369--2380. Available from: \url{https://arxiv.org/abs/1809.09600}
+
+TRIVEDI, H., BALASUBRAMANIAN, N., KHOT, T. and SABHARWAL, A., 2022. MuSiQue: Multihop questions via single-hop question composition. \textit{Transactions of the Association for Computational Linguistics}, 10, pp. 539--554. Available from: \url{https://arxiv.org/abs/2108.00573}
+
+JI, Z., LEE, N., FRIESKE, R., YU, T., SU, D., XU, Y., ISHII, E., BANG, Y.J., MADOTTO, A. and FUNG, P., 2023. Survey of hallucination in natural language generation. \textit{ACM Computing Surveys}, 55(12), pp. 1--38.
+
+HUANG, L., YU, W., MA, W., ZHONG, W., FENG, Z., WANG, H., CHEN, Q., PENG, W., FENG, X., QIN, B. and LIU, T., 2023. A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. \textit{arXiv preprint arXiv:2311.05232}. Available from: \url{https://arxiv.org/abs/2311.05232}
+
+HOWARD, A., SANDLER, M., CHU, G., CHEN, L.-C., CHEN, B., TAN, M., WANG, W., ZHU, Y., PANG, R., VASUDEVAN, V. et al., 2019. Searching for MobileNetV3. \textit{Proceedings of the IEEE/CVF International Conference on Computer Vision}, pp. 1314--1324.
 
 % =================================================
 % Appendix
@@ -1031,44 +1056,5 @@ The complete source code for this dissertation project, including the LangGraph 
 
 The repository includes a comprehensive \texttt{README.md} with installation instructions, environment configuration guidance, and instructions for reproducing the benchmark evaluation results.
 
-% \subsection{Live Application}
-
-% A live demonstration of the Adaptive Multi-LLM Agentic RAG chatbot system is accessible at:
-
-% \textbf{Live Application URL:} \texttt{[Deployment URL -- to be provided upon production deployment]}
-
-% \textbf{Android Application:} Available for download from the Google Play Store under the application name ``Adaptive RAG Chatbot'' (publication pending final submission approval).
-
-% \section{System Configuration Reference}
-% \label{app:config}
-
-% The system requires the following environment variables, configured in a \texttt{.env} file in the project root directory.
-
-% \begin{lstlisting}[caption={Required environment variable configuration for system deployment.}, label={lst:env}, language=bash]
-% # Groq API key for LLM inference
-% GROQ_API_KEY=your_groq_api_key_here
-
-% # MySQL database connection parameters
-% MYSQL_HOST=localhost
-% MYSQL_PORT=3306
-% MYSQL_USER=chatbot_user
-% MYSQL_PASSWORD=your_mysql_password
-% MYSQL_DATABASE=langgraph_chatbot
-
-% # Default model key (used when auto-routing is disabled)
-% DEFAULT_MODEL_KEY=llama_3_1_8b_instant
-
-% # ChromaDB vector store persistence directory
-% VECTORSTORE_DIR=./vectorstore
-
-% # FastAPI server configuration
-% API_HOST=0.0.0.0
-% API_PORT=8000
-% \end{lstlisting}
-
-% \section{Evaluation Reproducibility Guide}
-% \label{app:reproducibility}
-
-% To reproduce the benchmark evaluation results reported in Section~\ref{sec:evaluation}, the following procedure should be followed. First, install the project dependencies using \texttt{pip install -r requirements.txt}. Second, configure the \texttt{.env} file with a valid Groq API key and MySQL connection parameters. Third, initialise the MySQL database schema by running \texttt{python -m app.core.bootstrap}. Fourth, download the HotpotQA and MuSiQue evaluation sets from their official repositories and place them in the \texttt{data/} directory. Fifth, run the evaluation script with \texttt{python -m scripts.evaluate --dataset hotpotqa --sample 500} and \texttt{python -m scripts.evaluate --dataset musique --sample 500}. Results are written to JSON files in the \texttt{results/} directory and can be summarised using \texttt{python -m scripts.summarise\_results}.
 
 \end{document}

@@ -25,10 +25,14 @@ def render_branding() -> None:
         st.sidebar.markdown(f"""
         <div class="branding-bar">
             <div class="branding-left">
-                <span style="font-size:1.6rem;">🧠</span>
+                <span>
+                <img src="https://img.icons8.com/?size=100&id=39955&format=png&color=000000" 
+                    alt="icon" 
+                    style="width: 1.8rem; height: 2rem; vertical-align: middle;">
+                </span>
                 <div>
-                    <div class="branding-title">LangGraph Chat</div>
-                    <div class="branding-subtitle">COM726 · DISSERTATION</div>
+                    <div class="branding-title">Zephryel</div>
+                    <div class="branding-subtitle">An AI Companion</div>
                 </div>
             </div>
             <div class="{pill_class}" aria-hidden="true">

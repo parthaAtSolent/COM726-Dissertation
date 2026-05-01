@@ -1,8 +1,0 @@
-\contentsline {figure}{\numberline {1}{\ignorespaces High-level architecture of the Adaptive Multi-LLM Agentic RAG system.}}{9}{figure.caption.6}%
-\contentsline {figure}{\numberline {2}{\ignorespaces Query routing decision flowchart for the adaptive multi-path execution architecture.}}{14}{figure.caption.8}%
-\contentsline {figure}{\numberline {3}{\ignorespaces RAG pipeline showing document ingestion, embedding, retrieval, and context injection.}}{15}{figure.caption.9}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Streamlit user interface showing the chat panel, model selector, and conversation thread management sidebar.}}{17}{figure.caption.10}%
-\contentsline {figure}{\numberline {5}{\ignorespaces LangGraph StateGraph topology showing nodes, conditional edges, and execution paths.}}{18}{figure.caption.11}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Mobile dashboard of the Android application showing chat interface, model interaction, and routing transparency.}}{22}{figure.caption.12}%
-\contentsline {figure}{\numberline {7}{\ignorespaces End-to-End Interaction Flow of Android-based Multi-LLM Chatbot System}}{23}{figure.caption.13}%
-\contentsline {figure}{\numberline {8}{\ignorespaces Project Gantt Chart illustrating the full project timeline from January 17, 2026 to May 2, 2026.}}{27}{figure.caption.16}%
