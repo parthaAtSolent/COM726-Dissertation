@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  1 MAY 2026 09:29
+This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  4 MAY 2026 10:20
  restricted system commands enabled.
 **main.tex
 (./main.tex
@@ -829,7 +829,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-<../assets/solent_logo.png, id=219, 2055.68pt x 2054.67625pt>
+<../assets/solent_logo.png, id=227, 2055.68pt x 2054.67625pt>
 File: ../assets/solent_logo.png Graphic file (type png)
 <use ../assets/solent_logo.png>
 Package luatex.def Info: ../assets/solent_logo.png  used on input line 110.
@@ -896,46 +896,46 @@ sks to spe-cial-ist LLMs out-per-form mono-lithic ap-proaches
  []
 
 [2]
-Overfull \hbox (3.95738pt too wide) in paragraph at lines 249--250
+Overfull \hbox (3.95738pt too wide) in paragraph at lines 248--249
 []\TU/TrebuchetMS(0)/m/n/12 Retrieval-Augmented Gen-er-a-tion (RAG), in-tro-duce
 d by Lewis et al. (2020), grounds
  []
 
 
-Overfull \hbox (6.50356pt too wide) in paragraph at lines 254--255
+Overfull \hbox (6.50356pt too wide) in paragraph at lines 253--254
 \TU/TrebuchetMS(0)/m/n/12 in-ter-leaved rea-son-ing traces with tool ex-e-cu-tio
 n to im-prove multi-hop QA and decision-
  []
 
 [3] [4]
-Overfull \hbox (1.10437pt too wide) in paragraph at lines 278--279
+Overfull \hbox (1.10437pt too wide) in paragraph at lines 277--278
 []\TU/TrebuchetMS(0)/m/n/12 The ex-per-i-men-tal eval-u-a-tion is con-ducted us-
 ing a con-trolled bench-mark ap-proach,
  []
 
 
-Overfull \hbox (10.93054pt too wide) in paragraph at lines 278--279
+Overfull \hbox (10.93054pt too wide) in paragraph at lines 277--278
 \TU/TrebuchetMS(0)/m/n/12 com-par-ing the pro-posed sys-tem against single-model
  base-lines on stan-dard-ised datasets
  []
 
-<../assets/architecture_diagram.png, id=393, 2762.32pt x 1541.76pt>
+<../assets/architecture_diagram.png, id=403, 2762.32pt x 1541.76pt>
 File: ../assets/architecture_diagram.png Graphic file (type png)
 <use ../assets/architecture_diagram.png>
 Package luatex.def Info: ../assets/architecture_diagram.png  used on input line
- 287.
+ 286.
 (luatex.def)             Requested size: 407.66833pt x 227.51349pt.
 [5<../assets/architecture_diagram.png>]
-Overfull \hbox (8.32323pt too wide) in paragraph at lines 297--298
+Overfull \hbox (8.32323pt too wide) in paragraph at lines 296--297
 \TU/TrebuchetMS(0)/m/n/12 by Lang-Graph’s \TU/lmtt/m/n/12 StateGraph\TU/Trebu
 chetMS(0)/m/n/12 . The state schema, de-fined in \TU/lmtt/m/n/12 app/models/chat
 _state.py\TU/TrebuchetMS(0)/m/n/12 ,
  []
 
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 303.
+put line 302.
 
-Overfull \hbox (4.98126pt too wide) in paragraph at lines 322--323
+Overfull \hbox (4.98126pt too wide) in paragraph at lines 321--322
 \TU/TrebuchetMS(0)/m/n/12 and four nodes are reg-is-tered: \TU/lmtt/m/n/12 route
 r_node\TU/TrebuchetMS(0)/m/n/12 , \TU/lmtt/m/n/12 direct_node\TU/TrebuchetMS(0)
 /m/n/12 , \TU/lmtt/m/n/12 rag_node\TU/TrebuchetMS(0)/m/n/12 , and \TU/lmtt/m/n/
@@ -943,114 +943,115 @@ r_node\TU/TrebuchetMS(0)/m/n/12 , \TU/lmtt/m/n/12 direct_node\TU/TrebuchetMS(0)
  []
 
 
-Underfull \hbox (badness 1365) in paragraph at lines 335--336
+Underfull \hbox (badness 1365) in paragraph at lines 334--335
 []|\TU/TrebuchetMS(0)/b/n/12 Pri-mary Spe-cial-i-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 337--338
+Underfull \hbox (badness 10000) in paragraph at lines 336--337
 []|\TU/TrebuchetMS(0)/m/n/12 Ad-vanced multi-
  []
 
 
-Underfull \hbox (badness 3375) in paragraph at lines 339--340
+Underfull \hbox (badness 3375) in paragraph at lines 338--339
 []|\TU/TrebuchetMS(0)/m/n/12 Gen-eral lan-guage
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 341--342
-[]|\TU/TrebuchetMS(0)/m/n/12 Syn-the-sis, broad
- []
-
-
-Underfull \hbox (badness 4660) in paragraph at lines 343--344
+Underfull \hbox (badness 4660) in paragraph at lines 340--341
 []|\TU/TrebuchetMS(0)/m/n/12 Lightweight, fast
  []
 
 
-Underfull \hbox (badness 1253) in paragraph at lines 345--346
+Underfull \hbox (badness 1253) in paragraph at lines 342--343
 []|\TU/TrebuchetMS(0)/m/n/12 En-ter-prise, struc-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 347--348
+Underfull \hbox (badness 10000) in paragraph at lines 344--345
 []|\TU/TrebuchetMS(0)/m/n/12 General-purpose,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 351--352
+Underfull \hbox (badness 10000) in paragraph at lines 348--349
 []|\TU/TrebuchetMS(0)/m/n/12 Rea-son-ing, com-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 353--354
+Underfull \hbox (badness 10000) in paragraph at lines 350--351
 []|\TU/TrebuchetMS(0)/m/n/12 Code gen-er-a-tion
  []
 
 
-Overfull \hbox (22.6441pt too wide) in paragraph at lines 333--358
+Overfull \hbox (22.6441pt too wide) in paragraph at lines 332--355
  [][] 
  []
 
 
-Overfull \hbox (3.47621pt too wide) in paragraph at lines 360--361
-\TU/TrebuchetMS(0)/m/n/12 Mistral-7B and LLaMA-3.1-8B-Instant han-dle general-pu
-rpose instruction-following and
+Overfull \hbox (4.31866pt too wide) in paragraph at lines 357--358
+\TU/TrebuchetMS(0)/m/n/12 repos-i-to-ries. Mistral-7B and LLaMA-3.1-8B-Instant 
+han-dle general-purpose instruction-
+ []
+
+
+Overfull \hbox (16.05229pt too wide) in paragraph at lines 357--358
+\TU/TrebuchetMS(0)/m/n/12 fall-back mod-els for low-complexity queries where re-
+sponse speed is pri-ori-tised. Granite-
  []
 
 [6] [7]
-Overfull \hbox (4.75713pt too wide) in paragraph at lines 407--408
+Overfull \hbox (4.75713pt too wide) in paragraph at lines 404--405
 \TU/TrebuchetMS(0)/m/n/12 trac-tion. Low-complexity gen-eral queries are served by the lightweight \TU/lmtt/m/n/12 qwen3_5_0_8b\TU/TrebuchetMS(0)/m/n/12 ,
  []
 
-[8] [9]
-Overfull \hbox (14.72649pt too wide) in paragraph at lines 451--452
+[8]
+Overfull \hbox (14.72649pt too wide) in paragraph at lines 448--449
 \TU/TrebuchetMS(0)/m/n/12 key-word match-ing. The highest-priority check scans 
 for mem-ber-ship in \TU/lmtt/m/n/12 AGENT_KEYWORDS\TU/TrebuchetMS(0)/m/n/12 ,
  []
 
-<../assets/query_routing.png, id=429, 1541.76pt x 2762.32pt>
+<../assets/query_routing.png, id=435, 1541.76pt x 2762.32pt>
 File: ../assets/query_routing.png Graphic file (type png)
 <use ../assets/query_routing.png>
-Package luatex.def Info: ../assets/query_routing.png  used on input line 455.
+Package luatex.def Info: ../assets/query_routing.png  used on input line 452.
 (luatex.def)             Requested size: 176.95755pt x 317.07614pt.
 
-Overfull \hbox (1.25421pt too wide) in paragraph at lines 464--466
+Overfull \hbox (1.25421pt too wide) in paragraph at lines 461--463
 \TU/TrebuchetMS(0)/m/n/12 The \TU/lmtt/m/n/12 direct_node \TU/TrebuchetMS(0)/m/
 n/12 han-dles queries that can be an-swered from para-met-ric model knowl-
  []
 
-[10] [11<../assets/query_routing.png>]
-<../assets/rag_pipeline.png, id=440, 2762.32pt x 1541.76pt>
+[9] [10<../assets/query_routing.png>]
+<../assets/rag_pipeline.png, id=446, 2762.32pt x 1541.76pt>
 File: ../assets/rag_pipeline.png Graphic file (type png)
 <use ../assets/rag_pipeline.png>
-Package luatex.def Info: ../assets/rag_pipeline.png  used on input line 474.
+Package luatex.def Info: ../assets/rag_pipeline.png  used on input line 471.
 (luatex.def)             Requested size: 407.66833pt x 227.51349pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 515--516
+ [11<../assets/rag_pipeline.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 512--513
 [] \TU/TrebuchetMS(0)/b/n/12 re-turn $\OMS/cmsy/m/n/12 f [] \OT1/cmr/m/n/12 : [[]([])]\OML/cmm/m/it/12 ;  [] \OT1/cmr/m/n/12 :
  []
 
-[12<../assets/rag_pipeline.png>] [13]
-<../assets/sidebar.png, id=456, 311.49709pt x 734.41042pt>
+[12]
+<../assets/sidebar.png, id=460, 311.49709pt x 734.41042pt>
 File: ../assets/sidebar.png Graphic file (type png)
 <use ../assets/sidebar.png>
-Package luatex.def Info: ../assets/sidebar.png  used on input line 544.
+Package luatex.def Info: ../assets/sidebar.png  used on input line 541.
 (luatex.def)             Requested size: 134.48297pt x 317.07614pt.
- [14]
-<../assets/chat.png, id=465, 963.26541pt x 730.73pt>
+ [13]
+<../assets/chat.png, id=469, 963.26541pt x 730.73pt>
 File: ../assets/chat.png Graphic file (type png)
 <use ../assets/chat.png>
-Package luatex.def Info: ../assets/chat.png  used on input line 557.
+Package luatex.def Info: ../assets/chat.png  used on input line 554.
 (luatex.def)             Requested size: 407.66833pt x 309.25716pt.
- [15<../assets/sidebar.png>]
-<../assets/graphical_abstract.png, id=474, 2762.32pt x 1541.76pt>
+ [14<../assets/sidebar.png>]
+<../assets/graphical_abstract.png, id=477, 2762.32pt x 1541.76pt>
 File: ../assets/graphical_abstract.png Graphic file (type png)
 <use ../assets/graphical_abstract.png>
 Package luatex.def Info: ../assets/graphical_abstract.png  used on input line 5
-70.
+67.
 (luatex.def)             Requested size: 407.66833pt x 227.51349pt.
- [16<../assets/chat.png>]
+ [15<../assets/chat.png>] [16<../assets/graphical_abstract.png>]
 (C:/Users/parth/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
@@ -1058,7 +1059,7 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 592.
+nput line 590.
 
 Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
@@ -1159,6 +1160,104 @@ Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
+Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
@@ -1209,16 +1308,11 @@ Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-<../assets/graphical_abstract.png>]
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
+Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
@@ -1234,28 +1328,11 @@ Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
@@ -1265,13 +1342,6 @@ Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
@@ -1279,13 +1349,6 @@ Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
 Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
@@ -1299,240 +1362,175 @@ Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
 Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-
-Overfull \hbox (10.44653pt too wide) in paragraph at lines 666--667
-\TU/TrebuchetMS(0)/m/n/12 view mod-els, while the de-fault fall-back \TU/lmtt/m
-/n/12 llama_3_1_8b_instant \TU/TrebuchetMS(0)/m/n/12 and \TU/lmtt/m/n/12 granite
-3_dense_2b
+]
+Overfull \hbox (6.12912pt too wide) in paragraph at lines 662--663
+\TU/TrebuchetMS(0)/m/n/12 iden-ti-fiers. Sev-eral en-tries in this reg-istry re-
+flect de-ploy-ment con-straints. Lightweight
  []
 
-[18
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ├ (U+251C) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no │ (U+2502) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no └ (U+2514) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-Missing character: There is no ─ (U+2500) in font [lmmono10-regular]:!
-] [19]
-Overfull \hbox (8.62921pt too wide) in paragraph at lines 719--720
+[18]
+Overfull \hbox (8.62921pt too wide) in paragraph at lines 715--716
 \TU/TrebuchetMS(0)/m/n/12 mod-ule wraps the graph’s \TU/lmtt/m/n/12 astream_ev
 ents \TU/TrebuchetMS(0)/m/n/12 method, fil-ter-ing for \TU/lmtt/m/n/12 on_chat_m
 odel_stream
  []
 
-[20]
-Overfull \hbox (1.32323pt too wide) in paragraph at lines 761--762
+[19]
+Overfull \hbox (1.32323pt too wide) in paragraph at lines 757--758
 []\TU/TrebuchetMS(0)/m/n/12 The API is de-signed for state-less hor-i-zon-tal sc
 al-a-bil-ity; all state is man-aged through
  []
 
-[21]
-<../assets/mobile_dashboard.png, id=543, 310.82791pt x 668.4975pt>
+[20]
+<../assets/mobile_dashboard.png, id=546, 310.82791pt x 668.4975pt>
 File: ../assets/mobile_dashboard.png Graphic file (type png)
 <use ../assets/mobile_dashboard.png>
-Package luatex.def Info: ../assets/mobile_dashboard.png  used on input line 783
+Package luatex.def Info: ../assets/mobile_dashboard.png  used on input line 779
 .
 (luatex.def)             Requested size: 147.43135pt x 317.07614pt.
- [22<../assets/mobile_dashboard.png>]
-<../assets/android_flowchart.png, id=550, 931.48pt x 1701.35625pt>
+ [21<../assets/mobile_dashboard.png>]
+<../assets/android_flowchart.png, id=553, 931.48pt x 1701.35625pt>
 File: ../assets/android_flowchart.png Graphic file (type png)
 <use ../assets/android_flowchart.png>
-Package luatex.def Info: ../assets/android_flowchart.png  used on input line 80
-0.
+Package luatex.def Info: ../assets/android_flowchart.png  used on input line 79
+6.
 (luatex.def)             Requested size: 173.58607pt x 317.07614pt.
- [23<../assets/android_flowchart.png>]
+ [22<../assets/android_flowchart.png>]
 
-LaTeX Warning: Reference `tab:routing_accuracy' on page 24 undefined on input l
-ine 899.
+LaTeX Warning: Reference `tab:routing_accuracy' on page 23 undefined on input l
+ine 893.
 
-[24]
-Overfull \hbox (15.7516pt too wide) in paragraph at lines 901--902
+[23]
+Overfull \hbox (15.7516pt too wide) in paragraph at lines 895--896
 \TU/TrebuchetMS(0)/m/n/12 adap-tive multi-LLM con-fig-u-ra-tion ben-e-fits from di-rect-ing rea-son-ing queries to DeepSeek-
  []
 
-[25] [26]
-<../assets/gnatt_chart.png, id=576, 1872.9975pt x 852.18375pt>
+[24] [25]
+<../assets/gnatt_chart.png, id=579, 1257.69875pt x 574.145pt>
 File: ../assets/gnatt_chart.png Graphic file (type png)
 <use ../assets/gnatt_chart.png>
-Package luatex.def Info: ../assets/gnatt_chart.png  used on input line 930.
-(luatex.def)             Requested size: 452.9679pt x 206.08867pt.
- [27<../assets/gnatt_chart.png>] [28] [29] [30]
-Underfull \hbox (badness 1448) in paragraph at lines 1026--1027
+Package luatex.def Info: ../assets/gnatt_chart.png  used on input line 924.
+(luatex.def)             Requested size: 452.9679pt x 206.77965pt.
+ [26<../assets/gnatt_chart.png>] [27] [28] [29]
+Underfull \hbox (badness 1448) in paragraph at lines 1020--1021
 []\TU/TrebuchetMS(0)/m/n/12 TRIVEDI, H., BAL-A-SUB-RA-MA-NIAN, N., KHOT, T. and SAB-HAR-WAL, A., 2022.
  []
 
-[31]
-Overfull \hbox (26.81583pt too wide) in paragraph at lines 1055--1056
+[30]
+Overfull \hbox (26.81583pt too wide) in paragraph at lines 1049--1050
 []\TU/TrebuchetMS(0)/b/n/12 GitHub Repos-i-tory: \TU/lmtt/m/n/12 [https://github
 .com/parthaAtSolent/COM726---Dissertation] 
  []
 
-<Ethics_Application.pdf, id=646, 597.23125pt x 845.1575pt>
+<Ethics_Application.pdf, id=649, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf>
-Package luatex.def Info: Ethics_Application.pdf  used on input line 1064.
+Package luatex.def Info: Ethics_Application.pdf  used on input line 1058.
 (luatex.def)             Requested size: 597.22978pt x 845.15544pt.
-<Ethics_Application.pdf, id=648, page=1, 597.23125pt x 845.1575pt>
+<Ethics_Application.pdf, id=651, page=1, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1064
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
 .
 (luatex.def)             Requested size: 597.22978pt x 845.15544pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1064
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
-[32]
+[31]
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1064
-.
-(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
-File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1064
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1064
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+.
+(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
+File: Ethics_Application.pdf Graphic file (type pdf)
+<use Ethics_Application.pdf, page 1>
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+.
+(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
+ [32
+
+<./Ethics_Application.pdf>]
+<Ethics_Application.pdf, id=715, page=2, 597.23125pt x 845.1575pt>
+File: Ethics_Application.pdf Graphic file (type pdf)
+<use Ethics_Application.pdf, page 2>
+Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
+.
+(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
+File: Ethics_Application.pdf Graphic file (type pdf)
+<use Ethics_Application.pdf, page 2>
+Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
+.
+(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
+File: Ethics_Application.pdf Graphic file (type pdf)
+<use Ethics_Application.pdf, page 2>
+Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [33
 
 <./Ethics_Application.pdf>]
-<Ethics_Application.pdf, id=713, page=2, 597.23125pt x 845.1575pt>
+<Ethics_Application.pdf, id=787, page=3, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 2>
-Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1064
+<use Ethics_Application.pdf, page 3>
+Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 2>
-Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1064
+<use Ethics_Application.pdf, page 3>
+Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 2>
-Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1064
+<use Ethics_Application.pdf, page 3>
+Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [34
 
 <./Ethics_Application.pdf>]
-<Ethics_Application.pdf, id=784, page=3, 597.23125pt x 845.1575pt>
+<Ethics_Application.pdf, id=832, page=4, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 3>
-Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1064
+<use Ethics_Application.pdf, page 4>
+Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 3>
-Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1064
+<use Ethics_Application.pdf, page 4>
+Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 3>
-Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1064
+<use Ethics_Application.pdf, page 4>
+Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [35
 
 <./Ethics_Application.pdf>]
-<Ethics_Application.pdf, id=829, page=4, 597.23125pt x 845.1575pt>
+<Ethics_Application.pdf, id=901, page=5, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 4>
-Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1064
+<use Ethics_Application.pdf, page 5>
+Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 4>
-Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1064
+<use Ethics_Application.pdf, page 5>
+Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 4>
-Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1064
+<use Ethics_Application.pdf, page 5>
+Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1058
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [36
-
-<./Ethics_Application.pdf>]
-<Ethics_Application.pdf, id=898, page=5, 597.23125pt x 845.1575pt>
-File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 5>
-Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1064
-.
-(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
-File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 5>
-Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1064
-.
-(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
-File: Ethics_Application.pdf Graphic file (type pdf)
-<use Ethics_Application.pdf, page 5>
-Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1064
-.
-(luatex.def)             Requested size: 597.25711pt x 845.19412pt.
- [37
 
 <./Ethics_Application.pdf>] (./main.aux)
  ***********
@@ -1544,19 +1542,20 @@ L3 programming layer <2025-12-24>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 652D10087093D28268EE463A2573A946;9217.
+(rerunfilecheck)             Checksum: 23F9F5DB9D9763D4AE0DB5D95D3C8492;9501.
 )
 
 Here is how much of LuaTeX's memory you used:
- 19198 strings out of 476081
- 195341,1144653 words of node,token memory allocated
+ 19199 strings out of 476081
+ 305241,1144653 words of node,token memory allocated
  1014 words of node memory still in use:
    6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 28 attribute, 114 glue_spe
 c, 28 attribute_list, 1 write, 22 pdf_action nodes
-   avail lists: 2:2374,3:428,4:500,5:5134,6:100,7:9492,8:60,9:8624,10:20,11:700
- 41035 multiletter control sequences out of 65536+600000
+   avail lists: 2:3456,3:426,4:716,5:8337,6:100,7:10369,8:60,9:14088,10:20,11:70
+0
+ 41037 multiletter control sequences out of 65536+600000
  69 fonts using 8272303 bytes
- 73i,17n,92p,1631b,1016s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 73i,17n,92p,1631b,719s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/parth/appdata/local/programs/miktex/fonts/opentype/public/lm/lmmono10-
 italic.otf><C:/Windows/Fonts/trebucbi.ttf><C:/Windows/Fonts/trebucit.ttf><c:/use
 rs/parth/appdata/local/programs/miktex/fonts/opentype/public/lm/lmmono12-regular
@@ -1566,9 +1565,9 @@ no10-regular.otf><C:/Windows/Fonts/trebuc.ttf><C:/Windows/Fonts/trebucbd.ttf><C:
 .pfb><C:/Users/parth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmr12.pfb><C:/Users/parth/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmsy10.pfb>
-Output written on main.pdf (45 pages, 20319237 bytes).
+Output written on main.pdf (44 pages, 20094106 bytes).
 
-PDF statistics: 980 PDF objects out of 1000 (max. 8388607)
- 148 named destinations out of 1000 (max. 131072)
- 433 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 983 PDF objects out of 1000 (max. 8388607)
+ 147 named destinations out of 1000 (max. 131072)
+ 449 words of extra memory for PDF output out of 10000 (max. 100000000)
 

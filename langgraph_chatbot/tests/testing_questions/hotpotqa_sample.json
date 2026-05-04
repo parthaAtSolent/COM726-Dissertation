@@ -1,0 +1,402 @@
+[
+  {
+    "question": "Were Scott Derrickson and Ed Wood of the same nationality?",
+    "answer": "yes",
+    "passages": [
+      "Scott Derrickson is an American director, screenwriter and producer.",
+      "Ed Wood was an American filmmaker, actor, writer, producer, and director."
+    ],
+    "titles": [
+      "Scott Derrickson",
+      "Ed Wood"
+    ],
+    "gold_titles": [
+      "Scott Derrickson",
+      "Ed Wood"
+    ]
+  },
+  {
+    "question": "What government position was held by the woman who portrayed Corliss Archer in the film Kiss and Tell?",
+    "answer": "Chief of Protocol",
+    "passages": [
+      "Kiss and Tell is a 1945 American comedy film starring Shirley Temple as Corliss Archer.",
+      "Shirley Temple Black served as the United States Chief of Protocol from 1976 to 1977."
+    ],
+    "titles": [
+      "Kiss and Tell (film)",
+      "Shirley Temple"
+    ],
+    "gold_titles": [
+      "Kiss and Tell (film)",
+      "Shirley Temple"
+    ]
+  },
+  {
+    "question": "What nationality was the director of the film Godzilla vs. Biollante?",
+    "answer": "Japanese",
+    "passages": [
+      "Godzilla vs. Biollante is a 1989 Japanese science fiction film directed by Kazuki Ohmori.",
+      "Kazuki Ohmori is a Japanese film director."
+    ],
+    "titles": [
+      "Godzilla vs. Biollante",
+      "Kazuki Ohmori"
+    ],
+    "gold_titles": [
+      "Godzilla vs. Biollante",
+      "Kazuki Ohmori"
+    ]
+  },
+  {
+    "question": "Which film has the director born first, Two Weeks in Another Town or The Spectre of Edgar Allan Poe?",
+    "answer": "Two Weeks in Another Town",
+    "passages": [
+      "Two Weeks in Another Town is a 1962 film directed by Vincente Minnelli, born in 1903.",
+      "The Spectre of Edgar Allan Poe is a 1974 film directed by Mohy Quandour, born in 1930."
+    ],
+    "titles": [
+      "Two Weeks in Another Town",
+      "The Spectre of Edgar Allan Poe"
+    ],
+    "gold_titles": [
+      "Two Weeks in Another Town",
+      "The Spectre of Edgar Allan Poe"
+    ]
+  },
+  {
+    "question": "What is the name of the artist who released the album 'Whenever You Need Somebody' and was found guilty of tax evasion?",
+    "answer": "Rick Astley",
+    "passages": [
+      "'Whenever You Need Somebody' is the debut studio album by English singer Rick Astley, released in 1987.",
+      "Rick Astley was found guilty of tax evasion in a UK court."
+    ],
+    "titles": [
+      "Whenever You Need Somebody",
+      "Rick Astley"
+    ],
+    "gold_titles": [
+      "Whenever You Need Somebody",
+      "Rick Astley"
+    ]
+  },
+  {
+    "question": "In what country did the religion that teaches the Four Noble Truths originate?",
+    "answer": "India",
+    "passages": [
+      "The Four Noble Truths are a central teaching of Buddhism.",
+      "Buddhism originated in ancient India, in the eastern Gangetic plain."
+    ],
+    "titles": [
+      "Four Noble Truths",
+      "Buddhism"
+    ],
+    "gold_titles": [
+      "Four Noble Truths",
+      "Buddhism"
+    ]
+  },
+  {
+    "question": "What is the capital of the country where the Great Barrier Reef is located?",
+    "answer": "Canberra",
+    "passages": [
+      "The Great Barrier Reef is located in the Coral Sea, off the coast of Queensland, Australia.",
+      "Canberra is the capital city of Australia."
+    ],
+    "titles": [
+      "Great Barrier Reef",
+      "Australia"
+    ],
+    "gold_titles": [
+      "Great Barrier Reef",
+      "Australia"
+    ]
+  },
+  {
+    "question": "Which mountain range contains the peak that was first climbed by Edmund Hillary and Tenzing Norgay?",
+    "answer": "Himalayas",
+    "passages": [
+      "Mount Everest was first climbed on 29 May 1953 by Edmund Hillary and Tenzing Norgay.",
+      "Mount Everest is part of the Himalayan mountain range."
+    ],
+    "titles": [
+      "Mount Everest",
+      "Himalayas"
+    ],
+    "gold_titles": [
+      "Mount Everest",
+      "Himalayas"
+    ]
+  },
+  {
+    "question": "Who founded the company that produces the iPhone?",
+    "answer": "Steve Jobs",
+    "passages": [
+      "The iPhone is a line of smartphones designed and marketed by Apple Inc.",
+      "Apple Inc. was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in 1976."
+    ],
+    "titles": [
+      "iPhone",
+      "Apple Inc."
+    ],
+    "gold_titles": [
+      "iPhone",
+      "Apple Inc."
+    ]
+  },
+  {
+    "question": "What language is primarily spoken in the country where the Eiffel Tower is located?",
+    "answer": "French",
+    "passages": [
+      "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France.",
+      "French is the official language of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "France"
+    ],
+    "gold_titles": [
+      "Eiffel Tower",
+      "France"
+    ]
+  },
+  {
+    "question": "What ocean lies to the east of the continent where the Amazon River is found?",
+    "answer": "Atlantic Ocean",
+    "passages": [
+      "The Amazon River flows through South America.",
+      "The Atlantic Ocean lies to the east of South America."
+    ],
+    "titles": [
+      "Amazon River",
+      "South America"
+    ],
+    "gold_titles": [
+      "Amazon River",
+      "South America"
+    ]
+  },
+  {
+    "question": "The director of the 1994 film Pulp Fiction also directed which earlier crime film set in Los Angeles?",
+    "answer": "Reservoir Dogs",
+    "passages": [
+      "Pulp Fiction is a 1994 crime film written and directed by Quentin Tarantino.",
+      "Reservoir Dogs is a 1992 crime film written and directed by Quentin Tarantino, set in Los Angeles."
+    ],
+    "titles": [
+      "Pulp Fiction",
+      "Reservoir Dogs"
+    ],
+    "gold_titles": [
+      "Pulp Fiction",
+      "Reservoir Dogs"
+    ]
+  },
+  {
+    "question": "In what city was the person born who invented the telephone?",
+    "answer": "Edinburgh",
+    "passages": [
+      "Alexander Graham Bell is credited with inventing the first practical telephone.",
+      "Alexander Graham Bell was born in Edinburgh, Scotland, on March 3, 1847."
+    ],
+    "titles": [
+      "Telephone",
+      "Alexander Graham Bell"
+    ],
+    "gold_titles": [
+      "Telephone",
+      "Alexander Graham Bell"
+    ]
+  },
+  {
+    "question": "What was the nationality of the physicist who developed the theory of general relativity?",
+    "answer": "German",
+    "passages": [
+      "The theory of general relativity was developed by Albert Einstein.",
+      "Albert Einstein was a German-born theoretical physicist."
+    ],
+    "titles": [
+      "General relativity",
+      "Albert Einstein"
+    ],
+    "gold_titles": [
+      "General relativity",
+      "Albert Einstein"
+    ]
+  },
+  {
+    "question": "Which university did the founder of Microsoft attend before dropping out?",
+    "answer": "Harvard University",
+    "passages": [
+      "Microsoft was founded by Bill Gates and Paul Allen.",
+      "Bill Gates enrolled at Harvard University in 1973 but dropped out in 1975."
+    ],
+    "titles": [
+      "Microsoft",
+      "Bill Gates"
+    ],
+    "gold_titles": [
+      "Microsoft",
+      "Bill Gates"
+    ]
+  },
+  {
+    "question": "What is the tallest building in the country whose capital is Tokyo?",
+    "answer": "Abeno Harukas",
+    "passages": [
+      "Tokyo is the capital city of Japan.",
+      "Abeno Harukas, standing at 300 metres, is the tallest building in Japan."
+    ],
+    "titles": [
+      "Tokyo",
+      "Abeno Harukas"
+    ],
+    "gold_titles": [
+      "Tokyo",
+      "Abeno Harukas"
+    ]
+  },
+  {
+    "question": "What sport did the athlete play who set the 100m world record that stood from 1999 to 2008?",
+    "answer": "athletics",
+    "passages": [
+      "The 100m world record of 9.79 seconds set in 1999 was held by Maurice Greene until 2008.",
+      "Maurice Greene is an American sprinter who competed in track and field athletics."
+    ],
+    "titles": [
+      "100 metres world record progression",
+      "Maurice Greene (sprinter)"
+    ],
+    "gold_titles": [
+      "100 metres world record progression",
+      "Maurice Greene (sprinter)"
+    ]
+  },
+  {
+    "question": "Who wrote the novel that the film The Shining is based on?",
+    "answer": "Stephen King",
+    "passages": [
+      "The Shining is a 1980 horror film directed by Stanley Kubrick, based on a novel.",
+      "The Shining novel was written by Stephen King and published in 1977."
+    ],
+    "titles": [
+      "The Shining (film)",
+      "The Shining (novel)"
+    ],
+    "gold_titles": [
+      "The Shining (film)",
+      "The Shining (novel)"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian real",
+    "passages": [
+      "Brazil is the most populous country in South America, with over 215 million people.",
+      "The official currency of Brazil is the Brazilian real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian real"
+    ],
+    "gold_titles": [
+      "Brazil",
+      "Brazilian real"
+    ]
+  },
+  {
+    "question": "In what year was the company founded that created the search engine used to find 'the world's information'?",
+    "answer": "1998",
+    "passages": [
+      "Google's mission is to organise the world's information and make it universally accessible.",
+      "Google was founded on September 4, 1998, by Larry Page and Sergey Brin."
+    ],
+    "titles": [
+      "Google Search",
+      "Google"
+    ],
+    "gold_titles": [
+      "Google Search",
+      "Google"
+    ]
+  },
+  {
+    "question": "What is the home country of the tennis player who won the most Grand Slam singles titles in the Open Era before Novak Djokovic?",
+    "answer": "Switzerland",
+    "passages": [
+      "Before Novak Djokovic surpassed him, Roger Federer held the record for most Grand Slam singles titles in the Open Era.",
+      "Roger Federer is a Swiss professional tennis player."
+    ],
+    "titles": [
+      "Grand Slam (tennis)",
+      "Roger Federer"
+    ],
+    "gold_titles": [
+      "Grand Slam (tennis)",
+      "Roger Federer"
+    ]
+  },
+  {
+    "question": "What river runs through the city where the Colosseum is located?",
+    "answer": "Tiber",
+    "passages": [
+      "The Colosseum is an oval amphitheatre in the centre of Rome, Italy.",
+      "The Tiber is the third-longest river in Italy, running through Rome."
+    ],
+    "titles": [
+      "Colosseum",
+      "Rome"
+    ],
+    "gold_titles": [
+      "Colosseum",
+      "Rome"
+    ]
+  },
+  {
+    "question": "What element is the main component of the Sun?",
+    "answer": "hydrogen",
+    "passages": [
+      "The Sun is the star at the center of the Solar System.",
+      "Hydrogen is by far the most abundant element in the Sun, accounting for about 73% of its mass."
+    ],
+    "titles": [
+      "Sun",
+      "Stellar composition"
+    ],
+    "gold_titles": [
+      "Sun",
+      "Stellar composition"
+    ]
+  },
+  {
+    "question": "The painter of the Mona Lisa was born in which Italian town?",
+    "answer": "Vinci",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born on 15 April 1452 in Anchiano, near the town of Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What programming language was created by Guido van Rossum and first released in 1991?",
+    "answer": "Python",
+    "passages": [
+      "Python was created by Guido van Rossum and first released in 1991.",
+      "Python is a high-level, general-purpose programming language emphasising readability."
+    ],
+    "titles": [
+      "Python (programming language)",
+      "Guido van Rossum"
+    ],
+    "gold_titles": [
+      "Python (programming language)",
+      "Guido van Rossum"
+    ]
+  }
+]

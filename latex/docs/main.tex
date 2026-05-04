@@ -237,7 +237,6 @@ The principal contributions of this dissertation are:
 \newpage
 % =================================================
 
-
 \section{Literature Review}
 \label{sec:literature_review}
 
@@ -338,8 +337,6 @@ deepseek\_r1 & DeepSeek-R1 & 8,000 & Advanced multi-step reasoning \\
 \hline
 falcon3 & Falcon-3 & 3,000 & General language understanding \\
 \hline
-gemini\_2\_5\_flash & Gemini-2.5-Flash & 8,000 & Synthesis, broad knowledge \\
-\hline
 gemma3\_270m & Gemma-3-270M & 2,000 & Lightweight, fast inference \\
 \hline
 granite3\_dense\_2b & Granite-3-Dense-2B & 3,000 & Enterprise, structured tasks \\
@@ -357,7 +354,7 @@ qwen3\_5\_0\_8b & Qwen3.5-0.8B & 3,000 & Lightweight multilingual \\
 \end{tabular}
 \end{table}
 
-DeepSeek-R1 is deployed for queries requiring deep chain-of-thought reasoning, mathematical inference, and complex logical deduction, owing to its training emphasis on reasoning-intensive tasks. Gemini-2.5-Flash serves a dual role as both a task executor for broad knowledge queries and as the synthesis model for the optional response refinement step, leveraging its large context window and strong instruction-following capabilities. Qwen2.5-Coder-7B is the primary destination for programming and code-related queries, having been specifically trained on code repositories. Mistral-7B and LLaMA-3.1-8B-Instant handle general-purpose instruction-following and question answering tasks. Phi-3-3.8B provides efficient reasoning capability in a compact footprint. Gemma-3-270M and Qwen3.5-0.8B serve as lightweight fallback models for low-complexity queries where response speed is prioritised. Granite-3-Dense-2B addresses structured data and enterprise-oriented queries. Falcon-3 completes the pool as a general-purpose model trained on diverse multilingual corpora.
+DeepSeek-R1 is deployed for queries requiring deep chain-of-thought reasoning, mathematical inference, and complex logical deduction, owing to its training emphasis on reasoning-intensive tasks. Qwen2.5-Coder-7B is the primary destination for programming and code-related queries, having been specifically trained on code repositories. Mistral-7B and LLaMA-3.1-8B-Instant handle general-purpose instruction-following and question answering tasks. Phi-3-3.8B provides efficient reasoning capability in a compact footprint. Gemma-3-270M and Qwen3.5-0.8B serve as lightweight fallback models for low-complexity queries where response speed is prioritised. Granite-3-Dense-2B addresses structured data and enterprise-oriented queries. Falcon-3 completes the pool as a general-purpose model trained on diverse multilingual corpora.
 
 
 \subsection{The Orchestrator: Task Classification and Model Selection}
@@ -384,7 +381,7 @@ The \texttt{classify\_task} function analyses the query text to produce a tuple 
   \EndIf
  
   \If{\ty{"summarisation"} $\in$ \ty{categories}}
-    \State \Return \ty{"gemini\_2\_5\_flash"}
+    \State \Return \ty{"falcon3"}
   \EndIf
  
   \If{\ty{"reasoning"} $\in$ \ty{categories} \textbf{ and } \ty{complexity} $=$ \ty{"medium"}}
@@ -404,7 +401,7 @@ The \texttt{classify\_task} function analyses the query text to produce a tuple 
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:orchestrator} encodes a priority-ordered chain of conditional rules. Coding queries are handled first and unconditionally routed to \texttt{qwen2\_5\_coder\_7b}, a dedicated code-generation model. High-complexity reasoning tasks are escalated to \texttt{deepseek\_r1}, whose architecture is optimised for multi-step inference. Summarisation queries are directed to \texttt{gemini\_2\_5\_flash}, which is favoured for its large context window and synthesis capability. Medium-complexity reasoning falls to \texttt{mistral\_7b}, offering a balance between capability and efficiency. Structured data extraction tasks are assigned to \texttt{granite3\_dense\_2b}, an enterprise-focused model suited to precision extraction. Low-complexity general queries are served by the lightweight \texttt{qwen3\_5\_0\_8b}, minimising unnecessary resource consumption. All remaining queries fall through to the default \texttt{llama\_3\_1\_8b\_instant}, a balanced general-purpose model.
+Algorithm~\ref{alg:orchestrator} encodes a priority-ordered chain of conditional rules. Coding queries are handled first and unconditionally routed to \texttt{qwen2\_5\_coder\_7b}, a dedicated code-generation model. High-complexity reasoning tasks are escalated to \texttt{deepseek\_r1}, whose architecture is optimised for multi-step inference. Summarisation queries are directed to \texttt{falcon3}. Medium-complexity reasoning falls to \texttt{mistral\_7b}, offering a balance between capability and efficiency. Structured data extraction tasks are assigned to \texttt{granite3\_dense\_2b}, an enterprise-focused model suited to precision extraction. Low-complexity general queries are served by the lightweight \texttt{qwen3\_5\_0\_8b}, minimising unnecessary resource consumption. All remaining queries fall through to the default \texttt{llama\_3\_1\_8b\_instant}, a balanced general-purpose model.
 
 The \texttt{build\_specialist\_prompt} function constructs a task-specific system prompt tailored to the selected model's strengths and the inferred task category. For coding tasks, the prompt includes instructions to produce well-commented, executable code. For reasoning tasks, it instructs the model to think step by step and verify each inference. This specialised prompting strategy ensures that the selected model operates in its optimal instruction-following mode, maximising the benefit of model selection.
 
@@ -533,7 +530,7 @@ The \texttt{MySQLSaver} implements the \texttt{get\_tuple}, \texttt{list}, \text
 
 The web-based user interface is implemented using Streamlit, providing a responsive chat interface with real-time streaming response display. The UI is organised into two primary components: a collapsible sidebar and a main chat area, each serving a distinct functional role within the overall system interaction model.
 
-\subsubsection*{Sidebar Panel}
+\subsubsection{Sidebar Panel}
 The sidebar, illustrated in Figure~\ref{fig:ui_sidebar}, serves as the primary control surface for session configuration and document management. At the top, the branding header displays the application identity — \textit{Zephryel, An AI Companion} — accompanied by a light/dark theme toggle for user preference persistence. Beneath the branding, the \textbf{Model} section exposes a dropdown selector that allows the user to either manually choose a specific language model from the deployed pool or delegate the decision to the system by selecting \textit{Auto (Multi-Model Routing)}, which activates the full orchestrator-driven routing pipeline. A contextual label beneath the dropdown indicates the active inference provider, confirming that all inference is served through Groq's API. The \textbf{Conversations} section provides thread management functionality, including a prominently placed \textit{New Chat} button that initialises a fresh conversation thread with a unique identifier, alongside per-thread action controls for renaming and deletion. The \textbf{Documents (RAG)} section at the bottom of the sidebar presents the current state of the vector store, displaying the ChromaDB persistence path and the total number of indexed chunks currently available for retrieval. A drag-and-drop file uploader accepts PDF and TXT documents up to 200MB per file, triggering the ingestion pipeline upon upload to parse, chunk, embed, and index the document into the ChromaDB collection.
 
 \begin{figure}[H]
@@ -546,7 +543,7 @@ The sidebar, illustrated in Figure~\ref{fig:ui_sidebar}, serves as the primary c
     \label{fig:ui_sidebar}
 \end{figure}
 
-\subsubsection*{Main Chat Area}
+\subsubsection{Main Chat Area}
 The main chat area, illustrated in Figure~\ref{fig:ui_chat}, provides the primary conversational interface. Each conversation turn is rendered with role-appropriate styling: user messages are displayed in a visually distinct bubble with a user avatar, while assistant responses are rendered with an assistant avatar and full markdown support, including bold emphasis, bullet points, code blocks, and inline formatting. The conversation title is auto-generated from the first user message using a lightweight title-generation prompt, providing meaningful thread labels in the sidebar. Streaming responses are rendered progressively using Streamlit's \texttt{st.write\_stream} interface, displaying partial tokens as they arrive from the Groq inference API to minimise perceived latency. Below each assistant response, a collapsible \textbf{Model Routing} metadata panel provides full transparency into the orchestrator's decision-making for that turn. As shown in Figure~\ref{fig:ui_chat}, the panel surfaces three key routing attributes: the inferred \textit{Task} category (e.g., \texttt{CONVERSATIONAL}, \texttt{REASONING}, \texttt{CODING}), the assessed \textit{Complexity} level (\texttt{LOW}, \texttt{MEDIUM}, or \texttt{HIGH}), and the \textit{Model} key of the specialist language model selected for that specific query. This routing transparency mechanism is a deliberate design choice to make the system's adaptive behaviour interpretable and auditable by the end user, distinguishing the interface from conventional single-model chatbot UIs where model selection is entirely opaque.
 
 \begin{figure}[H]
@@ -589,6 +586,7 @@ The system is implemented in Python 3.12, selected for its extensive ecosystem o
 
 The codebase is organised into a modular package structure designed for maintainability and testability, as shown in Listing~\ref{lst:structure}.
 
+\newpage
 \begin{lstlisting}[caption={Project directory structure of the LangGraph chatbot implementation.}, label={lst:structure}, language=bash]
 langgraph_chatbot/
 ├── api.py                    # FastAPI REST backend for Android app
@@ -640,8 +638,6 @@ All LLM inference is performed through the Groq inference API, which provides lo
   \State \hspace{\algorithmicindent}
     \ty{"falcon3"} $\mapsto$ \ty{"falcon-3-10b-instruct"},
   \State \hspace{\algorithmicindent}
-    \ty{"gemini\_2\_5\_flash"} $\mapsto$ \ty{"gemma2-9b-it"},
-  \State \hspace{\algorithmicindent}
     \ty{"gemma3\_270m"} $\mapsto$ \ty{"gemma-7b-it"},
   \State \hspace{\algorithmicindent}
     \ty{"granite3\_dense\_2b"} $\mapsto$ \ty{"llama-3.1-8b-instant"},
@@ -663,7 +659,7 @@ All LLM inference is performed through the Groq inference API, which provides lo
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:build_llm} defines two components. The first is \texttt{MODEL\_REGISTRY}, a static mapping from the system's internal model keys to their corresponding Groq-hosted model identifiers. Several entries in this registry reflect deployment constraints: for instance, \texttt{gemini\_2\_5\_flash} resolves to \texttt{gemma2-9b-it} and \texttt{qwen2\_5\_coder\_7b} resolves to \texttt{qwen-qwq-32b}, as these represent the closest available Groq-hosted equivalents at the time of deployment. Lightweight keys such as \texttt{qwen3\_5\_0\_8b} map to compact preview models, while the default fallback \texttt{llama\_3\_1\_8b\_instant} and \texttt{granite3\_dense\_2b} both resolve to \texttt{llama-3.1-8b-instant}, prioritising availability and latency. The second component is the \texttt{BuildLLM} function itself, which performs a single registry lookup on the provided key and constructs a \texttt{ChatGroq} instance with a fixed temperature of $0.7$ and the globally configured API key, returning a \texttt{BaseChatModel} compatible with the LangChain execution environment.
+Algorithm~\ref{alg:build_llm} defines two components. The first is \texttt{MODEL\_REGISTRY}, a static mapping from the system's internal model keys to their corresponding Groq-hosted model identifiers. Several entries in this registry reflect deployment constraints. Lightweight keys such as \texttt{qwen3\_5\_0\_8b} map to compact preview models, while the default fallback \texttt{llama\_3\_1\_8b\_instant} and \texttt{granite3\_dense\_2b} both resolve to \texttt{llama-3.1-8b-instant}, prioritising availability and latency. The second component is the \texttt{BuildLLM} function itself, which performs a single registry lookup on the provided key and constructs a \texttt{ChatGroq} instance with a fixed temperature of $0.7$ and the globally configured API key, returning a \texttt{BaseChatModel} compatible with the LangChain execution environment.
 
 
 \subsection{RAG Document Ingestion Pipeline}
@@ -840,7 +836,6 @@ HotpotQA benchmark.
     \hline
     DeepSeek-R1            & 70.2 & 75.8 & 0.865 & 3850 \\
     Falcon3                & 36.5 & 42.1 & 0.723 &  215 \\
-    Gemini-2.5-Flash       & 65.4 & 71.2 & 0.854 &  520 \\
     Gemma3-270M            & 18.2 & 23.5 & 0.512 &   78 \\
     Granite3-Dense-2B      & 28.7 & 34.3 & 0.642 &  142 \\
     LLaMA-3.1-8B-Instant   & 58.3 & 63.9 & 0.838 &  310 \\
@@ -875,7 +870,6 @@ MuSiQue benchmark.
     \hline
     DeepSeek-R1            & 55.1 & 59.3 & 0.784 & 3920 \\
     Falcon3                & 24.6 & 29.7 & 0.612 &  228 \\
-    Gemini-2.5-Flash       & 48.9 & 54.2 & 0.771 &  535 \\
     Gemma3-270M            & 12.5 & 17.1 & 0.428 &   85 \\
     Granite3-Dense-2B      & 19.8 & 24.9 & 0.535 &  151 \\
     LLaMA-3.1-8B-Instant   & 41.2 & 46.8 & 0.742 &  325 \\
@@ -923,12 +917,12 @@ Several promising directions for future research are identified. A learned query
 \subsection{Gantt Chart}
 \label{subsec:gantt}
 
-The complete project schedule, including task dependencies, parallel development tracks, and milestone deliverables, is presented in the Gantt chart provided in Figure~\ref{fig:gantt_chart}. The chart captures the temporal distribution of activities across research, system development, evaluation, and reporting phases, spanning the full project duration from January 17, 2026 to May 2, 2026.
+The complete project schedule, including task dependencies, parallel development tracks, and milestone deliverables, is presented in the Gantt chart provided in Figure~\ref{fig:gantt_chart}. The chart captures the total distribution of activities across research, system development, evaluation, and reporting phases, spanning the full project duration from January 17, 2026 to May 1, 2026.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{../assets/gnatt_chart.png}
-    \caption{Project Gantt Chart illustrating the full project timeline from January 17, 2026 to May 2, 2026.}
+    \caption{Project Gantt Chart illustrating the full project timeline from January 17, 2026 to May 1, 2026.}
     \label{fig:gantt_chart}
 \end{figure}
 
@@ -1007,7 +1001,7 @@ ZHANG, N., ZHANG, C., TAN, Z., YANG, X., DENG, W. and WANG, W., 2025. Credible p
 
 PARANJAPE, B., LUNDBERG, S., SINGH, S., HAJISHIRZI, H., ZETTLEMOYER, L. and RIBEIRO, M.T., 2023. ART: Automatic multi-step reasoning and tool-use for large language models. \textit{arXiv preprint arXiv:2303.09014}. Available from: \url{https://arxiv.org/abs/2303.09014}
 
-ZOU, J., YANG, L., QI, Y., CHEN, S., AI, M., SHEN, K., HE, J. and WANG, M., 2025. AutoTool: Dynamic tool selection and integration for agentic reasoning. \textit{arXiv preprint arXiv:2508.xxxxx}. Available from: \url{https://arxiv.org/abs/2508.xxxxx}
+ZOU, J., YANG, L., QI, Y., CHEN, S., AI, M., SHEN, K., HE, J. and WANG, M., 2025. AutoTool: Dynamic tool selection and integration for agentic reasoning. \textit{arXiv preprint arXiv:2512.13278}. Available from: \url{https://arxiv.org/abs/2512.13278}
 
 CHEN, Y., ZHANG, E., YAN, L., WANG, S., HUANG, J., YIN, D. and MAO, J., 2025. MAO-ARAG: Multi-Agent Orchestration for Adaptive Retrieval-Augmented Generation. \textit{arXiv preprint arXiv:2508.01005}. Available from: \url{https://arxiv.org/abs/2508.01005}
 
