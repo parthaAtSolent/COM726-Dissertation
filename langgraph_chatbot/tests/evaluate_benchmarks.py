@@ -64,7 +64,7 @@ Prerequisites
         ollama pull mistral:7b
         ollama pull phi3:3.8b
         ollama pull qwen2.5-coder:7b
-        ollama pull qwen3.5:0.8b
+        ollama pull m/qwen2514bmax:latest
 
 3.  Install extra dependencies if needed:
         pip install langchain-ollama datasets
@@ -154,7 +154,7 @@ MODELS: list[tuple[str, str, int]] = [
     ("Mistral-7B",               "mistral:7b",                   256),
     ("Phi3-3.8B",                "phi3:3.8b",                    256),
     ("Qwen2.5-Coder-7B",         "qwen2.5-coder:7b",             256),
-    ("Qwen3.5-0.8B",             "qwen3.5:0.8b",                 128),
+    ("Qwen2.5-14B-Max",          "m/qwen2514bmax:latest",        256),
     ("Adaptive (Ours)",          "adaptive",                     256),
 ]
 
@@ -827,7 +827,7 @@ def _build_adaptive_caller() -> Callable[[str], tuple[str, float]]:
         "phi3-3.8b":          "phi3:3.8b",
         "qwen2_5_coder_7b":   "qwen2.5-coder:7b",
         "qwen2.5-coder-7b":   "qwen2.5-coder:7b",
-        "qwen3.5-0.8b":       "qwen3.5:0.8b",
+        "qwen2.5-14b-max":    "m/qwen2514bmax:latest",
     }
 
     _llm_cache: dict[str, ChatOllama] = {}

@@ -21,8 +21,9 @@ from llms.llama_3_1_8b_instant.factory import build as _build_llama_8b
 # from llms.gemini_2_5_flash.config import MODEL_KEY as _k2, DISPLAY_NAME as _n2, ICON as _i2
 # from llms.gemini_2_5_flash.factory import build as _build_gemini
 
-from llms.qwen3_5_0_8b.config import MODEL_KEY as _k4, DISPLAY_NAME as _n4, ICON as _i4
-from llms.qwen3_5_0_8b.factory import build as _build_qwen
+# Qwen2.5-14B-Max model (replacing Qwen3.5-0.8B)
+from llms.qwen2_5_14_b_max.config import MODEL_KEY as _k4, DISPLAY_NAME as _n4, ICON as _i4
+from llms.qwen2_5_14_b_max.factory import build as _build_qwen_max
 
 from llms.phi3_3_8b.config import MODEL_KEY as _k5, DISPLAY_NAME as _n5, ICON as _i5
 from llms.phi3_3_8b.factory import build as _build_phi3
@@ -50,38 +51,54 @@ from llms.falcon3.factory import build as _build_falcon
 from llms.qwen2_5_coder_7b.config import MODEL_KEY as _k12, DISPLAY_NAME as _n12, ICON as _i12
 from llms.qwen2_5_coder_7b.factory import build as _build_qwen_coder
 
-from llms.custom.config import MODEL_KEY as _k12, DISPLAY_NAME as _n12, ICON as _i12
+# Custom orchestrator (Auto routing)
+from llms.custom.config import MODEL_KEY as _k13, DISPLAY_NAME as _n13, ICON as _i13
 from llms.custom.factory import build as _build_custom
 
 
 REGISTRY: dict[str, dict] = {
-    # 🎯 Auto — first in list
-    _k12: {"name": _n12, "icon": _i12, "build": _build_custom},
+    # 🎯 Auto (Multi-Model Routing) — first in list
+    _k13: {"name": _n13, "icon": _i13, "build": _build_custom},
 
+    # Individual models in alphabetical order by display name
     _k1: {"name": _n1, "icon": _i1, "build": _build_llama_8b},
-    # _k2: {"name": _n2, "icon": _i2, "build": _build_gemini},
-    _k4: {"name": _n4, "icon": _i4, "build": _build_qwen},
-    _k5: {"name": _n5, "icon": _i5, "build": _build_phi3},
-    _k6: {"name": _n6, "icon": _i6, "build": _build_granite3},
-    _k7: {"name": _n7, "icon": _i7, "build": _build_gemma3},
-    # New models
+    # _k2: {"name": _n2, "icon": _i2, "build": _build_gemini},  # Disabled
     _k8: {"name": _n8, "icon": _i8, "build": _build_deepseek},
-    _k9: {"name": _n9, "icon": _i9, "build": _build_mistral},
     _k10: {"name": _n10, "icon": _i10, "build": _build_falcon},
-    # _k11: {"name": _n11, "icon": _i11, "build": _build_starcoder},
-    # Qwen2.5-Coder
+    _k7: {"name": _n7, "icon": _i7, "build": _build_gemma3},
+    _k6: {"name": _n6, "icon": _i6, "build": _build_granite3},
+    _k9: {"name": _n9, "icon": _i9, "build": _build_mistral},
+    _k5: {"name": _n5, "icon": _i5, "build": _build_phi3},
+    _k4: {"name": _n4, "icon": _i4, "build": _build_qwen_max},
     _k12: {"name": _n12, "icon": _i12, "build": _build_qwen_coder},
+    # _k11: {"name": _n11, "icon": _i11, "build": _build_starcoder},  # Disabled
 }
 
 
-def build_llm(model_key: str):
-    """Build and return the LangChain chat model for *model_key*."""
+def build_llm(model_key: str, streaming: bool = False, on_token=None):
+    """
+    Build and return the LangChain chat model for *model_key*.
+
+    Args:
+        model_key: The key of the model to build
+        streaming: Enable streaming mode
+        on_token: Callback function for each token (only used if streaming=True)
+    """
     if model_key not in REGISTRY:
         raise KeyError(
             f"Model '{model_key}' not registered. "
             f"Available: {list(REGISTRY.keys())}"
         )
-    return REGISTRY[model_key]["build"]()
+
+    # Check if the build function supports streaming parameters
+    build_func = REGISTRY[model_key]["build"]
+
+    # Try to pass streaming params if the model supports it (like Llama31_8BInstant)
+    try:
+        return build_func(streaming=streaming, on_token=on_token)
+    except TypeError:
+        # Fallback for models that don't support streaming params
+        return build_func()
 
 
 def list_model_keys() -> list[str]:

@@ -1,30 +1,26 @@
 """
 llms/llama_3_1_8b_instant/factory.py
 ──────────────────────────────────────
-Builds and returns a configured ChatGroq instance for Llama 3.1 8B Instant.
+Builds and returns a configured Ollama instance for Llama 3.1 8B.
 
-Each LLM folder owns its own factory so:
-  - The import path makes the model provenance explicit.
-  - Adding/removing a model never touches shared service code.
-  - Unit-testing a model in isolation is trivial.
+Uses local Ollama instance instead of Groq API.
 """
 
 from __future__ import annotations
 
-import os
 import time
 from typing import Iterator, AsyncIterator, Optional, Callable
 from contextlib import asynccontextmanager
 
-from langchain_groq import ChatGroq
+from langchain_ollama import ChatOllama
 from langchain_core.callbacks import CallbackManager
 
 from .config import (
-    API_KEY_ENV,
     MAX_TOKENS,
     MODEL_ID,
     TEMPERATURE,
     WEBSITE,
+    OLLAMA_BASE_URL,
 )
 
 
@@ -41,9 +37,9 @@ class LlamaStreamingHandler:
         self.on_token(token)
 
 
-def build(streaming: bool = False, on_token: Optional[Callable[[str], None]] = None) -> ChatGroq:
+def build(streaming: bool = False, on_token: Optional[Callable[[str], None]] = None) -> ChatOllama:
     """
-    Build Llama 3.1 8B Instant model with optional streaming support.
+    Build Llama 3.1 8B model using local Ollama instance.
 
     Args:
         streaming: Enable streaming mode
@@ -51,21 +47,14 @@ def build(streaming: bool = False, on_token: Optional[Callable[[str], None]] = N
 
     Raises
     ------
-    EnvironmentError
-        If ``GROQ_API_KEY`` is not set in the environment / .env file.
+    ConnectionError
+        If Ollama is not running or model is not pulled.
     """
-    api_key = os.getenv(API_KEY_ENV, "")
-    if not api_key:
-        raise EnvironmentError(
-            f"'{API_KEY_ENV}' is not set in your .env file.  "
-            f"Get a free key at https://{WEBSITE}"
-        )
-
     config = {
         "model": MODEL_ID,
         "temperature": TEMPERATURE,
-        "max_tokens": MAX_TOKENS,
-        "api_key": api_key,
+        "num_predict": MAX_TOKENS,     # Ollama uses num_predict instead of max_tokens
+        "base_url": OLLAMA_BASE_URL,
     }
 
     if streaming:
@@ -74,12 +63,12 @@ def build(streaming: bool = False, on_token: Optional[Callable[[str], None]] = N
             handler = LlamaStreamingHandler(on_token)
             config["callbacks"] = [handler]
 
-    return ChatGroq(**config)
+    return ChatOllama(**config)
 
 
 class Llama31_8BInstant:
     """
-    Advanced streaming wrapper for Llama 3.1 8B Instant.
+    Advanced streaming wrapper for Llama 3.1 8B (local Ollama).
     Provides both sync and async streaming.
     """
 

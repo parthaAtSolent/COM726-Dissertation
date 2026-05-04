@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  4 MAY 2026 10:20
+This is LuaHBTeX, Version 1.22.0 (MiKTeX 25.4) (format=lualatex 2025.12.29)  4 MAY 2026 11:30
  restricted system commands enabled.
 **main.tex
 (./main.tex
@@ -1398,10 +1398,10 @@ Package luatex.def Info: ../assets/android_flowchart.png  used on input line 79
  [22<../assets/android_flowchart.png>]
 
 LaTeX Warning: Reference `tab:routing_accuracy' on page 23 undefined on input l
-ine 893.
+ine 890.
 
 [23]
-Overfull \hbox (15.7516pt too wide) in paragraph at lines 895--896
+Overfull \hbox (15.7516pt too wide) in paragraph at lines 892--893
 \TU/TrebuchetMS(0)/m/n/12 adap-tive multi-LLM con-fig-u-ra-tion ben-e-fits from di-rect-ing rea-son-ing queries to DeepSeek-
  []
 
@@ -1409,15 +1409,15 @@ Overfull \hbox (15.7516pt too wide) in paragraph at lines 895--896
 <../assets/gnatt_chart.png, id=579, 1257.69875pt x 574.145pt>
 File: ../assets/gnatt_chart.png Graphic file (type png)
 <use ../assets/gnatt_chart.png>
-Package luatex.def Info: ../assets/gnatt_chart.png  used on input line 924.
+Package luatex.def Info: ../assets/gnatt_chart.png  used on input line 921.
 (luatex.def)             Requested size: 452.9679pt x 206.77965pt.
  [26<../assets/gnatt_chart.png>] [27] [28] [29]
-Underfull \hbox (badness 1448) in paragraph at lines 1020--1021
+Underfull \hbox (badness 1448) in paragraph at lines 1017--1018
 []\TU/TrebuchetMS(0)/m/n/12 TRIVEDI, H., BAL-A-SUB-RA-MA-NIAN, N., KHOT, T. and SAB-HAR-WAL, A., 2022.
  []
 
 [30]
-Overfull \hbox (26.81583pt too wide) in paragraph at lines 1049--1050
+Overfull \hbox (26.81583pt too wide) in paragraph at lines 1046--1047
 []\TU/TrebuchetMS(0)/b/n/12 GitHub Repos-i-tory: \TU/lmtt/m/n/12 [https://github
 .com/parthaAtSolent/COM726---Dissertation] 
  []
@@ -1425,33 +1425,33 @@ Overfull \hbox (26.81583pt too wide) in paragraph at lines 1049--1050
 <Ethics_Application.pdf, id=649, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf>
-Package luatex.def Info: Ethics_Application.pdf  used on input line 1058.
+Package luatex.def Info: Ethics_Application.pdf  used on input line 1055.
 (luatex.def)             Requested size: 597.22978pt x 845.15544pt.
 <Ethics_Application.pdf, id=651, page=1, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1055
 .
 (luatex.def)             Requested size: 597.22978pt x 845.15544pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 [31]
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 1>
-Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [32
@@ -1460,17 +1460,17 @@ Package luatex.def Info: Ethics_Application.pdf , page1 used on input line 1058
 <Ethics_Application.pdf, id=715, page=2, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 2>
-Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 2>
-Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 2>
-Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [33
@@ -1479,17 +1479,17 @@ Package luatex.def Info: Ethics_Application.pdf , page2 used on input line 1058
 <Ethics_Application.pdf, id=787, page=3, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 3>
-Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 3>
-Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 3>
-Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [34
@@ -1498,17 +1498,17 @@ Package luatex.def Info: Ethics_Application.pdf , page3 used on input line 1058
 <Ethics_Application.pdf, id=832, page=4, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 4>
-Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 4>
-Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 4>
-Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [35
@@ -1517,17 +1517,17 @@ Package luatex.def Info: Ethics_Application.pdf , page4 used on input line 1058
 <Ethics_Application.pdf, id=901, page=5, 597.23125pt x 845.1575pt>
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 5>
-Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 5>
-Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
 File: Ethics_Application.pdf Graphic file (type pdf)
 <use Ethics_Application.pdf, page 5>
-Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1058
+Package luatex.def Info: Ethics_Application.pdf , page5 used on input line 1055
 .
 (luatex.def)             Requested size: 597.25711pt x 845.19412pt.
  [36
@@ -1565,7 +1565,7 @@ no10-regular.otf><C:/Windows/Fonts/trebuc.ttf><C:/Windows/Fonts/trebucbd.ttf><C:
 .pfb><C:/Users/parth/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmr12.pfb><C:/Users/parth/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmsy10.pfb>
-Output written on main.pdf (44 pages, 20094106 bytes).
+Output written on main.pdf (44 pages, 20093912 bytes).
 
 PDF statistics: 983 PDF objects out of 1000 (max. 8388607)
  147 named destinations out of 1000 (max. 131072)
