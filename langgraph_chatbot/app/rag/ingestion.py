@@ -11,8 +11,6 @@ from pathlib import Path
 from typing import List
 
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
-
-# instead of from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -22,8 +20,10 @@ from app.rag.embedder import get_embedder
 VECTORSTORE_DIR = str(
     Path(__file__).resolve().parents[2] / "data" / "vectorstore")
 COLLECTION_NAME = "rag_documents"
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+
+# 🚀 INCREASED CHUNK SIZES for better context
+CHUNK_SIZE = 4000          # Was 1000 - now 4x larger
+CHUNK_OVERLAP = 500        # Was 200 - better overlap between chunks
 
 # Debug: Print the vectorstore path
 print(f"[RAG] vectorstore directory: {VECTORSTORE_DIR}")
@@ -71,6 +71,8 @@ def ingest_documents(file_paths: List[str]) -> int:
 
             for doc in docs:
                 doc.metadata["source"] = path.name
+                # Add full text flag for debugging
+                doc.metadata["total_chars"] = len(doc.page_content)
 
             all_docs.extend(docs)
             print(f"[RAG] Total docs so far: {len(all_docs)}")
@@ -83,18 +85,21 @@ def ingest_documents(file_paths: List[str]) -> int:
         print("[RAG] No content extracted from any file")
         return 0
 
-    # ── 2. Chunk ──────────────────────────────────────────────────────────────
+    # ── 2. Chunk with larger sizes ──────────────────────────────────────────────
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
         chunk_overlap=CHUNK_OVERLAP,
+        separators=["\n\n", "\n", ". ", " ", ""],  # Better boundary detection
     )
     chunks = splitter.split_documents(all_docs)
     print(f"[RAG] Split into {len(chunks)} chunks")
+    print(
+        f"[RAG] Average chunk size: {sum(len(c.page_content) for c in chunks) / len(chunks):.0f} chars" if chunks else "No chunks")
 
     # Print sample chunk
     if chunks:
         print(
-            f"[RAG] Sample chunk (first 200 chars): {chunks[0].page_content[:200]}...")
+            f"[RAG] Sample chunk (first 300 chars): {chunks[0].page_content[:300]}...")
 
     # ── 3. Embed and store ────────────────────────────────────────────────────
     try:
@@ -105,7 +110,7 @@ def ingest_documents(file_paths: List[str]) -> int:
         vectorstore.add_documents(chunks)
         print(f"[RAG] Successfully added documents")
 
-        # Verify by checking count — using public API (chromadb 1.x compatible)
+        # Verify by checking count
         count = len(vectorstore.get(include=[])["ids"])
         print(f"[RAG] vectorstore now contains {count} total chunks")
 
