@@ -93,11 +93,9 @@ def format_rag_context_for_model(rag_result: dict, model_key: str) -> str:
     format_type = pref["format"]
 
     if format_type == "plain":
-        # Simple plain text format
         return rag_result.get('formatted_text', '')
 
     elif format_type == "structured":
-        # Structured format with clear markers
         parts = []
         parts.append("=== RELEVANT DOCUMENT EXCERPTS ===")
         parts.append("")
@@ -114,12 +112,9 @@ def format_rag_context_for_model(rag_result: dict, model_key: str) -> str:
         return "\n".join(parts)
 
     elif format_type == "simple":
-        # Very simple format for small models
         parts = []
         parts.append("Context from documents:")
-        # Limit to 3 chunks for small models
         for chunk in rag_result.get('raw_chunks', [])[:3]:
-            # Truncate for small models
             truncated = chunk['content'][:500] if len(
                 chunk['content']) > 500 else chunk['content']
             parts.append(f"- {truncated}")
@@ -243,7 +238,7 @@ class MySQLSaver(BaseCheckpointSaver):
             print(f"[MySQLSaver] Connection lost, reconnecting... Error: {e}")
             try:
                 conn.close()
-            except:
+            except Exception:
                 pass
             self._local.conn = None
             self._local.conn = self._create_connection()
@@ -264,7 +259,7 @@ class MySQLSaver(BaseCheckpointSaver):
                     old_conn = getattr(self._local, 'conn', None)
                     if old_conn:
                         old_conn.close()
-                except:
+                except Exception:
                     pass
                 self._local.conn = None
                 if attempt < max_retries - 1:
@@ -558,6 +553,9 @@ def _call_llm_with_orchestrator(
 
     Returns:
         tuple: (response_content, routing_metadata)
+
+    NOTE: Never calls build_attribution_footer() — callers are responsible
+          for appending exactly one footer after this returns.
     """
     # Step 1: Classify task and complexity using orchestrator
     categories, complexity = classify_task(query)
@@ -594,8 +592,7 @@ def _call_llm_with_orchestrator(
             synthesis_prompt = build_synthesis_prompt(
                 query, raw_response, categories, selected_model
             )
-            synthesis_llm = llms.build_llm(
-                "llama-3.1-8b-instant")
+            synthesis_llm = llms.build_llm("llama-3.1-8b-instant")
             refined = synthesis_llm.invoke(synthesis_prompt)
             final_response = refined.content
             synthesis_used = True
@@ -604,17 +601,17 @@ def _call_llm_with_orchestrator(
             synthesis_used = False
 
         # Step 8: Return raw response + metadata only.
-        # The attribution footer is added exactly once, by the caller
-        # (factory.py _generate Step 5 / agent_node). Never build it here.
+        # The attribution footer is added exactly once by the caller.
+        # Never call build_attribution_footer() inside this function.
         routing_metadata = {
-            "model_key": selected_model,
-            "model_name": llms.get_display_name(selected_model),
-            "auto_selected": auto_selected,
-            "categories": categories,
-            "complexity": complexity,
+            "model_key":      selected_model,
+            "model_name":     llms.get_display_name(selected_model),
+            "auto_selected":  auto_selected,
+            "categories":     categories,
+            "complexity":     complexity,
             "synthesis_used": synthesis_used,
             "synthesis_model": "llama-3.1-8b-instant" if synthesis_used else None,
-            "reason": f"Orchestrator selected {selected_model} for {', '.join(categories)} task"
+            "reason":         f"Orchestrator selected {selected_model} for {', '.join(categories)} task",
         }
 
         return final_response, routing_metadata
@@ -623,12 +620,22 @@ def _call_llm_with_orchestrator(
         print(f"[_call_llm_with_orchestrator] Error: {e}")
         fallback_llm = llms.build_llm(DEFAULT_MODEL_KEY)
         response = fallback_llm.invoke(query)
+        # Re-classify so callers always receive categories/complexity/synthesis_model
+        # and never hit a KeyError when building the attribution footer.
+        try:
+            _fb_categories, _fb_complexity = classify_task(query)
+        except Exception:
+            _fb_categories, _fb_complexity = ["conversational"], "low"
         return response.content, {
-            "model_key": DEFAULT_MODEL_KEY,
-            "model_name": llms.get_display_name(DEFAULT_MODEL_KEY),
-            "auto_selected": False,
-            "error": str(e),
-            "reason": f"Fallback due to error: {str(e)[:100]}"
+            "model_key":      DEFAULT_MODEL_KEY,
+            "model_name":     llms.get_display_name(DEFAULT_MODEL_KEY),
+            "auto_selected":  False,
+            "categories":     _fb_categories,
+            "complexity":     _fb_complexity,
+            "synthesis_used": False,
+            "synthesis_model": None,
+            "error":          str(e),
+            "reason":         f"Fallback due to error: {str(e)[:100]}",
         }
 
 
@@ -736,7 +743,7 @@ def direct_node(state: ChatState) -> dict:
         rag_context=None
     )
 
-    # Append exactly ONE footer here — _call_llm_with_orchestrator returns raw content only
+    # Append exactly ONE footer — _call_llm_with_orchestrator returns raw content only
     footer = build_attribution_footer(
         categories=routing_metadata["categories"],
         complexity=routing_metadata["complexity"],
@@ -838,7 +845,7 @@ Is there something else I can help you with regarding the existing documents?"""
             rag_context=None
         )
 
-    # Append exactly ONE footer here — covers both the has-context and no-context paths
+    # Append exactly ONE footer — covers both the has-context and no-context paths
     footer = build_attribution_footer(
         categories=routing_metadata["categories"],
         complexity=routing_metadata["complexity"],
@@ -866,8 +873,8 @@ Is there something else I can help you with regarding the existing documents?"""
 def agent_node(state: ChatState) -> dict:
     """
     Minimal ReAct agent with two tools:
-      1. DuckDuckGoSearchRun — free web search, no API key needed
-      2. PythonCalculator    — safe arithmetic via ast.literal_eval / numexpr
+      1. web_search   — DuckDuckGo via duckduckgo-search (no langchain-community needed)
+      2. calculator   — safe arithmetic via ast
 
     Uses orchestrator for the agent's internal LLM.
     """
@@ -886,14 +893,27 @@ def agent_node(state: ChatState) -> dict:
     agent_model = recommended_model if model_key == DEFAULT_MODEL_KEY else model_key
 
     try:
-        from langchain_community.tools import DuckDuckGoSearchRun
+        from duckduckgo_search import DDGS
         from langchain.tools import tool
         from langchain.agents import AgentExecutor, create_react_agent
         from langchain_core.prompts import PromptTemplate
         import ast
         import operator as _op
 
-        search_tool = DuckDuckGoSearchRun()
+        @tool
+        def web_search(query: str) -> str:
+            """Search the web using DuckDuckGo for current or real-time information."""
+            try:
+                with DDGS() as ddgs:
+                    results = list(ddgs.text(query, max_results=3))
+                if not results:
+                    return "No results found."
+                return "\n\n".join(
+                    f"{r.get('title', '')}\n{r.get('body', '')}"
+                    for r in results
+                )
+            except Exception as e:
+                return f"Search error: {e}"
 
         _SAFE_OPS = {
             ast.Add:  _op.add,
@@ -934,7 +954,7 @@ def agent_node(state: ChatState) -> dict:
             except Exception as e:
                 return f"Calculator error: {e}"
 
-        tools = [search_tool, calculator]
+        tools = [web_search, calculator]
 
         react_prompt = PromptTemplate.from_template(
             "You are a helpful assistant with access to tools.\n\n"
@@ -974,24 +994,24 @@ def agent_node(state: ChatState) -> dict:
         })
         answer = result.get("output", "No answer returned by agent.")
 
+        # Append exactly ONE footer
         footer = build_attribution_footer(
             categories=categories,
             complexity=complexity,
             primary_model=agent_model,
             synthesis_model=None,
-            fallback_used=False
+            fallback_used=False,
         )
-
         final_answer = answer + footer
 
         routing_info = state.get("routing_info", {})
         routing_info.update({
-            "model_key": agent_model,
-            "model_name": llms.get_display_name(agent_model),
+            "model_key":    agent_model,
+            "model_name":   llms.get_display_name(agent_model),
             "auto_selected": agent_model == recommended_model,
-            "categories": categories,
-            "complexity": complexity,
-            "reason": f"Agent used {agent_model} for {', '.join(categories)} task"
+            "categories":   categories,
+            "complexity":   complexity,
+            "reason":       f"Agent used {agent_model} for {', '.join(categories)} task",
         })
 
         return {

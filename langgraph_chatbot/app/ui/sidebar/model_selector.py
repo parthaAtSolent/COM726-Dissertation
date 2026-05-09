@@ -5,8 +5,61 @@ import llms
 from app.ui.sidebar.thread_actions import on_model_change
 
 
+def _inject_css() -> None:
+    """Inject CSS for model selector styling."""
+    if "model_selector_css_injected" not in st.session_state:
+        st.markdown("""
+            <style>
+            /* Target the dropdown menu container */
+            [data-testid="stSelectbox"] [data-baseweb="select"] [data-testid="stMarkdownContainer"] {
+                max-height: 600px !important;
+                overflow-y: auto !important;
+            }
+            
+            /* Target the virtualized list container */
+            [data-baseweb="select"] [data-simplebar] {
+                max-height: 600px !important;
+            }
+            
+            /* Target all dropdown menu containers */
+            .stSelectbox .select__menu {
+                max-height: 600px !important;
+            }
+            
+            .stSelectbox .select__menu-list {
+                max-height: 600px !important;
+            }
+            
+            /* Make dropdown items taller */
+            .stSelectbox .select__option {
+                padding: 12px 16px !important;
+                min-height: 50px !important;
+                white-space: normal !important;
+            }
+            
+            /* Override any inline max-height styles */
+            div[role="listbox"] {
+                max-height: 600px !important;
+                height: auto !important;
+            }
+            
+            /* Ensure the popover doesn't clip content */
+            [data-baseweb="popover"] {
+                overflow: visible !important;
+            }
+            
+            [data-baseweb="popover"] [data-testid="stSelectbox"] {
+                overflow: visible !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+        st.session_state.model_selector_css_injected = True
+
+
 def render_model_selector() -> None:
-    """Render the model selector dropdown."""
+    """Render the model selector dropdown with custom styling."""
+    _inject_css()
+
     try:
         keys = llms.list_model_keys()
         if not keys:
@@ -29,6 +82,7 @@ def render_model_selector() -> None:
             on_change=on_model_change,
             help="Select which AI model to use for this conversation"
         )
+
         st.sidebar.caption("⚡ Powered by Groq's free tier")
         st.sidebar.divider()
     except Exception as e:
