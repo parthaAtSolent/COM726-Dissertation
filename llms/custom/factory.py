@@ -71,24 +71,17 @@ class CustomOrchestrator(BaseChatModel):
         """
         Main generation method that orchestrates the multi-model workflow.
 
-        Args:
-            messages: List of chat messages (includes conversation history)
-            stop: Optional stop sequences
-            **kwargs: Additional arguments
-
-        Returns:
-            ChatResult containing the final synthesized response with metadata
+        This returns raw content WITHOUT attribution footers.
+        Footers are added by graph nodes (direct_node, rag_node, agent_node).
         """
 
         # ── STEP 1: Extract the latest user message ─────────────────────────────
-        # Find the most recent human message in the conversation
         user_prompt = ""
         for msg in reversed(messages):
             if isinstance(msg, HumanMessage):
                 user_prompt = msg.content
                 break
 
-        # Handle empty messages
         if not user_prompt:
             return ChatResult(generations=[
                 ChatGeneration(message=AIMessage(
@@ -97,13 +90,9 @@ class CustomOrchestrator(BaseChatModel):
             ])
 
         # ── STEP 2: Classify the task ──────────────────────────────────────────
-        # Determine what type of task this is and how complex
         categories, complexity = classify_task(user_prompt)
-
-        # Select the best specialist model for this task
         primary_model_key = select_primary_model(categories, complexity)
 
-        # Log the routing decision for debugging
         print(f"\n[Orchestrator] Processing request:")
         print(f"  - Prompt: {user_prompt[:100]}...")
         print(f"  - Categories: {categories}")
@@ -111,29 +100,24 @@ class CustomOrchestrator(BaseChatModel):
         print(f"  - Selected primary model: {primary_model_key}")
 
         # ── STEP 3: Build and run specialist prompt ────────────────────────────
-        # Create an enhanced prompt tailored to the specialist model
         specialist_prompt = build_specialist_prompt(
             user_prompt, categories, complexity, primary_model_key
         )
 
-        # Track which models were used (for attribution)
         models_used = {
             "primary": primary_model_key,
             "synthesis": None,
             "fallback_used": False
         }
 
-        # Run the specialist model
         specialist_response = ""
         try:
-            # Build and invoke the primary model
             primary_llm = llms.build_llm(primary_model_key)
             specialist_result = primary_llm.invoke(specialist_prompt)
             specialist_response = specialist_result.content
             print(f"  ✓ Primary model '{primary_model_key}' succeeded")
 
         except Exception as e:
-            # Primary model failed - try fallback
             print(f"  ✗ Primary model '{primary_model_key}' failed: {e}")
             print(f"  → Attempting fallback to '{FALLBACK_MODEL}'")
 
@@ -146,7 +130,6 @@ class CustomOrchestrator(BaseChatModel):
                 print(f"  ✓ Fallback model '{FALLBACK_MODEL}' succeeded")
 
             except Exception as fallback_err:
-                # Both primary and fallback failed - return error message
                 print(f"  ✗ Fallback model also failed: {fallback_err}")
                 error_msg = (
                     f"⚠️ Unable to process your request. Both the primary model "
@@ -158,13 +141,11 @@ class CustomOrchestrator(BaseChatModel):
                 ])
 
         # ── STEP 4: Optional synthesis pass ────────────────────────────────────
-        # Refine the response with a synthesis model for complex tasks
         final_response = specialist_response
 
         if should_synthesize(categories, complexity):
             print(f"  → Running synthesis pass with '{SYNTHESIS_MODEL}'")
             try:
-                # Build and invoke the synthesis model
                 synthesis_llm = llms.build_llm(SYNTHESIS_MODEL)
                 synthesis_prompt = build_synthesis_prompt(
                     user_prompt,
@@ -178,31 +159,17 @@ class CustomOrchestrator(BaseChatModel):
                 print(f"  ✓ Synthesis pass complete")
 
             except Exception as synth_err:
-                # Synthesis failed - use specialist response as-is
                 print(
                     f"  ✗ Synthesis failed, using specialist output: {synth_err}")
-                # Keep final_response as specialist_response
         else:
             print(f"  → Skipping synthesis (low complexity conversational task)")
 
-        # ── STEP 5: Add attribution metadata ───────────────────────────────────
-        # Add transparency about which models were used (if enabled)
-        if self.show_attribution:
-            attribution_footer = build_attribution_footer(
-                categories=categories,
-                complexity=complexity,
-                primary_model=models_used["primary"],
-                synthesis_model=models_used.get("synthesis"),
-                fallback_used=models_used["fallback_used"]
-            )
-            final_response_with_attribution = final_response + attribution_footer
-        else:
-            final_response_with_attribution = final_response
+        # ── STEP 5: Return response WITHOUT attribution footer ─────────────────
+        # IMPORTANT: Do NOT add footer here. Graph nodes handle footer addition.
+        # The caller (direct_node, rag_node, agent_node) will add exactly ONE footer.
 
-        # Return the final response wrapped in LangChain's ChatResult format
         return ChatResult(generations=[
-            ChatGeneration(message=AIMessage(
-                content=final_response_with_attribution))
+            ChatGeneration(message=AIMessage(content=final_response))
         ])
 
     async def _agenerate(

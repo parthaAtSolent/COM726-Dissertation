@@ -247,7 +247,8 @@ def build_synthesis_prompt(
         f"2. Improve clarity and flow\n"
         f"3. Keep all correct content intact\n"
         f"4. Fix grammatical errors\n"
-        f"5. Output ONLY the final response\n"
+        f"5. Output ONLY the final response — do NOT append any routing info, "
+        f"footers, or metadata. Those are added externally.\n"
     )
 
     return synthesis_prompt
@@ -256,10 +257,28 @@ def build_synthesis_prompt(
 def should_synthesize(categories: List[str], complexity: str) -> bool:
     """
     Determines whether to run the synthesis pass.
+
+    NOTE: This controls synthesis only — not footer visibility.
+          Use should_show_footer() for footer display logic.
+          These two concerns are intentionally separated so that
+          skipping synthesis never accidentally hides the footer.
     """
-    # Skip for simple conversations
+    # Skip synthesis for simple conversations
     if complexity == "low" and categories == ["conversational"]:
         return False
+    return True
+
+
+def should_show_footer() -> bool:
+    """
+    Determines whether to show the model routing attribution footer.
+
+    Always returns True — the footer is unconditionally displayed
+    regardless of task type, complexity, or whether synthesis ran.
+    Kept as a function (rather than a bare constant) so call sites
+    stay consistent and the behaviour can be toggled in one place
+    if requirements ever change.
+    """
     return True
 
 
@@ -272,6 +291,8 @@ def build_attribution_footer(
 ) -> str:
     """
     Builds a clean attribution footer that works well on any screen size.
+    Always call this when should_show_footer() is True, independently of
+    whether should_synthesize() returned True or False.
     """
     # Set defaults if parameters are None
     if categories is None:
@@ -283,20 +304,20 @@ def build_attribution_footer(
 
     # Define synthesis model locally if not available
     if synthesis_model is None:
-        synthesis_model = "llama-8b-instant"  # Changed from gemini to llama
+        synthesis_model = "llama-8b-instant"
 
     # Resolve 'custom' to actual model using routing logic
     if primary_model == "custom":
         try:
             actual_primary = select_primary_model(categories, complexity)
-        except:
+        except Exception:
             actual_primary = "llama-8b-instant"  # Fallback
     else:
         actual_primary = primary_model
 
     # Resolve synthesis model if needed
     if synthesis_model == "custom":
-        actual_synthesis = "llama-8b-instant"  # Changed from gemini to llama
+        actual_synthesis = "llama-8b-instant"
     else:
         actual_synthesis = synthesis_model
 
@@ -317,3 +338,74 @@ def build_attribution_footer(
     footer += "---"
 
     return footer
+
+
+# ── Main Orchestration Entry Point ────────────────────────────────────────────
+
+def orchestrate(prompt: str, call_model_fn) -> str:
+    """
+    Main orchestration pipeline. Classifies the prompt, routes to the
+    appropriate specialist model, optionally synthesizes, then appends
+    exactly ONE attribution footer.
+
+    Args:
+        prompt:        The raw user prompt string.
+        call_model_fn: A callable(model_name: str, prompt: str) -> str
+                       that dispatches to your model backends.
+
+    Returns:
+        The final response string with a single footer appended.
+    """
+    fallback_used = False
+
+    # ── Step 1: Classify ──────────────────────────────────────────────────
+    categories, complexity = classify_task(prompt)
+
+    # ── Step 2: Select primary model ─────────────────────────────────────
+    primary_model = select_primary_model(categories, complexity)
+    if primary_model == FALLBACK_MODEL and categories != ["conversational"]:
+        fallback_used = True
+
+    # ── Step 3: Build and run specialist prompt ───────────────────────────
+    specialist_prompt = build_specialist_prompt(
+        prompt, categories, complexity, primary_model)
+
+    try:
+        specialist_response = call_model_fn(primary_model, specialist_prompt)
+    except Exception:
+        # Hard fallback: use the fallback model if specialist call fails
+        fallback_used = True
+        specialist_response = call_model_fn(FALLBACK_MODEL, specialist_prompt)
+        primary_model = FALLBACK_MODEL
+
+    # ── Step 4: Optionally synthesize ────────────────────────────────────
+    run_synthesis = should_synthesize(categories, complexity)
+    synthesis_model_used: Optional[str] = None
+
+    if run_synthesis:
+        synthesis_prompt = build_synthesis_prompt(
+            prompt, specialist_response, categories, primary_model
+        )
+        try:
+            final_response = call_model_fn(SYNTHESIS_MODEL, synthesis_prompt)
+            synthesis_model_used = SYNTHESIS_MODEL
+        except Exception:
+            # If synthesis fails, fall back to the raw specialist response
+            final_response = specialist_response
+    else:
+        final_response = specialist_response
+
+    # ── Step 5: Append exactly ONE footer ────────────────────────────────
+    # This is the ONLY place build_attribution_footer() is called.
+    # Never call it inside call_model_fn, streaming callbacks, or
+    # any other helper — doing so produces duplicate footers.
+    if should_show_footer():
+        final_response += build_attribution_footer(
+            categories=categories,
+            complexity=complexity,
+            primary_model=primary_model,
+            synthesis_model=synthesis_model_used,
+            fallback_used=fallback_used,
+        )
+
+    return final_response

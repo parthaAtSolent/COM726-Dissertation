@@ -603,17 +603,9 @@ def _call_llm_with_orchestrator(
             final_response = raw_response
             synthesis_used = False
 
-        # Step 8: Build attribution footer
-        footer = build_attribution_footer(
-            categories=categories,
-            complexity=complexity,
-            primary_model=selected_model,
-            synthesis_model="llama-3.1-8b-instant" if synthesis_used else None,
-            fallback_used=False
-        )
-
-        final_response_with_footer = final_response + footer
-
+        # Step 8: Return raw response + metadata only.
+        # The attribution footer is added exactly once, by the caller
+        # (factory.py _generate Step 5 / agent_node). Never build it here.
         routing_metadata = {
             "model_key": selected_model,
             "model_name": llms.get_display_name(selected_model),
@@ -621,10 +613,11 @@ def _call_llm_with_orchestrator(
             "categories": categories,
             "complexity": complexity,
             "synthesis_used": synthesis_used,
+            "synthesis_model": "llama-3.1-8b-instant" if synthesis_used else None,
             "reason": f"Orchestrator selected {selected_model} for {', '.join(categories)} task"
         }
 
-        return final_response_with_footer, routing_metadata
+        return final_response, routing_metadata
 
     except Exception as e:
         print(f"[_call_llm_with_orchestrator] Error: {e}")
@@ -743,6 +736,16 @@ def direct_node(state: ChatState) -> dict:
         rag_context=None
     )
 
+    # Append exactly ONE footer here — _call_llm_with_orchestrator returns raw content only
+    footer = build_attribution_footer(
+        categories=routing_metadata["categories"],
+        complexity=routing_metadata["complexity"],
+        primary_model=routing_metadata["model_key"],
+        synthesis_model=routing_metadata.get("synthesis_model"),
+        fallback_used=False,
+    )
+    response_content = response_content + footer
+
     routing_info = state.get("routing_info", {})
     routing_info.update(routing_metadata)
 
@@ -810,7 +813,7 @@ User Question: {query}
 
 Now provide your answer based on the document excerpts above:"""
 
-        # Use orchestrator with RAG context
+        # Use orchestrator with RAG context — returns raw content, no footer
         response_content, routing_metadata = _call_llm_with_orchestrator(
             query=enhanced_query,
             history_block=history_block,
@@ -834,6 +837,16 @@ Is there something else I can help you with regarding the existing documents?"""
             model_key=model_key,
             rag_context=None
         )
+
+    # Append exactly ONE footer here — covers both the has-context and no-context paths
+    footer = build_attribution_footer(
+        categories=routing_metadata["categories"],
+        complexity=routing_metadata["complexity"],
+        primary_model=routing_metadata["model_key"],
+        synthesis_model=routing_metadata.get("synthesis_model"),
+        fallback_used=False,
+    )
+    response_content = response_content + footer
 
     # Update routing_info
     routing_info = state.get("routing_info", {})
