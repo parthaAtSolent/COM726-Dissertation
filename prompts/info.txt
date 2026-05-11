@@ -1,0 +1,82 @@
+## Top 3 Experiments With Minimal System Changes
+
+The key constraint is using your **existing infrastructure, datasets, and results** with only minor modifications.
+
+---
+
+### Experiment 1 — Router Ablation Study
+**Effort: Change ~3 lines of code**
+
+You already have all three execution paths built. Simply override the `ClassifyRoute` function to force a fixed path per run.
+
+**What to change:**
+```python
+# Force direct: return "direct"
+# Force RAG:    return "rag"
+# Keep adaptive: existing logic
+```
+
+Run your existing 500 HotpotQA and 500 MuSiQue questions through each configuration and produce this table:
+
+| Configuration | HotpotQA EM | HotpotQA F1 | MuSiQue EM | MuSiQue F1 | Avg Latency |
+|---|---|---|---|---|---|
+| Adaptive (yours) | — | — | — | — | — |
+| Always Direct | — | — | — | — | — |
+| Always RAG | — | — | — | — | — |
+
+This is your strongest argument that routing itself — not just the models — drives performance gains.
+
+---
+
+### Experiment 2 — Performance Breakdown by Query Complexity
+**Effort: Add a labelling step to existing data**
+
+MuSiQue explicitly contains 2-hop, 3-hop, and 4-hop questions in its metadata. HotpotQA provides a distractor vs. full-wiki split. You do not need to re-run anything new — just **re-slice your existing 500 results** by complexity tier.
+
+**What to change:** Write a small post-processing script that groups your already-collected results by hop count and computes EM/F1 per group.
+
+This produces a figure like this:
+
+```
+EM (%)
+100 |          ■ Adaptive
+ 90 |    ■           □ Best Single Model
+ 80 |         ■
+ 70 |              ■
+ 60 |                   ■
+     2-hop   3-hop   4-hop
+```
+
+This directly shows your system degrades more gracefully than monolithic baselines on harder queries — a compelling result requiring **zero infrastructure changes**.
+
+---
+
+### Experiment 3 — Latency vs. Routing Path Analysis
+**Effort: Extract data you already logged**
+
+Your results tables already record latency per model. You simply need to **group latency by routing path** (direct/RAG/agent) and by complexity, then plot it.
+
+**What to add:** One logging line per query capturing `(route_taken, complexity, latency_ms, EM)` — then aggregate.
+
+This produces two valuable figures:
+
+**Figure A — Average latency by path:**
+| Path | Avg Latency (ms) | Avg EM (%) |
+|---|---|---|
+| Direct | — | — |
+| RAG | — | — |
+| Agent | — | — |
+
+**Figure B — Latency vs. complexity scatter plot**, showing your system routes low-complexity queries to fast models cheaply, and only pays the latency cost of heavy models when complexity demands it.
+
+---
+
+### Why These Three Specifically
+
+| Experiment | Code Changes | Data Changes | New Infrastructure |
+|---|---|---|---|
+| Router Ablation | 3 lines | None | None |
+| Complexity Breakdown | None | Re-slice existing | None |
+| Latency Analysis | 1 logging line | Re-aggregate existing | None |
+
+Together they address the three most common reviewer criticisms for system papers: **"does each component contribute?"**, **"does it scale to harder tasks?"**, and **"is it actually efficient?"** — all answered using what you already built.

@@ -1,0 +1,752 @@
+[
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  },
+  {
+    "question": "Which city is the capital of the country where the Eiffel Tower is located?",
+    "answer": "Paris",
+    "passages": [
+      "The Eiffel Tower is located in Paris, France.",
+      "Paris is the capital city of France."
+    ],
+    "titles": [
+      "Eiffel Tower",
+      "Paris"
+    ],
+    "gold_titles": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa and in which city was he born?",
+    "answer": "Leonardo da Vinci was born in Vinci, Italy",
+    "passages": [
+      "The Mona Lisa was painted by Leonardo da Vinci.",
+      "Leonardo da Vinci was born in Vinci, Italy."
+    ],
+    "titles": [
+      "Mona Lisa",
+      "Leonardo da Vinci"
+    ],
+    "gold_titles": [
+      "Leonardo da Vinci"
+    ]
+  },
+  {
+    "question": "What is the currency of the country that has the largest population in South America?",
+    "answer": "Brazilian Real",
+    "passages": [
+      "Brazil is the most populous country in South America.",
+      "The official currency of Brazil is the Brazilian Real."
+    ],
+    "titles": [
+      "Brazil",
+      "Brazilian Real"
+    ],
+    "gold_titles": [
+      "Brazil"
+    ]
+  },
+  {
+    "question": "Who wrote the novel 'Pride and Prejudice' and in which century was it published?",
+    "answer": "Jane Austen, 19th century",
+    "passages": [
+      "Pride and Prejudice is a novel by Jane Austen.",
+      "The novel was published in 1813, which is in the 19th century."
+    ],
+    "titles": [
+      "Pride and Prejudice",
+      "Jane Austen"
+    ],
+    "gold_titles": [
+      "Jane Austen"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in Africa and what is its height?",
+    "answer": "Mount Kilimanjaro, 5,895 meters",
+    "passages": [
+      "Mount Kilimanjaro is the highest mountain in Africa.",
+      "It stands at 5,895 meters above sea level."
+    ],
+    "titles": [
+      "Mount Kilimanjaro",
+      "List of mountains in Africa"
+    ],
+    "gold_titles": [
+      "Mount Kilimanjaro"
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{brown2020language,wei2022chain}
+\citation{touvron2023llama,jiang2023mistral,team2024gemini}
+\citation{singh2025agentic}
+\citation{lewis2020retrieval}
+\citation{shi2023large,asai2023self}
+\citation{yao2023react}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{zhao2024langgraph}
+\@writefile{toc}{\contentsline {section}{\numberline {2}System Architecture}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Overview}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces High-level architecture of the Adaptive Multi-LLM Agentic RAG system.}}{2}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:arch_overview}{{1}{2}{High-level architecture of the Adaptive Multi-LLM Agentic RAG system}{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}LangGraph State Management}{3}{subsection.2.2}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces ChatState TypedDict definition managing conversation context and routing metadata.}}{3}{algorithm.1}\protected@file@percent }
+\newlabel{alg:chatstate}{{1}{3}{ChatState TypedDict definition managing conversation context and routing metadata}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Deployed Language Models}{3}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Task Classification and Model Selection}{3}{subsection.2.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Deployed language models with their primary specialisations and context window sizes.}}{4}{table.caption.2}\protected@file@percent }
+\newlabel{tab:models}{{1}{4}{Deployed language models with their primary specialisations and context window sizes}{table.caption.2}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Core orchestrator logic for task classification and specialist model selection.}}{4}{algorithm.2}\protected@file@percent }
+\newlabel{alg:orchestrator}{{2}{4}{Core orchestrator logic for task classification and specialist model selection}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Query Routing}{5}{subsection.2.5}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Route classification function implementing the retrieval necessity predictor.}}{5}{algorithm.3}\protected@file@percent }
+\newlabel{alg:routing}{{3}{5}{Route classification function implementing the retrieval necessity predictor}{algorithm.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Execution Nodes}{5}{subsection.2.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Query routing decision flowchart for the adaptive multi-path execution architecture.}}{6}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:routing_flow}{{2}{6}{Query routing decision flowchart for the adaptive multi-path execution architecture}{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces RAG pipeline showing document ingestion, embedding, retrieval, and context injection.}}{6}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:rag_pipeline}{{3}{6}{RAG pipeline showing document ingestion, embedding, retrieval, and context injection}{figure.caption.4}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Agent node implementation showing ReAct-style execution with tool integration.}}{7}{algorithm.4}\protected@file@percent }
+\newlabel{alg:agent}{{4}{7}{Agent node implementation showing ReAct-style execution with tool integration}{algorithm.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Persistence Layer}{7}{subsection.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Implementation}{7}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Technology Stack}{7}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}LLM Integration}{7}{subsection.3.2}\protected@file@percent }
+\citation{yang2018hotpotqa}
+\citation{trivedi2022musique}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces LLM factory function mapping model keys to Groq-hosted model instances.}}{8}{algorithm.5}\protected@file@percent }
+\newlabel{alg:build_llm}{{5}{8}{LLM factory function mapping model keys to Groq-hosted model instances}{algorithm.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}RAG Document Ingestion Pipeline}{8}{subsection.3.3}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces Document ingestion pipeline showing chunking and ChromaDB indexing}}{8}{algorithm.6}\protected@file@percent }
+\newlabel{alg:ingestion}{{6}{8}{Document ingestion pipeline showing chunking and ChromaDB indexing}{algorithm.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces LangGraph StateGraph topology showing nodes, conditional edges, and execution paths.}}{9}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:langgraph_topology}{{4}{9}{LangGraph StateGraph topology showing nodes, conditional edges, and execution paths}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{9}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Experimental Setup}{9}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}HotpotQA Results}{9}{subsection.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Model performance on HotpotQA (500 questions).}}{9}{table.caption.6}\protected@file@percent }
+\newlabel{tab:hotpotqa}{{2}{9}{Model performance on HotpotQA (500 questions)}{table.caption.6}{}}
+\citation{asai2023self}
+\citation{jeong2024adaptive}
+\citation{yao2023react}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}MuSiQue Results}{10}{subsection.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Model performance on MuSiQue (500 questions).}}{10}{table.caption.7}\protected@file@percent }
+\newlabel{tab:musique}{{3}{10}{Model performance on MuSiQue (500 questions)}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{10}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Analysis of Results}{10}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Limitations}{10}{subsection.5.2}\protected@file@percent }
+\bibstyle{plain}
+\bibcite{brown2020language}{1}
+\bibcite{wei2022chain}{2}
+\bibcite{touvron2023llama}{3}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Future Work}{11}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{11}{section.6}\protected@file@percent }
+\bibcite{jiang2023mistral}{4}
+\bibcite{team2024gemini}{5}
+\bibcite{singh2025agentic}{6}
+\bibcite{lewis2020retrieval}{7}
+\bibcite{shi2023large}{8}
+\bibcite{asai2023self}{9}
+\bibcite{yao2023react}{10}
+\bibcite{zhao2024langgraph}{11}
+\bibcite{jeong2024adaptive}{12}
+\bibcite{yang2018hotpotqa}{13}
+\bibcite{trivedi2022musique}{14}
+\gdef \@abspage@last{12}

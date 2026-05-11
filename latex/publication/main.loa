@@ -1,0 +1,7 @@
+\contentsline {algorithm}{\numberline {1}{\ignorespaces ChatState TypedDict definition managing conversation context and routing metadata.}}{6}{algorithm.1}%
+\contentsline {algorithm}{\numberline {2}{\ignorespaces Core orchestrator logic for task classification and specialist model selection.}}{8}{algorithm.2}%
+\contentsline {algorithm}{\numberline {3}{\ignorespaces Route classification function implementing the retrieval necessity predictor.}}{9}{algorithm.3}%
+\contentsline {algorithm}{\numberline {4}{\ignorespaces Agent node implementation showing ReAct-style execution with tool integration.}}{12}{algorithm.4}%
+\contentsline {algorithm}{\numberline {5}{\ignorespaces LLM factory function mapping model keys to Groq-hosted model instances.}}{18}{algorithm.5}%
+\contentsline {algorithm}{\numberline {6}{\ignorespaces Document ingestion pipeline showing chunking and ChromaDB indexing}}{19}{algorithm.6}%
+\contentsline {algorithm}{\numberline {7}{\ignorespaces FastAPI REST endpoint definitions for the Android application backend.}}{20}{algorithm.7}%

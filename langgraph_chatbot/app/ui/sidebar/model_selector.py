@@ -6,50 +6,57 @@ from app.ui.sidebar.thread_actions import on_model_change
 
 
 def _inject_css() -> None:
-    """Inject CSS for model selector styling."""
+    """Inject CSS for model selector styling. Only runs once per session."""
     if "model_selector_css_injected" not in st.session_state:
         st.markdown("""
             <style>
-            /* Target the dropdown menu container */
-            [data-testid="stSelectbox"] [data-baseweb="select"] [data-testid="stMarkdownContainer"] {
-                max-height: 600px !important;
+            /* Make the selectbox trigger button larger */
+            div[data-testid="stSelectbox"] > div > div {
+                font-size: 16px;
+                min-height: 48px;
+            }
+            
+            div[data-testid="stSelectbox"] > div > div > div {
+                padding: 10px 14px;
+            }
+            
+            /* Dropdown menu items styling */
+            [data-baseweb="select"] ul {
+                max-height: 500px !important;
+                min-height: auto !important;
+            }
+            
+            /* Individual dropdown items */
+            [data-baseweb="select"] ul li {
+                font-size: 15px;
+                padding: 12px 14px !important;
+                min-height: 48px;
+                height: auto !important;
+                display: flex;
+                align-items: center;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+            }
+            
+            /* Popover/dropdown container */
+            [data-baseweb="popover"] {
+                max-height: 550px !important;
                 overflow-y: auto !important;
             }
             
-            /* Target the virtualized list container */
-            [data-baseweb="select"] [data-simplebar] {
-                max-height: 600px !important;
+            [data-baseweb="popover"] ul {
+                max-height: none !important;
             }
             
-            /* Target all dropdown menu containers */
-            .stSelectbox .select__menu {
-                max-height: 600px !important;
+            /* Optional: Wider dropdown */
+            div[data-testid="stSelectbox"] div[data-baseweb="select"] {
+                width: 100%;
             }
             
-            .stSelectbox .select__menu-list {
-                max-height: 600px !important;
-            }
-            
-            /* Make dropdown items taller */
-            .stSelectbox .select__option {
-                padding: 12px 16px !important;
-                min-height: 50px !important;
+            /* Allow text wrapping in dropdown items */
+            .stSelectbox div[role="listbox"] div {
                 white-space: normal !important;
-            }
-            
-            /* Override any inline max-height styles */
-            div[role="listbox"] {
-                max-height: 600px !important;
-                height: auto !important;
-            }
-            
-            /* Ensure the popover doesn't clip content */
-            [data-baseweb="popover"] {
-                overflow: visible !important;
-            }
-            
-            [data-baseweb="popover"] [data-testid="stSelectbox"] {
-                overflow: visible !important;
+                word-break: break-word !important;
             }
             </style>
         """, unsafe_allow_html=True)
